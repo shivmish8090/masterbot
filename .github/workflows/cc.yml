@@ -1,0 +1,41 @@
+name: Go Init Check
+
+on:
+  push:
+    paths:
+      - "**.py"
+      - "**.yml"
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  init-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: 1.20
+
+    - name: To Do
+      run: |
+        mkdir Vivek
+        cd Vivek
+        go mod init Vivek
+        go get github.com/wader/goutubedl
+        go get -u github.com/amarnathcjd/gogram/telegram
+        
+    - name: Commit Changes
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+          commit_message: "Format Codes"
+          commit_options: "--no-verify"
+          repository: .
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
