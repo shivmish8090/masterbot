@@ -1,0 +1,10 @@
+github.com/amarnathcjd/gogram v1.5.5 h1:a+joycMnLHQe17EZjzew/kugIPZqKC7E4oGECPT6JEA=
+github.com/amarnathcjd/gogram v1.5.5/go.mod h1:kxOCYC/wJqoGhwdQVXv9PcNTkDcjyfq6AguAkCkgs74=
+github.com/fortytw2/leaktest v1.3.0/go.mod h1:jDsjWgpAGjm2CA7WthBh/CdZYEPF31XHquHwclZch5g=
+github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
+github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
+github.com/wader/goutubedl v0.0.0-20250123100622-6c49489d9399 h1:y8BMIm8/QDnv5C0fi80+ri317L6GZN7z0xSQKEPpbww=
+github.com/wader/goutubedl v0.0.0-20250123100622-6c49489d9399/go.mod h1:5KXd5tImdbmz4JoVhePtbIokCwAfEhUVVx3WLHmjYuw=
+github.com/wader/osleaktest v0.0.0-20191111175233-f643b0fed071/go.mod h1:XD6emOFPHVzb0+qQpiNOdPL2XZ0SRUM0N5JHuq6OmXo=
+golang.org/x/net v0.34.0 h1:Mb7Mrk043xzHgnRM88suvJFwzVrRfHEHJEl5/71CKw0=
+golang.org/x/net v0.34.0/go.mod h1:di0qlW3YNM5oh6GqDGQr92MyTozJPmybPK4Ev/Gm31k=
