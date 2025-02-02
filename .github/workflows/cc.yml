@@ -3,10 +3,8 @@ name: Go Init Check
 on:
   push:
     paths:
-      - "**.py"
+      - "**.go"
       - "**.yml"
-    branches:
-      - dev
   workflow_dispatch:
 
 jobs:
@@ -25,11 +23,7 @@ jobs:
 
     - name: To Do
       run: |
-        mkdir Vivek
-        cd Vivek
-        go mod init Vivek
-        go get github.com/wader/goutubedl
-        go get -u github.com/amarnathcjd/gogram/telegram
+        go run main.go
         
     - name: Commit Changes
       uses: stefanzweifel/git-auto-commit-action@v5
