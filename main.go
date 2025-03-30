@@ -179,7 +179,7 @@ func AddedToGroups(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 
-	return nill
+	return nil
 }
 
 func ExtractJoinLeftStatusChange(u *gotgbot.ChatMemberUpdated) (bool, bool) {
