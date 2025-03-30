@@ -32,33 +32,33 @@ func main() {
 	// /start command to introduce the bot
 	dispatcher.AddHandler(handlers.NewCommand("start", start))
 	dispatcher.AddHandler(
-    handlers.NewMyChatMember(
-        func(u *gotgbot.ChatMemberUpdated) bool {
-            wasMember, isMember := ExtractJoinLeftStatusChange(u)
-            return !wasMember && isMember
-        },
-        AddedToGroups,
-    ),
-)
+		handlers.NewMyChatMember(
+			func(u *gotgbot.ChatMemberUpdated) bool {
+				wasMember, isMember := ExtractJoinLeftStatusChange(u)
+				return !wasMember && isMember
+			},
+			AddedToGroups,
+		),
+	)
 
-deleteHandler := handlers.NewMessage(
-    func(m *gotgbot.Message) bool {
-        sender := m.GetSender()
-        if sender.User != nil {
-            user, err := b.GetChatMember(m.Chat.Id, sender.User.Id, nil)
-            if err != nil {
-                return false
-            }
-            if user.GetStatus() == "creator" || user.GetStatus() == "administrator" {
-                return false
-            }
-        }
-        return m.GetText() != "" && len(m.GetText()) > 800
-    },
-    deleteLongMessage,
-)
+	deleteHandler := handlers.NewMessage(
+		func(m *gotgbot.Message) bool {
+			sender := m.GetSender()
+			if sender.User != nil {
+				user, err := b.GetChatMember(m.Chat.Id, sender.User.Id, nil)
+				if err != nil {
+					return false
+				}
+				if user.GetStatus() == "creator" || user.GetStatus() == "administrator" {
+					return false
+				}
+			}
+			return m.GetText() != "" && len(m.GetText()) > 800
+		},
+		deleteLongMessage,
+	)
 
-dispatcher.AddHandler(deleteHandler)
+	dispatcher.AddHandler(deleteHandler)
 	allowedUpdates := []string{"message", "callback_query", "my_chat_member", "chat_member"}
 
 	// Start receiving updates.
@@ -206,10 +206,9 @@ Let me know if you need any help.`, b.User.FirstName)
 }
 
 func deleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
-
-return ext.EndGroups
+	return ext.EndGroups
 }
-		       
+
 func ExtractJoinLeftStatusChange(u *gotgbot.ChatMemberUpdated) (bool, bool) {
 	if u.Chat.Type == "channel" {
 		return false, false
