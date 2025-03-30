@@ -22,6 +22,7 @@ jobs:
 
     - name: Initialize Go Module
       run: |
+        rm -rf go.mod go.sum
         go mod init github.com/Vivekkumar-IN/EditguardianBot
         go get github.com/PaulSonOfLars/gotgbot/v2
         #go mod tidy
