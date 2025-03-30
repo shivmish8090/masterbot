@@ -32,7 +32,7 @@ func main() {
 
 	// /start command to introduce the bot
 	dispatcher.AddHandler(handlers.NewCommand("start", start))
-	dispatcher.AddHandler(handlers.NewChatMember(chatmember.UserId(b.User.Id), chatMember))
+	dispatcher.AddHandler(handlers.NewMyChatMember(chatmember.UserId(b.User.Id), chatMember))
 
 	// Start receiving updates.
 	err = updater.StartPolling(b, &ext.PollingOpts{
