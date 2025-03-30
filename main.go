@@ -108,7 +108,7 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 			ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName,
 			ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName, ctx.EffectiveUser.LastName,
 		)
-		b.SendMessage(ctx.EffectiveChat.Id, logStr,                         &gotgbot.SendPhotoOpts{ParseMode:      "HTML"})
+		b.SendMessage(ctx.EffectiveChat.Id, logStr, &gotgbot.SendPhotoOpts{ParseMode: "HTML"})
 	} else if chat == "group" {
 		message := `⚠️ Warning: I can't function in a basic group!
 
