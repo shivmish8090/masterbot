@@ -32,7 +32,19 @@ func main() {
 
 	// /start command to introduce the bot
 	dispatcher.AddHandler(handlers.NewCommand("start", start))
-	dispatcher.AddHandler(handlers.NewMyChatMember(chatmember.UserId(b.User.Id), chatMember))
+	dispatcher.AddHandlerToGroup(
+  handlers.NewMyChatMember(
+   func(
+    u *gotgbot.ChatMemberUpdated,
+   ) bool {
+    wasMember, isMember := ExtractJoinLeftStatusChange(u)
+    return !wasMember && isMember
+   },
+   AddedToGroups,
+  ),
+  -1,
+ )
+
 	allowedUpdates := []string{"message", "callback_query", "my_chat_member", "chat_member"}
 
 	// Start receiving updates.
@@ -129,13 +141,45 @@ To use my features, please upgrade this group to a supergroup.
 	} else if chat == "supergroup" {
 		ctx.EffectiveMessage.Reply(b, "✅ I am active and ready to protect this supergroup!", nil)
 	}
-	return nil
+	return ext.EndGroups
 }
 
-func chatMember(b *gotgbot.Bot, ctx *ext.Context) error {
+func AddedToGroups(b *gotgbot.Bot, ctx *ext.Context) error {
 	_, err := b.SendMessage(config.LoggerId, "Added to new group", nil)
 	if err != nil {
 		return fmt.Errorf("failed to send photo: %w", err)
 	}
-	return nil
+	return ext.EndGroups
+}
+
+func ExtractJoinLeftStatusChange(u *gotgbot.ChatMemberUpdated) (bool, bool) {
+	if u.Chat.Type == "channel" {
+		return false, false
+	}
+
+	oldMemberStatus := u.OldChatMember.MergeChatMember().Status
+	newMemberStatus := u.NewChatMember.MergeChatMember().Status
+	oldIsMember := u.OldChatMember.MergeChatMember().IsMember
+	newIsMember := u.NewChatMember.MergeChatMember().IsMember
+
+	if oldMemberStatus == newMemberStatus {
+		return false, false
+	}
+
+	findInSlice := func(slice []string, val string) bool {
+		for _, item := range slice {
+			if item == val {
+				return true
+			}
+		}
+		return false
+	}
+
+	wasMember := findInSlice([]string{"member", "administrator", "creator"}, oldMemberStatus) ||
+		(oldMemberStatus == "restricted" && oldIsMember)
+
+	isMember := findInSlice([]string{"member", "administrator", "creator"}, newMemberStatus) ||
+		(newMemberStatus == "restricted" && newIsMember)
+
+	return wasMember, isMember
 }
