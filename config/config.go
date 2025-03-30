@@ -8,7 +8,7 @@ import (
 
 var (
 	Token         string
-	StartImageUrl string
+	StartImage string
 )
 
 func init() {
