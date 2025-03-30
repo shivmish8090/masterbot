@@ -132,8 +132,8 @@ To use my features, please upgrade this group to a supergroup.
 
 func chatMember(b *gotgbot.Bot, ctx *ext.Context) error {
 	_, err := b.SendMessage(config.LoggerId, "Added to new group", nil)
-                if err != nil {
-                        return fmt.Errorf("failed to send photo: %w", err)
-                }
+	if err != nil {
+		return fmt.Errorf("failed to send photo: %w", err)
+	}
 	return nil
 }
