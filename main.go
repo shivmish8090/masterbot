@@ -84,7 +84,7 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 2. I'll start protecting instantly.
 
 ➡️ Click on 𝗔𝗱𝗱 𝗚𝗿𝗼𝘂𝗽 to add me and keep our group safe!`,
-    ctx.EffectiveUser.FirstName,
+			ctx.EffectiveUser.FirstName,
 			b.User.Username,
 		)
 
