@@ -53,7 +53,7 @@ func main() {
 
 // start introduces the bot.
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
- file := gotgbot.InputFileByID("config.StartImageID")
+	file := gotgbot.InputFileByID("config.StartImageID")
 
 	b.SendPhoto(ctx.EffectiveChat.Id, file, nil)
 	_, err := ctx.EffectiveMessage.Reply(b, fmt.Sprintf("Hello, I'm @%s.\nI am a sample bot", b.User.Username), &gotgbot.SendMessageOpts{
