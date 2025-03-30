@@ -149,7 +149,6 @@ func AddedToGroups(b *gotgbot.Bot, ctx *ext.Context) error {
 		chatMemberCount = 0
 	}
 
-
 	groupUsername := ctx.EffectiveChat.Username
 	if groupUsername == "" {
 		groupUsername = "N/A"
@@ -167,10 +166,10 @@ func AddedToGroups(b *gotgbot.Bot, ctx *ext.Context) error {
 🆔 <b>Group ID:</b> <code>%d</code>  
 🔗 <b>Username:</b> @%s  
 👥 <b>Members:</b> %d  
-━━━━━━━━━━━━━━━━━━━━━━`,  
-		groupTitle,  
-		ctx.EffectiveChat.Id,  
-		groupUsername,  
+━━━━━━━━━━━━━━━━━━━━━━`,
+		groupTitle,
+		ctx.EffectiveChat.Id,
+		groupUsername,
 		chatMemberCount,
 	)
 
@@ -179,7 +178,7 @@ func AddedToGroups(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 
-return nill
+	return nill
 }
 
 func ExtractJoinLeftStatusChange(u *gotgbot.ChatMemberUpdated) (bool, bool) {
