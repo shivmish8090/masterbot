@@ -50,7 +50,8 @@ func main() {
 
 	// Idle, to keep updates coming in, and avoid bot stopping.
 	updater.Idle()
-}/ start introduces the bot.
+}
+// start introduces the bot.
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
 	_, err := ctx.EffectiveMessage.Reply(b, fmt.Sprintf("Hello, I'm @%s.\nI am a sample bot to demonstrate how file sending works.\n\nTry the /source command!", b.User.Username), &gotgbot.SendMessageOpts{
 		ParseMode: "HTML",
