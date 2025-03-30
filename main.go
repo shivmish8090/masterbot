@@ -125,7 +125,7 @@ To use my features, please upgrade this group to a supergroup.
 	} else if chat == "supergroup" {
 		ctx.EffectiveMessage.Reply(b, "✅ I am active and ready to protect this supergroup!", nil)
 
-		chatMemberCount, err := b.GetChatMemberCount(ctx.EffectiveChat.Id)
+		chatMemberCount, err := b.GetChatMemberCount(ctx.EffectiveChat.Id, nil)
 		if err != nil {
 			chatMemberCount = 0
 		}
