@@ -108,8 +108,8 @@ To use my features, please upgrade this group to a supergroup.
 ✅ How to upgrade:
 1. Go to Group Settings.
 2. Tap on "Chat History" and set it to "Visible".
-3. Convert the group to a Supergroup.
-4. Re-add me, and I'll be ready to help!`
+3. Re-add me, and I'll be ready to help!`
 	}
+ctx.EffectiveChat.Reply(b, message)
 	return nil
 }
