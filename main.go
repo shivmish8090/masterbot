@@ -52,7 +52,8 @@ func main() {
 }
 
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
-	if ctx.EffectiveChat.Type == "private" {
+        chat := ctx.EffectiveChat.Type
+	if  chat == "private" {
 		file := gotgbot.InputFileByURL(config.StartImage)
 
 		caption := fmt.Sprintf(
@@ -99,6 +100,18 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 			return fmt.Errorf("failed to send photo: %w", err)
 		}
 
-	}
+	} else if chat == "group" {
+
+message := `⚠️ Warning: I can't function in a basic group!
+
+To use my features, please upgrade this group to a supergroup.
+
+✅ How to upgrade:
+1. Go to Group Settings.
+2. Tap on "Chat History" and set it to "Visible".
+3. Convert the group to a Supergroup.
+4. Re-add me, and I'll be ready to help!`
+
+}
 	return nil
 }
