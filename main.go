@@ -123,6 +123,26 @@ To use my features, please upgrade this group to a supergroup.
 		ctx.EffectiveChat.Leave(b, nil)
 	} else if chat == "supergroup" {
 		ctx.EffectiveMessage.Reply(b, "✅ I am active and ready to protect this supergroup!", nil)
+
+ chatMemberCount, err := b.GetChatMemberCount(ctx.EffectiveChat.Id)
+if err != nil {
+chatMemberCount = "None"
+}
+ logStr := fmt.Sprintf(
+    `🔹 <b>Group Connection Log</b> 🔹  
+━━━━━━━━━━━━━━━━━━━━━━  
+📌 <b>Group Name:</b> %s  
+🆔 <b>Group ID:</b> <code>%d</code>  
+🔗 <b>Username:</b> @%s  
+👥 <b>Members:</b> %d  
+━━━━━━━━━━━━━━━━━━━━━━`,  
+    ctx.EffectiveChat.Title,  
+    ctx.EffectiveChat.Id,  
+    ctx.EffectiveChat.Username,  
+    chatMemberCount
+) 
+b.SendMessage(config.LoggerId, logStr, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
+
 	}
 	return nil
 }
