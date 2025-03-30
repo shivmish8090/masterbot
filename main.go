@@ -110,6 +110,7 @@ To use my features, please upgrade this group to a supergroup.
 2. Tap on "Chat History" and set it to "Visible".
 3. Re-add me, and I'll be ready to help!`
 	}
-	ctx.EffectiveChat.Reply(b, message)
+ctx.EffectiveChat.Reply(b, message, nil)
+ctx.EffectiveChat.Leave(b, nil)
 	return nil
 }
