@@ -109,8 +109,9 @@ To use my features, please upgrade this group to a supergroup.
 1. Go to Group Settings.
 2. Tap on "Chat History" and set it to "Visible".
 3. Re-add me, and I'll be ready to help!`
-	}
+
 	ctx.EffectiveMessage.Reply(b, message, nil)
 	ctx.EffectiveChat.Leave(b, nil)
+}
 	return nil
 }
