@@ -72,13 +72,13 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 	keyboard := gotgbot.InlineKeyboardMarkup{
 		InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
 			{
-				{Text: "🔄 Update Channel", URL: "https://t.me/Dns_Official_Channel"},
-				{Text: "💬 Update Group", URL: "https://t.me/dns_support_group"},
+				{Text: "🔄 Update Channel", Url: "https://t.me/Dns_Official_Channel"},
+				{Text: "💬 Update Group", Url: "https://t.me/dns_support_group"},
 			},
 			{
 				{
 					Text: "➕ Add me to Your Group",
-					URL:  fmt.Sprintf("https://t.me/%s?startgroup=s&admin=delete_messages+invite_users", b.User.Username),
+					Url:  fmt.Sprintf("https://t.me/%s?startgroup=s&admin=delete_messages+invite_users", b.User.Username),
 				},
 			},
 		},
