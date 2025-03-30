@@ -13,8 +13,6 @@ import (
 )
 
 func main() {
-
-
 	// Create bot from environment value.
 	b, err := gotgbot.NewBot(config.Token, nil)
 	if err != nil {
