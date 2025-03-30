@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	Token         string
+	Token      string
 	StartImage string
 )
 
