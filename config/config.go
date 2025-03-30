@@ -8,7 +8,7 @@ import (
 
 var (
 	Token        string
-	StartImageID string
+	StartImage string
 )
 
 func init() {
@@ -18,7 +18,7 @@ func init() {
 	if Token == "" {
 		panic("TOKEN environment variable is empty")
 	}
-	StartImageID = Getenv("START_IMG_URL", "AgACAgUAAx0Cf-yYdwABASe0Z-jiV0XQqdx2z9baWpZt-9a_r0IAAq3OMRu1GhFXGqclfejWhCUACAEAAwIAA3kABx4E")
+	StartImage = Getenv("START_IMG_URL", "https://telegra.ph/file/fef61e95cc35da109f900-e3978f1e3eaad29dee.jpg")
 }
 
 func Getenv(key, defaultValue string) string {
