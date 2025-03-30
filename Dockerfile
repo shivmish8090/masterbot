@@ -1,5 +1,5 @@
-#FROM golang:1.23-bookworm
-FROM golang:1.23-slim
+FROM golang:1.23-bookworm
+#FROM golang:1.23-slim
 WORKDIR /app
 
 COPY go.mod go.sum ./
