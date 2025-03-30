@@ -9,6 +9,7 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters"
+"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/chatmember"
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 )
 
@@ -32,7 +33,7 @@ func main() {
 
 	// /start command to introduce the bot
 	dispatcher.AddHandler(handlers.NewCommand("start", start))
-	dispatcher.AddHandler(handlers.NewChatMember(filters.ChatMember.UserId(b.User.Id), chatMemeber))
+	dispatcher.AddHandler(handlers.NewChatMember(chatmember.UserId(b.User.Id), chatMember))
 
 	// Start receiving updates.
 	err = updater.StartPolling(b, &ext.PollingOpts{
@@ -130,7 +131,7 @@ To use my features, please upgrade this group to a supergroup.
 	return nil
 }
 
-func chatMemeber(b *gotgbot.Bot, ctx *ext.Context) error {
+func chatMember(b *gotgbot.Bot, ctx *ext.Context) error {
 	b.SendMessage(config.LoggerId, "Added to new group", nil)
 	return nil
 }
