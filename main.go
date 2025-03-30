@@ -73,7 +73,7 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 		file := gotgbot.InputFileByURL(config.StartImage)
 
 		caption := fmt.Sprintf(
-			`Hello %s 👋, I'm your 𝗘𝗱𝗶𝘁 𝗚𝘂𝗮𝗿𝗱𝗶𝗮𝗻 𝗕𝗼𝘁, here to maintain a secure environment for our discussions.
+			`Hello %s 👋, I'm your %s, here to maintain a secure environment for our discussions.
 
 🚫 𝗘𝗱𝗶𝘁𝗲𝗱 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗗𝗲𝗹𝗲𝘁𝗶𝗼𝗻: 𝗜'𝗹𝗹 𝗿𝗲𝗺𝗼𝘃𝗲 𝗲𝗱𝗶𝘁𝗲𝗱 𝗺𝗲𝘀𝘀𝗮𝗴𝗲𝘀 𝘁𝗼 𝗺𝗮𝗶𝗻𝘁𝗮𝗶𝗻 𝘁𝗿𝗮𝗻𝘀𝗽𝗮𝗿𝗲𝗻𝗰𝘆.
 
@@ -84,6 +84,7 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 2. I'll start protecting instantly.
 
 ➡️ Click on 𝗔𝗱𝗱 𝗚𝗿𝗼𝘂𝗽 to add me and keep our group safe!`,
+    ctx.EffectiveUser.FirstName
 			b.User.Username,
 		)
 
