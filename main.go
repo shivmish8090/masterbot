@@ -11,6 +11,9 @@ import (
         "github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 )
 
+import _ "github.com/joho/godotenv"
+
+
 // This bot demonstrates some example interactions with commands on telegram.
 // It has a basic start command with a bot intro.
 // It also has a source command, which sends the bot sourcecode, as a file.
