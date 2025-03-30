@@ -170,12 +170,12 @@ Let me know if you need any help.`, b.User.FirstName)
 
 	logStr := fmt.Sprintf(
 		`🔹 <b>Group Connection Log</b> 🔹  
-━━━━━━━━━━━━━━━━━━━━━━  
+━━━━━━━━━━━━━━━━━  
 📌 <b>Group Name:</b> %s  
 🆔 <b>Group ID:</b> <code>%d</code>  
 🔗 <b>Username:</b> @%s  
 👥 <b>Members:</b> %d  
-━━━━━━━━━━━━━━━━━━━━━━`,
+━━━━━━━━━━━━━━━━━`,
 		groupTitle,
 		ctx.EffectiveChat.Id,
 		groupUsername,
