@@ -55,15 +55,9 @@ func main() {
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
 	file := gotgbot.InputFileByURL(config.StartImage)
 
-	_, er := b.SendPhoto(ctx.EffectiveChat.Id, file, nil)
-	if er != nil {
-		return fmt.Errorf("failed to send photo: %w", er)
-	}
-	_, err := ctx.EffectiveMessage.Reply(b, fmt.Sprintf("Hello, I'm @%s.\nI am a sample bot", b.User.Username), &gotgbot.SendMessageOpts{
-		ParseMode: "HTML",
-	})
+	_, err := b.SendPhoto(ctx.EffectiveChat.Id, file, &gotgbot.SendPhotoOpts{Caption: fmt.Sprintf("Hello, I'm @%s.\nI am a sample bot", b.User.Username), ProtectContent: true, ParseMode: "HTML"})
 	if err != nil {
-		return fmt.Errorf("failed to send start message: %w", err)
+		return fmt.Errorf("failed to send photo: %w", err)
 	}
 	return nil
 }
