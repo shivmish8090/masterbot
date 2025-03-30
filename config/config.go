@@ -7,14 +7,17 @@ import (
 )
 
 var (
-	BotToken      string
+	Token      string
 	StartImageUrl string
 )
 
 func init() {
 	godotenv.Load()
 
-	BotToken = Getenv("BOT_TOKEN", "")
+	Token = Getenv("TOKEN", "")
+ if Token == "" {
+		panic("TOKEN environment variable is empty")
+	}
 	StartImageUrl = Getenv("START_IMG_URL", "https://graph.org/file/f3c8291963a053ac18536-3558d077ad80845bd7.jpg")
 }
 
