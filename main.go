@@ -33,7 +33,7 @@ func main() {
 	// /start command to introduce the bot
 	dispatcher.AddHandler(handlers.NewCommand("start", start))
 	dispatcher.AddHandler(handlers.NewMyChatMember(chatmember.UserId(b.User.Id), chatMember))
- var allowedUpdates = []string{"message", "callback_query", "my_chat_member", "chat_member"}
+	allowedUpdates := []string{"message", "callback_query", "my_chat_member", "chat_member"}
 
 	// Start receiving updates.
 	err = updater.StartPolling(b, &ext.PollingOpts{
@@ -43,7 +43,7 @@ func main() {
 			RequestOpts: &gotgbot.RequestOpts{
 				Timeout: time.Second * 10,
 			},
-   AllowedUpdates: allowedUpdates,
+			AllowedUpdates: allowedUpdates,
 		},
 	})
 	if err != nil {
