@@ -12,7 +12,7 @@ import (
 
 	_ "github.com/joho/godotenv"
 
-_ "github.com/Vivekkumar-IN/EditguardianBot/config"
+	_ "github.com/Vivekkumar-IN/EditguardianBot/config"
 )
 
 // This bot demonstrates some example interactions with commands on telegram.
