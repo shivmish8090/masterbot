@@ -145,7 +145,7 @@ To use my features, please upgrade this group to a supergroup.
 }
 
 func AddedToGroups(b *gotgbot.Bot, ctx *ext.Context) error {
-	chatMemberCount, err := b.GetChatMemberCount(ctx.EffectiveChat.Id)
+	chatMemberCount, err := b.GetChatMemberCount(ctx.EffectiveChat.Id, nil)
 	if err != nil {
 		chatMemberCount = 0
 	}
