@@ -52,6 +52,7 @@ func main() {
 }
 
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
+ if ctx.EffectiveChat.Type == "private" {
 	file := gotgbot.InputFileByURL(config.StartImage)
 
 	caption := fmt.Sprintf(
@@ -98,5 +99,6 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 		return fmt.Errorf("failed to send photo: %w", err)
 	}
 
+}
 	return nil
 }
