@@ -144,10 +144,26 @@ To use my features, please upgrade this group to a supergroup.
 }
 
 func AddedToGroups(b *gotgbot.Bot, ctx *ext.Context) error {
-	_, err := b.SendMessage(config.LoggerId, "Added to new group", nil)
-	if err != nil {
-		return fmt.Errorf("failed to send photo: %w", err)
-	}
+	 chatMemberCount, err := b.GetChatMemberCount(ctx.EffectiveChat.Id)
+ if err != nil {
+ chatMemberCount = "None"
+ }
+  logStr := fmt.Sprintf(
+     `🔹 <b>Group Connection Log</b> 🔹  
+ ━━━━━━━━━━━━━━━━━━━━━━  
+ 📌 <b>Group Name:</b> %s  
+ 🆔 <b>Group ID:</b> <code>%d</code>  
+ 🔗 <b>Username:</b> @%s  
+ 👥 <b>Members:</b> %d  
+ ━━━━━━━━━━━━━━━━━━━━━━`,  
+     ctx.EffectiveChat.Title,  
+     ctx.EffectiveChat.Id,  
+     ctx.EffectiveChat.Username,  
+     chatMemberCount
+ ) 
+ b.SendMessage(config.LoggerId, logStr, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
+ 
+ 	
 	return ext.EndGroups
 }
 
