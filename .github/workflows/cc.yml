@@ -25,6 +25,7 @@ jobs:
         rm -rf go.mod go.sum
         go mod init github.com/Vivekkumar-IN/EditguardianBot
         go get github.com/PaulSonOfLars/gotgbot/v2
+        go get github.com/joho/godotenv
         #go mod tidy
 
     - name: Commit Changes
