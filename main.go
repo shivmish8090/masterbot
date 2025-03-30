@@ -9,21 +9,14 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
-	_ "github.com/Vivekkumar-IN/EditguardianBot/config"
+	"github.com/Vivekkumar-IN/EditguardianBot/config"
 )
 
-// This bot demonstrates some example interactions with commands on telegram.
-// It has a basic start command with a bot intro.
-// It also has a source command, which sends the bot sourcecode, as a file.
 func main() {
-	// Get token from the environment variable
-	token := os.Getenv("TOKEN")
-	if token == "" {
-		panic("TOKEN environment variable is empty")
-	}
+
 
 	// Create bot from environment value.
-	b, err := gotgbot.NewBot(token, nil)
+	b, err := gotgbot.NewBot(config.Token, nil)
 	if err != nil {
 		panic("failed to create new bot: " + err.Error())
 	}
