@@ -1,7 +1,9 @@
 package config
 
 import (
+	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 )
@@ -9,6 +11,7 @@ import (
 var (
 	Token      string
 	StartImage string
+	LoggerId   int64
 )
 
 func init() {
@@ -18,7 +21,16 @@ func init() {
 	if Token == "" {
 		panic("TOKEN environment variable is empty")
 	}
+
 	StartImage = Getenv("START_IMG_URL", "https://telegra.ph/file/ba238ec5e542d8754cea7-dc1786aa23ae1224f2.jpg")
+
+	logger := Getenv("LOGGER_ID", "-1002146211959")
+	logID, err := strconv.ParseInt(logger, 10, 64)
+	if err != nil {
+		panic(fmt.Sprintf("Error converting LOGGER_ID: %v", err))
+	}
+
+	LoggerId = logID
 }
 
 func Getenv(key, defaultValue string) string {
