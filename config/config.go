@@ -18,7 +18,8 @@ func init() {
 	if Token == "" {
 		panic("TOKEN environment variable is empty")
 	}
-	StartImageID = Getenv("START_IMG_URL", "https://graph.org/file/f3c8291963a053ac18536-3558d077ad80845bd7.jpg")
+	StartImageID = Getenv("START_IMG_URL", "
+AgACAgUAAx0Cf-yYdwABASe0Z-jiV0XQqdx2z9baWpZt-9a_r0IAAq3OMRu1GhFXGqclfejWhCUACAEAAwIAA3kABx4E")
 }
 
 func Getenv(key, defaultValue string) string {
