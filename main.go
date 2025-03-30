@@ -11,6 +11,8 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 
 	_ "github.com/joho/godotenv"
+
+_ "github.com/Vivekkumar-IN/EditguardianBot/config"
 )
 
 // This bot demonstrates some example interactions with commands on telegram.
