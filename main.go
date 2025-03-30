@@ -124,7 +124,6 @@ To use my features, please upgrade this group to a supergroup.
 		ctx.EffectiveChat.Leave(b, nil)
 	} else if chat == "supergroup" {
 		ctx.EffectiveMessage.Reply(b, "✅ I am active and ready to protect this supergroup!", nil)
-
 	}
 	return nil
 }
