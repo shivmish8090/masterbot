@@ -100,15 +100,15 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 			return fmt.Errorf("failed to send photo: %w", err)
 		}
 
-logStr := fmt.Sprintf(
-    `<a href="tg://user?id=%d">%s</a> has started the bot.
+		logStr := fmt.Sprintf(
+			`<a href="tg://user?id=%d">%s</a> has started the bot.
 
 <b>User ID:</b> <code>%d</code>
 <b>User Name:</b> %s %s`,
-    ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName, 
-    ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName, ctx.EffectiveUser.LastName,
-)
-ctx.EffectiveMessage.Reply(b, logStr, nil)
+			ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName,
+			ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName, ctx.EffectiveUser.LastName,
+		)
+		ctx.EffectiveMessage.Reply(b, logStr, nil)
 	} else if chat == "group" {
 		message := `⚠️ Warning: I can't function in a basic group!
 
