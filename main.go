@@ -125,30 +125,6 @@ To use my features, please upgrade this group to a supergroup.
 	} else if chat == "supergroup" {
 		ctx.EffectiveMessage.Reply(b, "✅ I am active and ready to protect this supergroup!", nil)
 
-		chatMemberCount, err := b.GetChatMemberCount(ctx.EffectiveChat.Id, nil)
-		if err != nil {
-			chatMemberCount = 0
-		}
-
-		username := ctx.EffectiveChat.Username
-		if username == "" {
-			username = "N/A"
-		}
-
-		logStr := fmt.Sprintf(
-			`🔹 <b>Group Connection Log</b> 🔹  
-━━━━━━━━━━━━━━━━━━━━━━  
-📌 <b>Group Name:</b> %s  
-🆔 <b>Group ID:</b> <code>%d</code>  
-🔗 <b>Username:</b> @%s  
-👥 <b>Members:</b> %d  
-━━━━━━━━━━━━━━━━━━━━━━`,
-			ctx.EffectiveChat.Title,
-			ctx.EffectiveChat.Id,
-			username,
-			chatMemberCount,
-		)
-		b.SendMessage(config.LoggerId, logStr, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
 	}
 	return nil
 }
