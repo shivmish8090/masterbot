@@ -52,10 +52,10 @@ func main() {
 }
 
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
-    file := gotgbot.InputFileByURL(config.StartImage)
+	file := gotgbot.InputFileByURL(config.StartImage)
 
-    caption := fmt.Sprintf(
-        `Hello %s 👋, I'm your 𝗘𝗱𝗶𝘁 𝗚𝘂𝗮𝗿𝗱𝗶𝗮𝗻 𝗕𝗼𝘁, here to maintain a secure environment for our discussions.
+	caption := fmt.Sprintf(
+		`Hello %s 👋, I'm your 𝗘𝗱𝗶𝘁 𝗚𝘂𝗮𝗿𝗱𝗶𝗮𝗻 𝗕𝗼𝘁, here to maintain a secure environment for our discussions.
 
 🚫 𝗘𝗱𝗶𝘁𝗲𝗱 𝗠𝗲𝘀𝘀𝗮𝗴𝗲 𝗗𝗲𝗹𝗲𝘁𝗶𝗼𝗻: 𝗜'𝗹𝗹 𝗿𝗲𝗺𝗼𝘃𝗲 𝗲𝗱𝗶𝘁𝗲𝗱 𝗺𝗲𝘀𝘀𝗮𝗴𝗲𝘀 𝘁𝗼 𝗺𝗮𝗶𝗻𝘁𝗮𝗶𝗻 𝘁𝗿𝗮𝗻𝘀𝗽𝗮𝗿𝗲𝗻𝗰𝘆.
 
@@ -65,37 +65,38 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 1. Add me to your group.
 2. I'll start protecting instantly.
 
-➡️ Click on 𝗔𝗱𝗱 𝗚𝗿𝗼𝘂𝗽 to add me and keep our group safe!`, 
-        b.User.Username,
-    )
+➡️ Click on 𝗔𝗱𝗱 𝗚𝗿𝗼𝘂𝗽 to add me and keep our group safe!`,
+		b.User.Username,
+	)
 
-    keyboard := gotgbot.InlineKeyboardMarkup{
-        InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
-            {
-                {Text: "🔄 Update Channel", URL: "https://t.me/Dns_Official_Channel"},
-                {Text: "💬 Update Group", URL: "https://t.me/dns_support_group"},
-            },
-            {
-                {Text: "➕ Add me to Your Group", 
-                 URL: fmt.Sprintf("https://t.me/%s?startgroup=s&admin=delete_messages+invite_users", b.User.Username)},
-            },
-        },
-    }
+	keyboard := gotgbot.InlineKeyboardMarkup{
+		InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
+			{
+				{Text: "🔄 Update Channel", URL: "https://t.me/Dns_Official_Channel"},
+				{Text: "💬 Update Group", URL: "https://t.me/dns_support_group"},
+			},
+			{
+				{
+					Text: "➕ Add me to Your Group",
+					URL:  fmt.Sprintf("https://t.me/%s?startgroup=s&admin=delete_messages+invite_users", b.User.Username),
+				},
+			},
+		},
+	}
 
-    _, err := b.SendPhoto(
-        ctx.EffectiveChat.Id,
-        file,
-        &gotgbot.SendPhotoOpts{
-            Caption:        caption,
-            ProtectContent: true,
-            ParseMode:      "HTML",
-            ReplyMarkup:    keyboard,
-        },
-    )
+	_, err := b.SendPhoto(
+		ctx.EffectiveChat.Id,
+		file,
+		&gotgbot.SendPhotoOpts{
+			Caption:        caption,
+			ProtectContent: true,
+			ParseMode:      "HTML",
+			ReplyMarkup:    keyboard,
+		},
+	)
+	if err != nil {
+		return fmt.Errorf("failed to send photo: %w", err)
+	}
 
-    if err != nil {
-        return fmt.Errorf("failed to send photo: %w", err)
-    }
-
-    return nil
+	return nil
 }
