@@ -145,14 +145,14 @@ To use my features, please upgrade this group to a supergroup.
 }
 
 func AddedToGroups(b *gotgbot.Bot, ctx *ext.Context) error {
- text := fmt.Sprintf(`Hello 👋 I'm <b>%s</b>, here to help keep the chat transparent and secure.
+	text := fmt.Sprintf(`Hello 👋 I'm <b>%s</b>, here to help keep the chat transparent and secure.
 
 🚫 I will automatically delete edited messages to maintain clarity.  
 
 I'm ready to protect this group! ✅  
 Let me know if you need any help.`, b.User.FirstName)
 
-b.SendMessage(ctx.EffectiveChat.Id, text, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
+	b.SendMessage(ctx.EffectiveChat.Id, text, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
 	chatMemberCount, err := b.GetChatMemberCount(ctx.EffectiveChat.Id, nil)
 	if err != nil {
 		chatMemberCount = 0
