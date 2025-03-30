@@ -144,27 +144,42 @@ To use my features, please upgrade this group to a supergroup.
 }
 
 func AddedToGroups(b *gotgbot.Bot, ctx *ext.Context) error {
-	 chatMemberCount, err := b.GetChatMemberCount(ctx.EffectiveChat.Id)
- if err != nil {
- chatMemberCount = "None"
- }
-  logStr := fmt.Sprintf(
-     `🔹 <b>Group Connection Log</b> 🔹  
- ━━━━━━━━━━━━━━━━━━━━━━  
- 📌 <b>Group Name:</b> %s  
- 🆔 <b>Group ID:</b> <code>%d</code>  
- 🔗 <b>Username:</b> @%s  
- 👥 <b>Members:</b> %d  
- ━━━━━━━━━━━━━━━━━━━━━━`,  
-     ctx.EffectiveChat.Title,  
-     ctx.EffectiveChat.Id,  
-     ctx.EffectiveChat.Username,  
-     chatMemberCount
- ) 
- b.SendMessage(config.LoggerId, logStr, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
- 
- 	
-	return ext.EndGroups
+	chatMemberCount, err := b.GetChatMemberCount(ctx.EffectiveChat.Id)
+	if err != nil {
+		chatMemberCount = 0
+	}
+
+
+	groupUsername := ctx.EffectiveChat.Username
+	if groupUsername == "" {
+		groupUsername = "N/A"
+	}
+
+	groupTitle := ctx.EffectiveChat.Title
+	if groupTitle == "" {
+		groupTitle = "Unknown"
+	}
+
+	logStr := fmt.Sprintf(
+		`🔹 <b>Group Connection Log</b> 🔹  
+━━━━━━━━━━━━━━━━━━━━━━  
+📌 <b>Group Name:</b> %s  
+🆔 <b>Group ID:</b> <code>%d</code>  
+🔗 <b>Username:</b> @%s  
+👥 <b>Members:</b> %d  
+━━━━━━━━━━━━━━━━━━━━━━`,  
+		groupTitle,  
+		ctx.EffectiveChat.Id,  
+		groupUsername,  
+		chatMemberCount,
+	)
+
+	_, err = b.SendMessage(config.LoggerId, logStr, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
+	if err != nil {
+		return err
+	}
+
+return nill
 }
 
 func ExtractJoinLeftStatusChange(u *gotgbot.ChatMemberUpdated) (bool, bool) {
