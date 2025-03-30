@@ -53,7 +53,7 @@ func main() {
 
 // start introduces the bot.
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
-	_, err := ctx.EffectiveMessage.Reply(b, fmt.Sprintf("Hello, I'm @%s.\nI am a sample bot to demonstrate how file sending works.\n\nTry the /source command!", b.User.Username), &gotgbot.SendMessageOpts{
+	_, err := ctx.EffectiveMessage.Reply(b, fmt.Sprintf("Hello, I'm @%s.\nI am a sample bot", b.User.Username), &gotgbot.SendMessageOpts{
 		ParseMode: "HTML",
 	})
 	if err != nil {
