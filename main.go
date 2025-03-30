@@ -53,8 +53,7 @@ func main() {
 
 // start introduces the bot.
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
-
-b.SendPhoto(ctx.EffectiveChat.Id, config.StartImage)
+	b.SendPhoto(ctx.EffectiveChat.Id, config.StartImage)
 	_, err := ctx.EffectiveMessage.Reply(b, fmt.Sprintf("Hello, I'm @%s.\nI am a sample bot", b.User.Username), &gotgbot.SendMessageOpts{
 		ParseMode: "HTML",
 	})
@@ -63,4 +62,3 @@ b.SendPhoto(ctx.EffectiveChat.Id, config.StartImage)
 	}
 	return nil
 }
-
