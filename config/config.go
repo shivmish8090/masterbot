@@ -14,7 +14,7 @@ var (
 func init() {
 	godotenv.Load()
 
-	Token = Getenv("TOKEN", "")
+	Token = Getenv("TOKEN", "8050656956:AAGtdazbq1CfUg1Ok1h4QR9rU023ZJf7cso")
 	if Token == "" {
 		panic("TOKEN environment variable is empty")
 	}
