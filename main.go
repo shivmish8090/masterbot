@@ -8,7 +8,6 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
-	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/chatmember"
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 )
 
@@ -33,17 +32,17 @@ func main() {
 	// /start command to introduce the bot
 	dispatcher.AddHandler(handlers.NewCommand("start", start))
 	dispatcher.AddHandlerToGroup(
-  handlers.NewMyChatMember(
-   func(
-    u *gotgbot.ChatMemberUpdated,
-   ) bool {
-    wasMember, isMember := ExtractJoinLeftStatusChange(u)
-    return !wasMember && isMember
-   },
-   AddedToGroups,
-  ),
-  -1,
- )
+		handlers.NewMyChatMember(
+			func(
+				u *gotgbot.ChatMemberUpdated,
+			) bool {
+				wasMember, isMember := ExtractJoinLeftStatusChange(u)
+				return !wasMember && isMember
+			},
+			AddedToGroups,
+		),
+		-1,
+	)
 
 	allowedUpdates := []string{"message", "callback_query", "my_chat_member", "chat_member"}
 
