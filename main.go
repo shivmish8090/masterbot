@@ -32,18 +32,17 @@ func main() {
 	// /start command to introduce the bot
 	dispatcher.AddHandler(handlers.NewCommand("start", start))
 	dispatcher.AddHandler(
-		handlers.NewMyChatMember(
-			func(
-				u *gotgbot.ChatMemberUpdated,
-			) bool {
-				wasMember, isMember := ExtractJoinLeftStatusChange(u)
-				return !wasMember && isMember
-			},
-			AddedToGroups,
-		)
-	)
-	deleteHandler := handlers.NewMessage(
-            func(m *gotgbot.Message) bool {
+    handlers.NewMyChatMember(
+        func(u *gotgbot.ChatMemberUpdated) bool {
+            wasMember, isMember := ExtractJoinLeftStatusChange(u)
+            return !wasMember && isMember
+        },
+        AddedToGroups,
+    ),
+)
+
+deleteHandler := handlers.NewMessage(
+    func(m *gotgbot.Message) bool {
         sender := m.GetSender()
         if sender.User != nil {
             user, err := b.GetChatMember(m.Chat.Id, sender.User.Id, nil)
@@ -58,8 +57,8 @@ func main() {
     },
     deleteLongMessage,
 )
-	
-	dispatcher.AddHandler(deleteHandler)
+
+dispatcher.AddHandler(deleteHandler)
 	allowedUpdates := []string{"message", "callback_query", "my_chat_member", "chat_member"}
 
 	// Start receiving updates.
