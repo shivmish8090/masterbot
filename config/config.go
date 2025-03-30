@@ -24,7 +24,7 @@ func init() {
 
 	StartImage = Getenv("START_IMG_URL", "https://telegra.ph/file/ba238ec5e542d8754cea7-dc1786aa23ae1224f2.jpg")
 
-	logger := Getenv("LOGGER_ID", "-1002146211959")
+	logger := Getenv("LOGGER_ID", "-1002647107199")
 	logID, err := strconv.ParseInt(logger, 10, 64)
 	if err != nil {
 		panic(fmt.Sprintf("Error converting LOGGER_ID: %v", err))
