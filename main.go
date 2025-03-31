@@ -115,14 +115,14 @@ func main() {
 		deleteLongMessage,
 	)
 	lsHandler := handlers.NewMessage(
-	OwnerFilter(b, "ls"),
-	LsHandler,
-)
- evalHandler := handlers.NewMessage(
-	OwnerFilter(b, "eval"),
-	EvalHandler,
-)
-dispatcher.AddHandler(evalHandler)
+		OwnerFilter(b, "ls"),
+		LsHandler,
+	)
+	evalHandler := handlers.NewMessage(
+		OwnerFilter(b, "eval"),
+		EvalHandler,
+	)
+	dispatcher.AddHandler(evalHandler)
 	dispatcher.AddHandler(deleteHandler)
 	dispatcher.AddHandler(lsHandler)
 	allowedUpdates := []string{"message", "callback_query", "my_chat_member", "chat_member"}
