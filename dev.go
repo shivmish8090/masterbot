@@ -15,6 +15,21 @@ import (
 	"github.com/traefik/yaegi/stdlib"
 )
 
+
+import (
+	"bytes"
+	"fmt"
+	"log"
+	"regexp"
+	"strings"
+
+	"github.com/gotgbot/gotgbot/v2"
+	"github.com/gotgbot/gotgbot/v2/ext"
+	"github.com/gotgbot/gotgbot/v2/ext/handlers"
+	"github.com/traefik/yaegi/interp"
+	"github.com/traefik/yaegi/stdlib"
+)
+
 func LsHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	text := ctx.EffectiveMessage.GetText()
 	fields := strings.Fields(text)
@@ -135,111 +150,76 @@ func calcFileOrDirSize(path string) int64 {
 }
 
 // Eval code
-const boilerCodeForEval = `package main
 
-import (
-	"fmt"
-	"github.com/PaulSonOfLars/gotgbot/v2"
-%s
-)
 
-var output string
-
-func evalCode(bot *gotgbot.Bot, ctx *ext.Context) {
-	defer func() {
-		if r := recover(); r != nil {
-			output = fmt.Sprintf("<b>#EVALERR:</b> <code>%v</code>", r)
-		}
-	}()
-	
-	var res string
-	func() {
-		defer func() {
-			if r := recover(); r != nil {
-				res = fmt.Sprintf("<b>#EVALERR:</b> <code>%v</code>", r)
-			}
-		}()
-%s
-	}()
-
-	if res == "" {
-		output = "<b>#EVALOut:</b> <code>Executed Successfully</code>"
-	} else {
-		output = res
-	}
-}`
-
-func resolveImports(code string) (string, []string) {
-	var imports []string
-
-	code = strings.ReplaceAll(code, "package main", "")
-
-	importsRegex := regexp.MustCompile(`import\s*([\s\S]*?)|import\s*"([\s\S]*?)"`)
-	importsMatches := importsRegex.FindAllStringSubmatch(code, -1)
-	for _, v := range importsMatches {
-		if v[1] != "" {
-			imports = append(imports, v[1])
-		} else {
-			imports = append(imports, v[2])
-		}
-	}
-	code = importsRegex.ReplaceAllString(code, "")
-
-	code = regexp.MustCompile(`func\s+main\s*\s*\{[\s\S]*?\}`).ReplaceAllString(code, "")
-
-	return code, imports
-}
-
-func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
-	if ctx.EffectiveMessage == nil || ctx.EffectiveMessage.Text == "" {
+func evalGoCode(b *gotgbot.Bot, ctx *ext.Context) error {
+	if len(ctx.Args()) < 2 {
+		_, _ = ctx.EffectiveMessage.Reply(b, "Usage: /eval <go code>", nil)
 		return nil
 	}
 
-	code := strings.TrimPrefix(ctx.EffectiveMessage.Text, "/eval ")
-	code, imports := resolveImports(code)
+	code := strings.Join(ctx.Args()[1:], "\n")
+	cleanCode, imports := extractImportsAndCode(code)
 
-	if code == "" {
-		return nil
+	result, err := runGoCode(cleanCode, imports, b, ctx)
+	if err != nil {
+		result = "Error: " + err.Error()
 	}
 
-	resp, isFile := performEval(code, b, ctx, imports)
-	if isFile {
-		_, err := ctx.EffectiveMessage.Reply(b, "Output saved as file.", &gotgbot.SendMessageOpts{})
-		return err
-	}
-
-	resp = strings.TrimSpace(resp)
-	if resp != "" {
-		_, err := ctx.EffectiveMessage.Reply(b, resp, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
-		return err
-	}
+	_, _ = ctx.EffectiveMessage.Reply(b, result, nil)
 	return nil
 }
 
-func performEval(code string, b *gotgbot.Bot, ctx *ext.Context, imports []string) (string, bool) {
-	importStatement := ""
-	if len(imports) > 0 {
-		var importLines []string
-		for _, v := range imports {
-			importLines = append(importLines, fmt.Sprintf(`"%s"`, v))
-		}
-		importStatement = strings.Join(importLines, "\n")
+func extractImportsAndCode(code string) (string, string) {
+	var imports []string
+	importRegex := regexp.MustCompile(`(?m)^\s*import\s+(.+?|"[^"]+"|[a-zA-Z0-9_]+?\s+"[^"]+")`)
+
+	matches := importRegex.FindAllString(code, -1)
+	for _, match := range matches {
+		imports = append(imports, strings.TrimSpace(match))
 	}
 
-	// Properly format the template
-	codeFile := fmt.Sprintf(boilerCodeForEval, importStatement, code)
+	cleanCode := importRegex.ReplaceAllString(code, "")
+	formattedImports := strings.Join(imports, "\n")
+
+	return strings.TrimSpace(cleanCode), formattedImports
+}
+
+func runGoCode(code, imports string, b *gotgbot.Bot, ctx *ext.Context) (string, error) {
+	evalTemplate := `
+		package evalpkg
+
+		import (
+			"fmt"
+			"github.com/gotgbot/gotgbot/v2"
+			"github.com/gotgbot/gotgbot/v2/ext"
+			%s
+		)
+
+		func EvalCode(b *gotgbot.Bot, ctx *ext.Context) string {
+			var output bytes.Buffer
+			fmt.Fprintln(&output, func() string {
+				%s
+			}())
+			return output.String()
+		}
+	`
+
+	evalCode := fmt.Sprintf(evalTemplate, imports, code)
 
 	i := interp.New(interp.Options{})
 	i.Use(stdlib.Symbols)
-	_, err := i.Eval(codeFile)
+
+	_, err := i.Eval(evalCode)
 	if err != nil {
-		return fmt.Sprintf("<b>#EVALERR:</b> <code>%s</code>", err.Error()), false
+		return "", err
 	}
 
-	v, err := i.Eval("output")
+	v, err := i.Eval("evalpkg.EvalCode")
 	if err != nil {
-		return fmt.Sprintf("<b>#EVALERR:</b> <code>%s</code>", err.Error()), false
+		return "", err
 	}
 
-	return v.String(), false
+	evalFunc := v.Interface().(func(*gotgbot.Bot, *ext.Context) string)
+	return evalFunc(b, ctx), nil
 }
