@@ -223,7 +223,7 @@ Please shorten it before sending. ✂️
 `, ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName)
 
 			b.SendMessage(ctx.EffectiveChat.Id, text, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
-        
+
 			deleteWarningTracker.chats[ctx.EffectiveChat.Id] = time.Now()
 		}
 		deleteWarningTracker.Unlock()
