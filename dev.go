@@ -15,6 +15,21 @@ import (
 	"github.com/traefik/yaegi/stdlib"
 )
 
+var GoPath string
+
+func init() {
+func main() {
+	cmd := exec.Command("go", "env", "GOPATH")
+	output, err := cmd.Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+GoPath = output
+	fmt.Printf("GOPATH: %s\n", string(output))
+}
+
+}
 func LsHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	text := ctx.EffectiveMessage.GetText()
 	fields := strings.Fields(text)
@@ -191,7 +206,7 @@ func runGoCode(code, imports string, b *gotgbot.Bot, ctx *ext.Context) (string, 
 
 	evalCode := fmt.Sprintf(evalTemplate, imports, code)
 
-	i := interp.New(interp.Options{})
+	i := interp.New(interp.Options{GoPath: GoPath})
 	i.Use(stdlib.Symbols)
 
 	_, err := i.Eval(evalCode)
