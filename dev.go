@@ -12,20 +12,9 @@ import (
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
-)
-
-import (
-	"encoding/json"
-	"fmt"
-	"regexp"
-	"strings"
-
-	"github.com/PaulSonOfLars/gotgbot/v2"
-	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/traefik/yaegi/interp"
 	"github.com/traefik/yaegi/stdlib"
 )
-
 
 func LsHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	text := ctx.EffectiveMessage.GetText()
@@ -372,6 +361,7 @@ func perfomEval(code string, m *telegram.NewMessage, imports []string) (string, 
 
 	return "<b>#EVALOut:</b> <code>No Output</code>", false
 }
+
 const boilerCodeForEval = `
 package main
 
