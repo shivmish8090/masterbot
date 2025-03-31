@@ -20,10 +20,24 @@ func LsHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		dir = strings.TrimSpace(strings.Replace(text, fields[0], "", 1))
 	}
 
-	cmd := exec.Command("ls", dir)
+	cmd := exec.Command("ls", "-A", dir)
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err := cmd.Run()
+	if err != nil {
+		ctx.EffectiveMessage.Reply(b, fmt.Sprintf("<b>Error:</b> <code>%s</code>", err.Error()), &gotgbot.SendMessageOpts{ParseMode: "HTML"})
+		return nil
+	}
+
+	files := strings.Split(strings.TrimSpace(out.String()), "\n")
+	if len(files) == 0 {
+		ctx.EffectiveMessage.Reply(b, "<b>No files found in this directory.</b>", &gotgbot.SendMessageOpts{ParseMode: "HTML"})
+		return nil
+	}
+
+	var responseBuilder strings.Builder
+	var totalSize int64
+
 	fileTypeEmoji := map[string]string{
 		"file":   "📄",
 		"dir":    "📂",
@@ -35,60 +49,56 @@ func LsHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		"txt":    "📜",
 	}
 
-	if err != nil {
-		ctx.EffectiveMessage.Reply(b, "<code>Error:</code> <b>"+err.Error()+"</b>", &gotgbot.SendMessageOpts{ParseMode: "HTML"})
-		return nil
-	}
-
-	files := strings.Split(strings.TrimSpace(out.String()), "\n")
-	var sizeTotal int64
-
-	var resp string
 	for _, file := range files {
+		filePath := filepath.Join(dir, file)
+		fileInfo, err := os.Stat(filePath)
+		if err != nil {
+			continue
+		}
+
 		fileType := "file"
-		if strings.Contains(file, ".") {
-			fp := strings.Split(file, ".")
-			fileType = fp[len(fp)-1]
+		if fileInfo.IsDir() {
+			fileType = "dir"
+		} else {
+			ext := strings.ToLower(filepath.Ext(file))
+			switch ext {
+			case ".mp4", ".mkv", ".webm", ".avi", ".flv", ".mov", ".wmv", ".3gp":
+				fileType = "video"
+			case ".mp3", ".wav", ".flac", ".ogg", ".m4a", ".wma":
+				fileType = "audio"
+			case ".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".tiff":
+				fileType = "image"
+			case ".go":
+				fileType = "go"
+			case ".py":
+				fileType = "python"
+			case ".txt":
+				fileType = "txt"
+			}
 		}
-		switch fileType {
-		case "mp4", "mkv", "webm", "avi", "flv", "mov", "wmv", "3gp":
-			fileType = "video"
-		case "mp3", "wav", "flac", "ogg", "m4a", "wma":
-			fileType = "audio"
-		case "jpg", "jpeg", "png", "gif", "webp", "bmp", "tiff":
-			fileType = "image"
-		case "go":
-			fileType = "go"
-		case "py":
-			fileType = "python"
-		case "txt":
-			fileType = "txt"
-		default:
-			fileType = "file"
-		}
-		size := calcFileOrDirSize(filepath.Join(dir, file))
-		sizeTotal += size
-		resp += fileTypeEmoji[fileType] + " " + file + " " + "(" + sizeToHuman(size) + ")" + "\n"
+
+		fileSize := calcFileOrDirSize(filePath)
+		totalSize += fileSize
+		responseBuilder.WriteString(fmt.Sprintf("%s <b>%s</b> (%s)\n", fileTypeEmoji[fileType], file, sizeToHuman(fileSize)))
 	}
 
-	resp += "\nTotal: " + sizeToHuman(sizeTotal)
-
-	ctx.EffectiveMessage.Reply(b, "<pre lang='bash'>"+resp+"</pre>", &gotgbot.SendMessageOpts{ParseMode: "HTML"})
+	responseBuilder.WriteString(fmt.Sprintf("\n<b>Total Size:</b> %s", sizeToHuman(totalSize)))
+	ctx.EffectiveMessage.Reply(b, responseBuilder.String(), &gotgbot.SendMessageOpts{ParseMode: "HTML"})
 
 	return nil
 }
 
 func sizeToHuman(size int64) string {
-	if size < 1024 {
+	switch {
+	case size < 1024:
 		return fmt.Sprintf("%d B", size)
-	}
-	if size < 1024*1024 {
+	case size < 1024*1024:
 		return fmt.Sprintf("%.2f KB", float64(size)/1024)
-	}
-	if size < 1024*1024*1024 {
+	case size < 1024*1024*1024:
 		return fmt.Sprintf("%.2f MB", float64(size)/(1024*1024))
+	default:
+		return fmt.Sprintf("%.2f GB", float64(size)/(1024*1024*1024))
 	}
-	return fmt.Sprintf("%.2f GB", float64(size)/(1024*1024*1024))
 }
 
 func calcFileOrDirSize(path string) int64 {
@@ -101,26 +111,22 @@ func calcFileOrDirSize(path string) int64 {
 		return fi.Size()
 	}
 
-	var size int64
-	walker := func(path string, info os.DirEntry, err error) error {
+	var totalSize int64
+	err = filepath.WalkDir(path, func(_ string, info os.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
-
 		if !info.IsDir() {
 			fi, err := info.Info()
 			if err != nil {
 				return err
 			}
-			size += fi.Size()
+			totalSize += fi.Size()
 		}
 		return nil
-	}
-
-	err = filepath.WalkDir(path, walker)
+	})
 	if err != nil {
 		return 0
 	}
-
-	return size
+	return totalSize
 }
