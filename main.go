@@ -299,17 +299,17 @@ Alternatively, use /eco for sending longer messages. 📜
 }
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
-        if len(ctx.Args()) < 2 {
-              ctx.EffectiveMessage.Reply(b, "Usage: /eco <long message>", nil)
-                return nil
-        }
+	if len(ctx.Args()) < 2 {
+		ctx.EffectiveMessage.Reply(b, "Usage: /eco <long message>", nil)
+		return nil
+	}
 
-        text := strings.Join(ctx.Args()[1:], "\n")
-        page, err := TelegraphAccount.CreatePage(TelegraphClient, "Eco Message", text, nil)
-  if err != nil {
-return err
-}
-ctx.EffectiveMessage.Reply(b, page.Url)
+	text := strings.Join(ctx.Args()[1:], "\n")
+	page, err := TelegraphAccount.CreatePage(TelegraphClient, "Eco Message", text, nil)
+	if err != nil {
+		return err
+	}
+	ctx.EffectiveMessage.Reply(b, page.Url)
 	return nil
 }
 
