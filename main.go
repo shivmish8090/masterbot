@@ -142,7 +142,7 @@ func main() {
 		panic("failed to start polling: " + err.Error())
 	}
 	log.Printf("%s has been started...\n", b.User.Username)
- b.SendMessage(config.LoggerId, fmt.Sprintf("%s has  started\n", b.User.Username), nil)
+	b.SendMessage(config.LoggerId, fmt.Sprintf("%s has  started\n", b.User.Username), nil)
 
 	// Idle, to keep updates coming in, and avoid bot stopping.
 	updater.Idle()
