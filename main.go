@@ -59,13 +59,13 @@ func main() {
 	TelegraphClient = &telegraph.TelegraphClient{
 		ApiUrl: "https://api.telegra.ph/",
 		HttpClient: &http.Client{
-			Timeout: 15 * time.Second,
+			/*Timeout: 15 * time.Second,
 			/* Transport: &http.Transport{
 				MaxIdleConns:        100,
 				MaxIdleConnsPerHost: 10,
 				IdleConnTimeout:     90 * time.Second,
 			},*/
-		},
+		},*/
 	}
 	account, err := TelegraphClient.CreateAccount(b.User.Username, &telegraph.CreateAccountOpts{
 		AuthorName: b.User.FirstName + b.User.LastName,
