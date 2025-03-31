@@ -41,8 +41,8 @@ func main() {
 			},
 		},
 	}
-	account, err := client.CreateAccount("editguardianbot", &telegraph.CreateAccountOpts{
-		AuthorName: "Edit Guardian Bot",
+	account, err := client.CreateAccount(b.User.Username, &telegraph.CreateAccountOpts{
+		AuthorName: b.User.FirstName + b.User.LastName,
 		AuthorUrl:  fmt.Sprintf("https://t.me/%s", b.User.Username),
 	})
 	if err != nil {
