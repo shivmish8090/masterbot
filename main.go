@@ -217,7 +217,12 @@ func deleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 		deleteWarningTracker.Lock()
 		lastWarning, exists := deleteWarningTracker.chats[ctx.EffectiveChat.Id]
 		if !exists || time.Since(lastWarning) > time.Second {
-			b.SendMessage(ctx.EffectiveChat.Id, "You can't send messages longer than 800 characters.", nil)
+   text := fmt.Sprintf(`
+⚠️ <a href="tg://user?id=%d">%s</a>, your message exceeds the 800-character limit! 🚫 
+Please shorten it before sending. ✂️
+`, ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName)
+
+			b.SendMessage(ctx.EffectiveChat.Id, text, nil)
 			deleteWarningTracker.chats[ctx.EffectiveChat.Id] = time.Now()
 		}
 		deleteWarningTracker.Unlock()
