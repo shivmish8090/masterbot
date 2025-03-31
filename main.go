@@ -58,8 +58,8 @@ func main() {
 	}
 	TelegraphClient = &telegraph.TelegraphClient{
 		ApiUrl: "https://api.telegra.ph/",
-		HttpClient: &http.Client{
-			/*Timeout: 15 * time.Second,
+		/*HttpClient: &http.Client{
+			Timeout: 15 * time.Second,
 			 Transport: &http.Transport{
 				MaxIdleConns:        100,
 				MaxIdleConnsPerHost: 10,
