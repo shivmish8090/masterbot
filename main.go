@@ -97,7 +97,7 @@ func main() {
 			AddedToGroups,
 		),
 	)
- dispatcher.AddHandler(handlers.NewCommand("eco", EcoHandler))
+	dispatcher.AddHandler(handlers.NewCommand("eco", EcoHandler))
 	deleteHandler := handlers.NewMessage(
 		func(m *gotgbot.Message) bool {
 			sender := m.GetSender()
@@ -299,8 +299,7 @@ Alternatively, use /eco for sending longer messages. 📜
 }
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
-return nil
-
+	return nil
 }
 
 func ExtractJoinLeftStatusChange(u *gotgbot.ChatMemberUpdated) (bool, bool) {
