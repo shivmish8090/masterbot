@@ -176,7 +176,7 @@ func runGoCode(code, imports string, b *gotgbot.Bot, ctx *ext.Context) (string, 
 		import (
 			"fmt"
 			"github.com/PaulSonOfLars/gotgbot/v2"
-	  "github.com/PaulSonOfLars/gotgbot/v2/ext"
+			"github.com/PaulSonOfLars/gotgbot/v2/ext"
 			%s
 		)
 
