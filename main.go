@@ -19,8 +19,10 @@ var deleteWarningTracker = struct {
 	chats map[int64]time.Time
 }{chats: make(map[int64]time.Time)}
 
-var TelegraphClient *telegraph.TelegraphClient
-var TelegraphAccount *telegraph.Account
+var (
+	TelegraphClient  *telegraph.TelegraphClient
+	TelegraphAccount *telegraph.Account
+)
 
 func main() {
 	// Create bot from environment value.
@@ -39,15 +41,14 @@ func main() {
 			},
 		},
 	}
-account, err := client.CreateAccount("editguardianbot", &telegraph.CreateAccountOpts{
-    AuthorName: "Edit Guardian Bot",
-    AuthorUrl:  fmt.Sprintf("https://t.me/%s", b.User.Username),
-})
-
-if err != nil {
-    log.Fatalf("Failed to create Telegraph account: %v", err)
-}
-TelegraphAccount = account
+	account, err := client.CreateAccount("editguardianbot", &telegraph.CreateAccountOpts{
+		AuthorName: "Edit Guardian Bot",
+		AuthorUrl:  fmt.Sprintf("https://t.me/%s", b.User.Username),
+	})
+	if err != nil {
+		log.Fatalf("Failed to create Telegraph account: %v", err)
+	}
+	TelegraphAccount = account
 	// Create updater and dispatcher.
 	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
 		// If an error is returned by a handler, log it and continue going.
