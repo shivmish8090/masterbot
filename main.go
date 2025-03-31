@@ -3,9 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
-	"time"
- "time"
 	"sync"
+	"time"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
@@ -17,7 +16,6 @@ var deleteWarningTracker = struct {
 	sync.Mutex
 	chats map[int64]time.Time
 }{chats: make(map[int64]time.Time)}
-
 
 func main() {
 	// Create bot from environment value.
@@ -228,6 +226,7 @@ func deleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 	return ext.EndGroups
 }
+
 func ExtractJoinLeftStatusChange(u *gotgbot.ChatMemberUpdated) (bool, bool) {
 	if u.Chat.Type == "channel" {
 		return false, false
