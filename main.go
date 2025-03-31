@@ -18,12 +18,26 @@ var deleteWarningTracker = struct {
 	chats map[int64]time.Time
 }{chats: make(map[int64]time.Time)}
 
+var telegraphClient *telegraph.TelegraphClient
+
+
 func main() {
 	// Create bot from environment value.
 	b, err := gotgbot.NewBot(config.Token, nil)
 	if err != nil {
 		panic("failed to create new bot: " + err.Error())
 	}
+ telegraphClient = &telegraph.TelegraphClient{
+        ApiUrl: "https://api.telegra.ph/",
+        HttpClient: &http.Client{
+            Timeout: 5 * time.Second,
+            Transport: &http.Transport{
+                MaxIdleConns:        100,
+                MaxIdleConnsPerHost: 10,
+                IdleConnTimeout:     90 * time.Second,
+            },
+        },
+    }
 
 	// Create updater and dispatcher.
 	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
