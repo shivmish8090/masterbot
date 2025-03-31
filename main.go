@@ -118,6 +118,8 @@ func main() {
 		OwnerFilter(b, "ls"),
 		LsHandler,
 	)
+	lsHandler = lsHandler.SetAllowEdited(true)
+
 	evalHandler := handlers.NewMessage(
 		OwnerFilter(b, "eval"),
 		EvalHandler,
