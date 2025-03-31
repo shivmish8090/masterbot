@@ -41,7 +41,7 @@ func main() {
 			},
 		},
 	}
-	account, err := client.CreateAccount(b.User.Username, &telegraph.CreateAccountOpts{
+	account, err := TelegraphClient.CreateAccount(b.User.Username, &telegraph.CreateAccountOpts{
 		AuthorName: b.User.FirstName + b.User.LastName,
 		AuthorUrl:  fmt.Sprintf("https://t.me/%s", b.User.Username),
 	})
