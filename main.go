@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
+	"unicode/utf8"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
@@ -94,32 +96,32 @@ func main() {
 				return False
 			}
 			msg := m
-			        ents := msg.GetEntities()
-        if len(ents) != 0 && ents[0].Offset == 0 && ents[0].Type != "bot_command" {
-                return false
-        }
+			ents := msg.GetEntities()
+			if len(ents) != 0 && ents[0].Offset == 0 && ents[0].Type != "bot_command" {
+				return false
+			}
 
-        text := msg.GetText()
-	Triggers := []rune{"/"}
+			text := msg.GetText()
+			Triggers := []rune{"/"}
 
-        var cmd string
-        for _, t := range Triggers {
-                if r, _ := utf8.DecodeRuneInString(text); r != t {
-                        continue
-                }
+			var cmd string
+			for _, t := range Triggers {
+				if r, _ := utf8.DecodeRuneInString(text); r != t {
+					continue
+				}
 
-                split := strings.Split(strings.ToLower(strings.Fields(text)[0]), "@")
-                if len(split) > 1 && split[1] != strings.ToLower(b.User.Username) {
-                        return false
-                }
-                cmd = split[0][1:]
-                break
-        }
-        if cmd == "" {
-                return false
-        }
+				split := strings.Split(strings.ToLower(strings.Fields(text)[0]), "@")
+				if len(split) > 1 && split[1] != strings.ToLower(b.User.Username) {
+					return false
+				}
+				cmd = split[0][1:]
+				break
+			}
+			if cmd == "" {
+				return false
+			}
 
-        return cmd == "ls"
+			return cmd == "ls"
 		},
 		LsHandler,
 	)
