@@ -138,37 +138,36 @@ func calcFileOrDirSize(path string) int64 {
 const boilerCodeForEval = `
 package main
 
-%s
-
 import (
-	"fmt"
-	"github.com/PaulSonOfLars/gotgbot/v2"
+        "fmt"
+        "github.com/PaulSonOfLars/gotgbot/v2"
+        %s
 )
 
 var output string
 
 func evalCode(bot *gotgbot.Bot, ctx *ext.Context) {
-	defer func() {
-		if r := recover(); r != nil {
-			output = fmt.Sprintf("<b>#EVALERR:</b> <code>%v</code>", r)
-		}
-	}()
-	
-	var res string
-	func() {
-		defer func() {
-			if r := recover(); r != nil {
-				res = fmt.Sprintf("<b>#EVALERR:</b> <code>%v</code>", r)
-			}
-		}()
-		%s
-	}()
+        defer func() {
+                if r := recover(); r != nil {
+                        output = fmt.Sprintf("<b>#EVALERR:</b> <code>%v</code>", r)
+                }
+        }()
+        
+        var res string
+        func() {
+                defer func() {
+                        if r := recover(); r != nil {
+                                res = fmt.Sprintf("<b>#EVALERR:</b> <code>%v</code>", r)
+                        }
+                }()
+                %s
+        }()
 
-	if res == "" {
-		output = "<b>#EVALOut:</b> <code>Executed Successfully</code>"
-	} else {
-		output = res
-	}
+        if res == "" {
+                output = "<b>#EVALOut:</b> <code>Executed Successfully</code>"
+        } else {
+                output = res
+        }
 }
 `
 
