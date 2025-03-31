@@ -15,11 +15,10 @@ import (
 func LsHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	text := ctx.EffectiveMessage.GetText()
 	fields := strings.Fields(text)
-	dir := ""
-	if len(fields) < 1 {
-		dir = "."
-	}
-	dir = strings.TrimSpace(strings.Replace(text, fields[0], "", 1))
+	dir := "."
+    if len(fields) > 1 {
+        dir = strings.TrimSpace(strings.Replace(text, fields[0], "", 1))
+    }
 
 	cmd := exec.Command("ls", dir)
 	var out bytes.Buffer
