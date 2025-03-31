@@ -309,7 +309,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if err != nil {
 		return err
 	}
-	ctx.EffectiveMessage.Reply(b, page.Url)
+	ctx.EffectiveMessage.Reply(b, page.Url, nil)
 	return nil
 }
 
