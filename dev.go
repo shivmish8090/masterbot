@@ -14,6 +14,7 @@ import (
 	"github.com/traefik/yaegi/interp"
 	"github.com/traefik/yaegi/stdlib"
 )
+
 func LsHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	text := ctx.EffectiveMessage.GetText()
 	fields := strings.Fields(text)
@@ -134,7 +135,6 @@ func calcFileOrDirSize(path string) int64 {
 }
 
 // Eval code
-
 
 func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if len(ctx.Args()) < 2 {
