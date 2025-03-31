@@ -20,15 +20,9 @@ jobs:
 
       - name: Install Formatting Tools
         run: |
-          go install golang.org/x/tools/cmd/goimports@latest
-          go install mvdan.cc/gofumpt@latest
-
-      - name: Format Go Codes
-        run: |
-          go mod tidy
-          gofmt -w .
-          goimports -w .
-          gofumpt -w .
+          #go install golang.org/x/tools/cmd/goimports@latest
+          #go install mvdan.cc/gofumpt@latest
+          go get github.com/iawaknahc/telegraph-go
 
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
