@@ -221,9 +221,6 @@ func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func performEval(code string, b *gotgbot.Bot, ctx *ext.Context, imports []string) (string, bool) {
-	msgB, _ := json.Marshal(ctx.EffectiveMessage)
-	usrB, _ := json.Marshal(ctx.EffectiveUser)
-	chatB, _ := json.Marshal(ctx.EffectiveChat)
 
 	importStatement := ""
 	if len(imports) > 0 {
