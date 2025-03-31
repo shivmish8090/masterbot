@@ -52,7 +52,6 @@ func OwnerFilter(b *gotgbot.Bot, cmd string) func(m *gotgbot.Message) bool {
 }
 
 func main() {
-	os.Setenv("GOMODCACHE", "/app/go/pkg/mod")
 	// Create bot from environment value.
 	b, err := gotgbot.NewBot(config.Token, nil)
 	if err != nil {
