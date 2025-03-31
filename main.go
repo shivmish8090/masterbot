@@ -208,10 +208,10 @@ Let me know if you need any help.`, b.User.FirstName)
 func deleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	done, err := ctx.EffectiveMessage.Delete(b, nil)
 	if done {
-	        b.SendMessage(ctx.EffectiveChat.Id, "You xan send longer message then 800 characters", nil)
- } else {
-    return err
-}
+		b.SendMessage(ctx.EffectiveChat.Id, "You xan send longer message then 800 characters", nil)
+	} else {
+		return err
+	}
 	return ext.EndGroups
 }
 
