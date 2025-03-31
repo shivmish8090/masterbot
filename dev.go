@@ -2,10 +2,12 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
@@ -131,9 +133,7 @@ func calcFileOrDirSize(path string) int64 {
 	return totalSize
 }
 
-
 // Eval code
-
 
 const boiler_code_for_eval = `
 package main
@@ -248,114 +248,114 @@ func packMessage(c *telegram.Client, message telegram.Message, sender *telegram.
 `
 
 func resolveImports(code string) (string, []string) {
-        var imports []string
-        importsRegex := regexp.MustCompile(`import\s*\(([\s\S]*?)\)|import\s*\"([\s\S]*?)\"`)
-        importsMatches := importsRegex.FindAllStringSubmatch(code, -1)
-        for _, v := range importsMatches {
-                if v[1] != "" {
-                        imports = append(imports, v[1])
-                } else {
-                        imports = append(imports, v[2])
-                }
-        }
-        code = importsRegex.ReplaceAllString(code, "")
-        return code, imports
+	var imports []string
+	importsRegex := regexp.MustCompile(`import\s*\(([\s\S]*?)\)|import\s*\"([\s\S]*?)\"`)
+	importsMatches := importsRegex.FindAllStringSubmatch(code, -1)
+	for _, v := range importsMatches {
+		if v[1] != "" {
+			imports = append(imports, v[1])
+		} else {
+			imports = append(imports, v[2])
+		}
+	}
+	code = importsRegex.ReplaceAllString(code, "")
+	return code, imports
 }
 
 func EvalHandle(m *telegram.NewMessage) error {
-        code := m.Args()
-        code, imports := resolveImports(code)
+	code := m.Args()
+	code, imports := resolveImports(code)
 
-        if code == "" {
-                return nil
-        }
+	if code == "" {
+		return nil
+	}
 
-        defer os.Remove("tmp/eval.go")
-        defer os.Remove("tmp/eval_out.txt")
-        defer os.Remove("tmp")
+	defer os.Remove("tmp/eval.go")
+	defer os.Remove("tmp/eval_out.txt")
+	defer os.Remove("tmp")
 
-        resp, isfile := perfomEval(code, m, imports)
-        if isfile {
-                if _, err := m.ReplyMedia(resp, telegram.MediaOptions{Caption: "Output"}); err != nil {
-                        m.Reply("Error: " + err.Error())
-                }
-                return nil
-        }
-        resp = strings.TrimSpace(resp)
+	resp, isfile := perfomEval(code, m, imports)
+	if isfile {
+		if _, err := m.ReplyMedia(resp, telegram.MediaOptions{Caption: "Output"}); err != nil {
+			m.Reply("Error: " + err.Error())
+		}
+		return nil
+	}
+	resp = strings.TrimSpace(resp)
 
-        if resp != "" {
-                if _, err := m.Reply(resp); err != nil {
-                        m.Reply(err)
-                }
-        }
-        return nil
+	if resp != "" {
+		if _, err := m.Reply(resp); err != nil {
+			m.Reply(err)
+		}
+	}
+	return nil
 }
 
 func perfomEval(code string, m *telegram.NewMessage, imports []string) (string, bool) {
-        msg_b, _ := json.Marshal(m.Message)
-        snd_b, _ := json.Marshal(m.Sender)
-        cnt_b, _ := json.Marshal(m.Chat)
-        chn_b, _ := json.Marshal(m.Channel)
-        cache_b, _ := m.Client.Cache.ExportJSON()
-        var importStatement string = ""
-        if len(imports) > 0 {
-                importStatement = "import (\n"
-                for _, v := range imports {
-                        importStatement += `"` + v + `"` + "\n"
-                }
-                importStatement += ")\n"
-        }
+	msg_b, _ := json.Marshal(m.Message)
+	snd_b, _ := json.Marshal(m.Sender)
+	cnt_b, _ := json.Marshal(m.Chat)
+	chn_b, _ := json.Marshal(m.Channel)
+	cache_b, _ := m.Client.Cache.ExportJSON()
+	var importStatement string = ""
+	if len(imports) > 0 {
+		importStatement = "import (\n"
+		for _, v := range imports {
+			importStatement += `"` + v + `"` + "\n"
+		}
+		importStatement += ")\n"
+	}
 
-        code_file := fmt.Sprintf(boiler_code_for_eval, importStatement, m.ID, msg_b, snd_b, cnt_b, chn_b, cache_b, code, m.Client.ExportSession())
-        tmp_dir := "tmp"
-        _, err := os.ReadDir(tmp_dir)
-        if err != nil {
-                err = os.Mkdir(tmp_dir, 0755)
-                if err != nil {
-                        fmt.Println(err)
-                }
-        }
+	code_file := fmt.Sprintf(boiler_code_for_eval, importStatement, m.ID, msg_b, snd_b, cnt_b, chn_b, cache_b, code, m.Client.ExportSession())
+	tmp_dir := "tmp"
+	_, err := os.ReadDir(tmp_dir)
+	if err != nil {
+		err = os.Mkdir(tmp_dir, 0o755)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 
-        //defer os.Remove(tmp_dir)
+	// defer os.Remove(tmp_dir)
 
-        os.WriteFile(tmp_dir+"/eval.go", []byte(code_file), 0644)
-        cmd := exec.Command("go", "run", "tmp/eval.go")
-        var stdOut bytes.Buffer
-        cmd.Stdout = &stdOut
-        var stdErr bytes.Buffer
-        cmd.Stderr = &stdErr
+	os.WriteFile(tmp_dir+"/eval.go", []byte(code_file), 0o644)
+	cmd := exec.Command("go", "run", "tmp/eval.go")
+	var stdOut bytes.Buffer
+	cmd.Stdout = &stdOut
+	var stdErr bytes.Buffer
+	cmd.Stderr = &stdErr
 
-        err = cmd.Run()
-        if stdOut.String() == "" && stdErr.String() == "" {
-                if err != nil {
-                        return fmt.Sprintf("<b>#EVALERR:</b> <code>%s</code>", err.Error()), false
-                }
-                return "<b>#EVALOut:</b> <code>No Output</code>", false
-        }
+	err = cmd.Run()
+	if stdOut.String() == "" && stdErr.String() == "" {
+		if err != nil {
+			return fmt.Sprintf("<b>#EVALERR:</b> <code>%s</code>", err.Error()), false
+		}
+		return "<b>#EVALOut:</b> <code>No Output</code>", false
+	}
 
-        if stdOut.String() != "" {
-                if len(stdOut.String()) > 4095 {
-                        os.WriteFile("tmp/eval_out.txt", stdOut.Bytes(), 0644)
-                        return "tmp/eval_out.txt", true
-                }
+	if stdOut.String() != "" {
+		if len(stdOut.String()) > 4095 {
+			os.WriteFile("tmp/eval_out.txt", stdOut.Bytes(), 0o644)
+			return "tmp/eval_out.txt", true
+		}
 
-                strDou := strings.Split(stdOut.String(), "output-start")
+		strDou := strings.Split(stdOut.String(), "output-start")
 
-                return fmt.Sprintf("<b>#EVALOut:</b> <code>%s</code>", strings.TrimSpace(strDou[1])), false
-        }
+		return fmt.Sprintf("<b>#EVALOut:</b> <code>%s</code>", strings.TrimSpace(strDou[1])), false
+	}
 
-        if stdErr.String() != "" {
-                var regexErr = regexp.MustCompile(`eval.go:\d+:\d+:`)
-                errMsg := regexErr.Split(stdErr.String(), -1)
-                if len(errMsg) > 1 {
-                        if len(errMsg[1]) > 4095 {
-                                os.WriteFile("tmp/eval_out.txt", []byte(errMsg[1]), 0644)
-                                return "tmp/eval_out.txt", true
-                        }
-                        return fmt.Sprintf("<b>#EVALERR:</b> <code>%s</code>", strings.TrimSpace(errMsg[1])), false
-                }
-                return fmt.Sprintf("<b>#EVALERR:</b> <code>%s</code>", stdErr.String()), false
-        }
+	if stdErr.String() != "" {
+		regexErr := regexp.MustCompile(`eval.go:\d+:\d+:`)
+		errMsg := regexErr.Split(stdErr.String(), -1)
+		if len(errMsg) > 1 {
+			if len(errMsg[1]) > 4095 {
+				os.WriteFile("tmp/eval_out.txt", []byte(errMsg[1]), 0o644)
+				return "tmp/eval_out.txt", true
+			}
+			return fmt.Sprintf("<b>#EVALERR:</b> <code>%s</code>", strings.TrimSpace(errMsg[1])), false
+		}
+		return fmt.Sprintf("<b>#EVALERR:</b> <code>%s</code>", stdErr.String()), false
+	}
 
-        return "<b>#EVALOut:</b> <code>No Output</code>", false
+	return "<b>#EVALOut:</b> <code>No Output</code>", false
 }
