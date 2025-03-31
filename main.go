@@ -4,12 +4,20 @@ import (
 	"fmt"
 	"log"
 	"time"
+ "time"
+	"sync"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 )
+
+var deleteWarningTracker = struct {
+	sync.Mutex
+	chats map[int64]time.Time
+}{chats: make(map[int64]time.Time)}
+
 
 func main() {
 	// Create bot from environment value.
@@ -208,13 +216,18 @@ Let me know if you need any help.`, b.User.FirstName)
 func deleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	done, err := ctx.EffectiveMessage.Delete(b, nil)
 	if done {
-		b.SendMessage(ctx.EffectiveChat.Id, "You xan send longer message then 800 characters", nil)
+		deleteWarningTracker.Lock()
+		lastWarning, exists := deleteWarningTracker.chats[ctx.EffectiveChat.Id]
+		if !exists || time.Since(lastWarning) > time.Second {
+			b.SendMessage(ctx.EffectiveChat.Id, "You can't send messages longer than 800 characters.", nil)
+			deleteWarningTracker.chats[ctx.EffectiveChat.Id] = time.Now()
+		}
+		deleteWarningTracker.Unlock()
 	} else {
 		return err
 	}
 	return ext.EndGroups
 }
-
 func ExtractJoinLeftStatusChange(u *gotgbot.ChatMemberUpdated) (bool, bool) {
 	if u.Chat.Type == "channel" {
 		return false, false
