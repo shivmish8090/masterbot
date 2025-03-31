@@ -206,8 +206,8 @@ Let me know if you need any help.`, b.User.FirstName)
 }
 
 func deleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
-ctx.EffectiveMessage.Delete(b, nil)
- ctx.EffectiveMessage.Reply(b, "You xan send longer message then 800 characters", nil)
+	ctx.EffectiveMessage.Delete(b, nil)
+	ctx.EffectiveMessage.Reply(b, "You xan send longer message then 800 characters", nil)
 	return ext.EndGroups
 }
 
