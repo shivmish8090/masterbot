@@ -56,7 +56,7 @@ func main() {
 		panic("failed to create new bot: " + err.Error())
 	}
 	TelegraphClient = &telegraph.TelegraphClient{
-		ApiUrl: "https://api.telegra.ph/",
+		ApiUrl: "https://api.graph.org/",
 		/*HttpClient: &http.Client{
 			Timeout: 15 * time.Second,
 			 Transport: &http.Transport{
