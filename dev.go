@@ -135,41 +135,39 @@ func calcFileOrDirSize(path string) int64 {
 }
 
 // Eval code
-const boilerCodeForEval = `
-package main
+const boilerCodeForEval = `package main
 
 import (
-        "fmt"
-        "github.com/PaulSonOfLars/gotgbot/v2"
-        %s
+	"fmt"
+	"github.com/PaulSonOfLars/gotgbot/v2"
+%s
 )
 
 var output string
 
 func evalCode(bot *gotgbot.Bot, ctx *ext.Context) {
-        defer func() {
-                if r := recover(); r != nil {
-                        output = fmt.Sprintf("<b>#EVALERR:</b> <code>%v</code>", r)
-                }
-        }()
-        
-        var res string
-        func() {
-                defer func() {
-                        if r := recover(); r != nil {
-                                res = fmt.Sprintf("<b>#EVALERR:</b> <code>%v</code>", r)
-                        }
-                }()
-                %s
-        }()
+	defer func() {
+		if r := recover(); r != nil {
+			output = fmt.Sprintf("<b>#EVALERR:</b> <code>%v</code>", r)
+		}
+	}()
+	
+	var res string
+	func() {
+		defer func() {
+			if r := recover(); r != nil {
+				res = fmt.Sprintf("<b>#EVALERR:</b> <code>%v</code>", r)
+			}
+		}()
+%s
+	}()
 
-        if res == "" {
-                output = "<b>#EVALOut:</b> <code>Executed Successfully</code>"
-        } else {
-                output = res
-        }
-}
-`
+	if res == "" {
+		output = "<b>#EVALOut:</b> <code>Executed Successfully</code>"
+	} else {
+		output = res
+	}
+}`
 
 func resolveImports(code string) (string, []string) {
 	var imports []string
@@ -221,13 +219,14 @@ func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 func performEval(code string, b *gotgbot.Bot, ctx *ext.Context, imports []string) (string, bool) {
 	importStatement := ""
 	if len(imports) > 0 {
-		importStatement = "import (\n"
+		var importLines []string
 		for _, v := range imports {
-			importStatement += `"` + v + `"` + "\n"
+			importLines = append(importLines, fmt.Sprintf(`"%s"`, v))
 		}
-		importStatement += ")\n"
+		importStatement = strings.Join(importLines, "\n")
 	}
 
+	// Properly format the template
 	codeFile := fmt.Sprintf(boilerCodeForEval, importStatement, code)
 
 	i := interp.New(interp.Options{})
