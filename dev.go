@@ -191,7 +191,7 @@ func runGoCode(code, imports string, b *gotgbot.Bot, ctx *ext.Context) (string, 
 
 	evalCode := fmt.Sprintf(evalTemplate, imports, code)
 
-	i := interp.New(interp.Options{})
+	i := interp.New(interp.Options{GoPath: "/app/go"})
 	i.Use(stdlib.Symbols)
 
 	_, err := i.Eval(evalCode)
