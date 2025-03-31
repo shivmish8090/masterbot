@@ -30,7 +30,7 @@ func main() {
 	if err != nil {
 		panic("failed to create new bot: " + err.Error())
 	}
-	telegraphClient = &telegraph.TelegraphClient{
+	TelegraphClient = &telegraph.TelegraphClient{
 		ApiUrl: "https://api.telegra.ph/",
 		HttpClient: &http.Client{
 			Timeout: 5 * time.Second,
