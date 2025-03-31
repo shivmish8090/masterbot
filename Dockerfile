@@ -1,5 +1,8 @@
-#FROM golang:1.23-bookworm
 FROM golang:1.23-alpine
+
+ENV GOPATH=/app/go
+ENV PATH=$GOPATH/bin:$PATH
+
 WORKDIR /app
 
 COPY go.mod go.sum ./
