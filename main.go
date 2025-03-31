@@ -25,6 +25,31 @@ var (
 	TelegraphAccount *telegraph.Account
 )
 
+func OwnerFilter(b *gotgbot.Bot, cmd string) func(m *gotgbot.Message) bool {
+	return func(m *gotgbot.Message) bool {
+		if m.From.Id != config.OwnerId {
+			return false
+		}
+
+		ents := m.Entities
+		if len(ents) != 0 && ents[0].Offset == 0 && ents[0].Type != "bot_command" {
+			return false
+		}
+
+		text := m.GetText()
+		if text == "" || !strings.HasPrefix(text, "/") {
+			return false
+		}
+
+		split := strings.Split(strings.ToLower(strings.Fields(text)[0]), "@")
+		if len(split) > 1 && (split[1] != strings.ToLower(b.User.Username)) {
+			return false
+		}
+
+		return split[0][1:] == cmd
+	}
+}
+
 func main() {
 	// Create bot from environment value.
 	b, err := gotgbot.NewBot(config.Token, nil)
@@ -90,30 +115,13 @@ func main() {
 		deleteLongMessage,
 	)
 	lsHandler := handlers.NewMessage(
-		func(m *gotgbot.Message) bool {
-			if m.From.Id != config.OwnerId {
-				return false
-			}
-
-			ents := m.Entities
-			if len(ents) != 0 && ents[0].Offset == 0 && ents[0].Type != "bot_command" {
-				return false
-			}
-
-			text := m.GetText()
-			if text == "" || !strings.HasPrefix(text, "/") {
-				return false
-			}
-
-			split := strings.Split(strings.ToLower(strings.Fields(text)[0]), "@")
-			if len(split) > 1 && (split[1] != strings.ToLower(b.User.Username)) {
-				return false
-			}
-
-			return split[0][1:] == "ls"
-		},
-		LsHandler,
-	)
+	OwnerFilter(b, "ls"),
+	LsHandler,
+)
+ evalHandler = := handlers.NewMessage(
+	OwnerFilter(b, "eval"),
+	Eval,
+)
 	dispatcher.AddHandler(deleteHandler)
 	dispatcher.AddHandler(lsHandler)
 	allowedUpdates := []string{"message", "callback_query", "my_chat_member", "chat_member"}
