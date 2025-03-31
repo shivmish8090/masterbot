@@ -420,7 +420,7 @@ func resolveImports(code string) (string, []string) {
 	return code, imports
 }
 
-func EvalHandle(b *gotgbot.Bot, ctx *ext.Context) error {
+func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if ctx.EffectiveMessage == nil || ctx.EffectiveMessage.Text == "" {
 		return nil
 	}
