@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
@@ -221,7 +220,6 @@ func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func performEval(code string, b *gotgbot.Bot, ctx *ext.Context, imports []string) (string, bool) {
-
 	importStatement := ""
 	if len(imports) > 0 {
 		importStatement = "import (\n"
