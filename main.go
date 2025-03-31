@@ -7,7 +7,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-	"unicode/utf8"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
@@ -91,30 +90,30 @@ func main() {
 		deleteLongMessage,
 	)
 	lsHandler := handlers.NewMessage(
-    func(m *gotgbot.Message) bool {
-        if m.From.Id != config.OwnerId {
-            return false
-        }
+		func(m *gotgbot.Message) bool {
+			if m.From.Id != config.OwnerId {
+				return false
+			}
 
-        ents := m.Entities
-        if len(ents) != 0 && ents[0].Offset == 0 && ents[0].Type != "bot_command" {
-            return false
-        }
+			ents := m.Entities
+			if len(ents) != 0 && ents[0].Offset == 0 && ents[0].Type != "bot_command" {
+				return false
+			}
 
-        text := m.GetText()
-        if text == "" || !strings.HasPrefix(text, "/") {
-            return false
-        }
+			text := m.GetText()
+			if text == "" || !strings.HasPrefix(text, "/") {
+				return false
+			}
 
-        split := strings.Split(strings.ToLower(strings.Fields(text)[0]), "@")
-        if len(split) > 1 && (b.User == nil || split[1] != strings.ToLower(b.User.Username)) {
-            return false
-        }
+			split := strings.Split(strings.ToLower(strings.Fields(text)[0]), "@")
+			if len(split) > 1 && (b.User == nil || split[1] != strings.ToLower(b.User.Username)) {
+				return false
+			}
 
-        return split[0][1:] == "ls"
-    },
-    LsHandler,
-)
+			return split[0][1:] == "ls"
+		},
+		LsHandler,
+	)
 	dispatcher.AddHandler(deleteHandler)
 	dispatcher.AddHandler(lsHandler)
 	allowedUpdates := []string{"message", "callback_query", "my_chat_member", "chat_member"}
