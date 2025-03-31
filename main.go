@@ -88,8 +88,43 @@ func main() {
 		},
 		deleteLongMessage,
 	)
+	lsHandler := handlers.NewMessage(
+		func(m *gotgbot.Message) bool {
+			if m.From.Id != config.OwnerId {
+				return False
+			}
+			msg := m
+			        ents := msg.GetEntities()
+        if len(ents) != 0 && ents[0].Offset == 0 && ents[0].Type != "bot_command" {
+                return false
+        }
 
+        text := msg.GetText()
+	Triggers := []rune{"/"}
+
+        var cmd string
+        for _, t := range Triggers {
+                if r, _ := utf8.DecodeRuneInString(text); r != t {
+                        continue
+                }
+
+                split := strings.Split(strings.ToLower(strings.Fields(text)[0]), "@")
+                if len(split) > 1 && split[1] != strings.ToLower(b.User.Username) {
+                        return false
+                }
+                cmd = split[0][1:]
+                break
+        }
+        if cmd == "" {
+                return false
+        }
+
+        return cmd == "ls"
+		},
+		LsHandler,
+	)
 	dispatcher.AddHandler(deleteHandler)
+	dispatcher.AddHandler(lsHandler)
 	allowedUpdates := []string{"message", "callback_query", "my_chat_member", "chat_member"}
 
 	// Start receiving updates.
