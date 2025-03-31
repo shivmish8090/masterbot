@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -24,7 +25,7 @@ func init() {
 		log.Fatal(err)
 	}
 
-GoPath = output
+	GoPath = output
 	fmt.Printf("GOPATH: %s\n", string(output))
 }
 
