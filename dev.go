@@ -74,7 +74,7 @@ func LsHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	resp += "\nTotal: " + sizeToHuman(sizeTotal)
 
-	ctx.EffectiveMessage.Reply(b, "<pre lang='bash'>"+resp+"</pre>"&gotgbot.SendMessageOpts{ParseMode: "HTML"})
+	ctx.EffectiveMessage.Reply(b, "<pre lang='bash'>"+resp+"</pre>", &gotgbot.SendMessageOpts{ParseMode: "HTML"})
 
 	return nil
 }
