@@ -25,7 +25,7 @@ func init() {
 		log.Fatal(err)
 	}
 
-	GoPath = output
+	GoPath = string(output)
 	fmt.Printf("GOPATH: %s\n", string(output))
 }
 
