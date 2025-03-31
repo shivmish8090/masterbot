@@ -118,7 +118,7 @@ func main() {
 	OwnerFilter(b, "ls"),
 	LsHandler,
 )
- evalHandler = := handlers.NewMessage(
+ evalHandler := handlers.NewMessage(
 	OwnerFilter(b, "eval"),
 	EvalHandler,
 )
