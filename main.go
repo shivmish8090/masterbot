@@ -303,6 +303,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		ctx.EffectiveMessage.Reply(b, "Usage: /eco <long message>", nil)
 		return nil
 	}
+        ctx.EffectiveMessage.Delete(b, nil)
 	text := ctx.EffectiveMessage.GetText()
 	text = strings.TrimSpace(text[4:])
 	page, err := TelegraphAccount.CreatePage(TelegraphClient, "Eco Message", text, nil)
