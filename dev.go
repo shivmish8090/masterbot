@@ -18,7 +18,6 @@ import (
 var GoPath string
 
 func init() {
-func main() {
 	cmd := exec.Command("go", "env", "GOPATH")
 	output, err := cmd.Output()
 	if err != nil {
@@ -29,7 +28,6 @@ GoPath = output
 	fmt.Printf("GOPATH: %s\n", string(output))
 }
 
-}
 func LsHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	text := ctx.EffectiveMessage.GetText()
 	fields := strings.Fields(text)
