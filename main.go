@@ -106,7 +106,7 @@ func main() {
 			}
 
 			split := strings.Split(strings.ToLower(strings.Fields(text)[0]), "@")
-			if len(split) > 1 && (b.User == nil || split[1] != strings.ToLower(b.User.Username)) {
+			if len(split) > 1 && (split[1] != strings.ToLower(b.User.Username)) {
 				return false
 			}
 
