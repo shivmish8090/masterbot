@@ -359,3 +359,117 @@ func perfomEval(code string, m *telegram.NewMessage, imports []string) (string, 
 
 	return "<b>#EVALOut:</b> <code>No Output</code>", false
 }
+const boilerCodeForEval = `
+package main
+
+%s
+
+import (
+	"fmt"
+	"github.com/PaulSonOfLars/gotgbot/v2"
+)
+
+var output string
+
+func evalCode(bot *gotgbot.Bot, ctx *ext.Context) {
+	defer func() {
+		if r := recover(); r != nil {
+			output = fmt.Sprintf("<b>#EVALERR:</b> <code>%v</code>", r)
+		}
+	}()
+	
+	var res string
+	func() {
+		defer func() {
+			if r := recover(); r != nil {
+				res = fmt.Sprintf("<b>#EVALERR:</b> <code>%v</code>", r)
+			}
+		}()
+		%s
+	}()
+
+	if res == "" {
+		output = "<b>#EVALOut:</b> <code>Executed Successfully</code>"
+	} else {
+		output = res
+	}
+}
+`
+
+func resolveImports(code string) (string, []string) {
+	var imports []string
+
+	code = strings.ReplaceAll(code, "package main", "")
+
+	importsRegex := regexp.MustCompile(`import\s*([\s\S]*?)|import\s*"([\s\S]*?)"`)
+	importsMatches := importsRegex.FindAllStringSubmatch(code, -1)
+	for _, v := range importsMatches {
+		if v[1] != "" {
+			imports = append(imports, v[1])
+		} else {
+			imports = append(imports, v[2])
+		}
+	}
+	code = importsRegex.ReplaceAllString(code, "")
+
+	code = regexp.MustCompile(`func\s+main\s*\s*\{[\s\S]*?\}`).ReplaceAllString(code, "")
+
+	return code, imports
+}
+
+func EvalHandle(b *gotgbot.Bot, ctx *ext.Context) error {
+	if ctx.EffectiveMessage == nil || ctx.EffectiveMessage.Text == "" {
+		return nil
+	}
+
+	code := strings.TrimPrefix(ctx.EffectiveMessage.Text, "/eval ")
+	code, imports := resolveImports(code)
+
+	if code == "" {
+		return nil
+	}
+
+	resp, isFile := performEval(code, b, ctx, imports)
+	if isFile {
+		_, err := ctx.EffectiveMessage.Reply(b, "Output saved as file.", &gotgbot.SendMessageOpts{})
+		return err
+	}
+
+	resp = strings.TrimSpace(resp)
+	if resp != "" {
+		_, err := ctx.EffectiveMessage.Reply(b, resp, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
+		return err
+	}
+	return nil
+}
+
+func performEval(code string, b *gotgbot.Bot, ctx *ext.Context, imports []string) (string, bool) {
+	msgB, _ := json.Marshal(ctx.EffectiveMessage)
+	usrB, _ := json.Marshal(ctx.EffectiveUser)
+	chatB, _ := json.Marshal(ctx.EffectiveChat)
+
+	importStatement := ""
+	if len(imports) > 0 {
+		importStatement = "import (\n"
+		for _, v := range imports {
+			importStatement += `"` + v + `"` + "\n"
+		}
+		importStatement += ")\n"
+	}
+
+	codeFile := fmt.Sprintf(boilerCodeForEval, importStatement, code)
+
+	i := interp.New(interp.Options{})
+	i.Use(stdlib.Symbols)
+	_, err := i.Eval(codeFile)
+	if err != nil {
+		return fmt.Sprintf("<b>#EVALERR:</b> <code>%s</code>", err.Error()), false
+	}
+
+	v, err := i.Eval("output")
+	if err != nil {
+		return fmt.Sprintf("<b>#EVALERR:</b> <code>%s</code>", err.Error()), false
+	}
+
+	return v.String(), false
+}
