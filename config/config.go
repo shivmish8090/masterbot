@@ -12,6 +12,7 @@ var (
 	Token      string
 	StartImage string
 	LoggerId   int64
+	OwnerId    int64
 )
 
 func init() {
@@ -24,13 +25,8 @@ func init() {
 
 	StartImage = Getenv("START_IMG_URL", "https://telegra.ph/file/ba238ec5e542d8754cea7-dc1786aa23ae1224f2.jpg")
 
-	logger := Getenv("LOGGER_ID", "-1002647107199")
-	logID, err := strconv.ParseInt(logger, 10, 64)
-	if err != nil {
-		panic(fmt.Sprintf("Error converting LOGGER_ID: %v", err))
-	}
-
-	LoggerId = logID
+	LoggerId = GetenvInt64("LOGGER_ID", "-1002647107199")
+	OwnerId = GetenvInt64("OWNER_ID", "7706682472")
 }
 
 func Getenv(key, defaultValue string) string {
@@ -38,4 +34,13 @@ func Getenv(key, defaultValue string) string {
 		return value
 	}
 	return defaultValue
+}
+
+func GetenvInt64(key, defaultValue string) int64 {
+	value := Getenv(key, defaultValue)
+	intValue, err := strconv.ParseInt(value, 10, 64)
+	if err != nil {
+		panic(fmt.Sprintf("Error converting %s: %v", key, err))
+	}
+	return intValue
 }
