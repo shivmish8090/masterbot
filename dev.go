@@ -14,22 +14,6 @@ import (
 	"github.com/traefik/yaegi/interp"
 	"github.com/traefik/yaegi/stdlib"
 )
-
-
-import (
-	"bytes"
-	"fmt"
-	"log"
-	"regexp"
-	"strings"
-
-	"github.com/gotgbot/gotgbot/v2"
-	"github.com/gotgbot/gotgbot/v2/ext"
-	"github.com/gotgbot/gotgbot/v2/ext/handlers"
-	"github.com/traefik/yaegi/interp"
-	"github.com/traefik/yaegi/stdlib"
-)
-
 func LsHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	text := ctx.EffectiveMessage.GetText()
 	fields := strings.Fields(text)
@@ -152,7 +136,7 @@ func calcFileOrDirSize(path string) int64 {
 // Eval code
 
 
-func evalGoCode(b *gotgbot.Bot, ctx *ext.Context) error {
+func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if len(ctx.Args()) < 2 {
 		_, _ = ctx.EffectiveMessage.Reply(b, "Usage: /eval <go code>", nil)
 		return nil
