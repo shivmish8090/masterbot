@@ -19,10 +19,6 @@ var deleteWarningTracker = struct {
 	chats map[int64]time.Time
 }{chats: make(map[int64]time.Time)}
 
-var (
-	TelegraphClient  *telegraph.TelegraphClient
-	TelegraphAccount *telegraph.Account
-)
 
 func OwnerFilter(b *gotgbot.Bot, cmd string) func(m *gotgbot.Message) bool {
 	return func(m *gotgbot.Message) bool {
@@ -55,25 +51,7 @@ func main() {
 	if err != nil {
 		panic("failed to create new bot: " + err.Error())
 	}
-	TelegraphClient = &telegraph.TelegraphClient{
-		ApiUrl: "https://api.graph.org/",
-		/*HttpClient: &http.Client{
-			Timeout: 15 * time.Second,
-			 Transport: &http.Transport{
-				MaxIdleConns:        100,
-				MaxIdleConnsPerHost: 10,
-				IdleConnTimeout:     90 * time.Second,
-			},
-		},*/
-	}
-	account, err := TelegraphClient.CreateAccount(b.User.Username, &telegraph.CreateAccountOpts{
-		AuthorName: b.User.FirstName + b.User.LastName,
-		AuthorUrl:  fmt.Sprintf("https://t.me/%s", b.User.Username),
-	})
-	if err != nil {
-		log.Fatalf("Failed to create Telegraph account: %v", err)
-	}
-	TelegraphAccount = account
+	
 	// Create updater and dispatcher.
 	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
 		// If an error is returned by a handler, log it and continue going.
@@ -298,7 +276,7 @@ Alternatively, use /eco for sending longer messages. 📜
 }
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
-	if len(ctx.Args()) < 2 {
+	/*if len(ctx.Args()) < 2 {
 		ctx.EffectiveMessage.Reply(b, "Usage: /eco <long message>", nil)
 		return nil
 	}
@@ -313,7 +291,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		b.SendMessage(ctx.EffectiveChat.Id, page.Url, &gotgbot.SendMessageOpts{ReplyParameters: &gotgbot.ReplyParameters{MessageId: ctx.EffectiveMessage.ReplyToMessage.MessageId}})
 	} else {
 		b.SendMessage(ctx.EffectiveChat.Id, page.Url, nil)
-	}
+	}/*
 	return nil
 }
 
