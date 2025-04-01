@@ -73,7 +73,7 @@ func main() {
 			AddedToGroups,
 		),
 	)
-	dispatcher.AddHandler(handlers.NewCommand("eco", EcoHandler))
+	dispatcher.AddHandler(handlers.NewCommand("echo", EcoHandler))
 	deleteHandler := handlers.NewMessage(
 		func(m *gotgbot.Message) bool {
 			sender := m.GetSender()
@@ -279,12 +279,14 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		ctx.EffectiveMessage.Reply(b, "Usage: /eco <long message>", nil)
 		return nil
 	}
-	if ctx.EffectiveChat.Type != "group" {
+	if ctx.EffectiveChat.Type != "supergroup" {
 		ctx.EffectiveMessage.Reply(b, "This command can be used only in groups", nil)
+                return nil
 	}
 	ctx.EffectiveMessage.Delete(b, nil)
 	if len(ctx.EffectiveMessage.GetText()) > 500 {
 		ctx.EffectiveMessage.Reply(b, "Oops! Your message is under 500 characters. You can send it without using /eco.", nil)
+                return nil
 	}
 
 	text := ctx.EffectiveMessage.GetText()
