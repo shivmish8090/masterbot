@@ -282,7 +282,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if ctx.EffectiveMessage.Chat.Type != "group" {
 		ctx.EffectiveMessage.Reply(b, "This command can be used only in groups", nil)
 	}
- ctx.EffectiveMessage.Delete(b, nil)
+	ctx.EffectiveMessage.Delete(b, nil)
 	if len(ctx.EffectiveMessage.GetText()) > 500 {
 		ctx.EffectiveMessage.Reply(b, "Oops! Your message is under 500 characters. You can send it without using /eco.", nil)
 	}
