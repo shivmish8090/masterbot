@@ -11,7 +11,7 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
-	_ "github.com/valyala/fasthttp"
+	"github.com/Vivekkumar-IN/EditguardianBot/telegraph"
 )
 
 var deleteWarningTracker = struct {
@@ -275,22 +275,22 @@ Alternatively, use /eco for sending longer messages. 📜
 }
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
-	/*if len(ctx.Args()) < 2 {
+	if len(ctx.Args()) < 2 {
 		ctx.EffectiveMessage.Reply(b, "Usage: /eco <long message>", nil)
 		return nil
 	}
 	ctx.EffectiveMessage.Delete(b, nil)
 	text := ctx.EffectiveMessage.GetText()
 	text = strings.TrimSpace(text[4:])
-	page, err := TelegraphAccount.CreatePage(TelegraphClient, "Eco Message", text, nil)
+	url, err := telegraph.CreatePage(text, ctx.EffectiveUser.UserName)
 	if err != nil {
 		return err
 	}
 	if ctx.EffectiveMessage.ReplyToMessage != nil {
-		b.SendMessage(ctx.EffectiveChat.Id, page.Url, &gotgbot.SendMessageOpts{ReplyParameters: &gotgbot.ReplyParameters{MessageId: ctx.EffectiveMessage.ReplyToMessage.MessageId}})
+		b.SendMessage(ctx.EffectiveChat.Id, url, &gotgbot.SendMessageOpts{ReplyParameters: &gotgbot.ReplyParameters{MessageId: ctx.EffectiveMessage.ReplyToMessage.MessageId}})
 	} else {
-		b.SendMessage(ctx.EffectiveChat.Id, page.Url, nil)
-	}*/
+		b.SendMessage(ctx.EffectiveChat.Id, url, nil)
+	}
 	return nil
 }
 
