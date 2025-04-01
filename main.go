@@ -292,9 +292,9 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func deleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
-
-        return nil
+	return nil
 }
+
 func ExtractJoinLeftStatusChange(u *gotgbot.ChatMemberUpdated) (bool, bool) {
 	if u.Chat.Type == "channel" {
 		return false, false
