@@ -3,7 +3,6 @@ package telegraph
 import (
 	"encoding/json"
 	"errors"
-	"math/rand"
 	"regexp"
 	"strconv"
 	"time"
@@ -164,7 +163,7 @@ func CreatePage(content, firstName string) (string, error) {
 		floodWaitTime := extractFloodWait(result.Error)
 		if floodWaitTime > 0 {
 			AccountMap[accessToken] = time.Now().Unix() + floodWaitTime // Store expiration time
-			continue // Try another account
+			continue                                                    // Try another account
 		}
 
 		// Other errors, return immediately
