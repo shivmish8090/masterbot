@@ -286,7 +286,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	ctx.EffectiveMessage.Delete(b, nil)
 	if len(ctx.EffectiveMessage.GetText()) > 500 {
-		ctx.EffectiveMessage.Reply(b, "Oops! Your message is under 500 characters. You can send it without using /eco.", nil)
+		b.SendMessage(ctx.EffectiveChat.Id, "Oops! Your message is under 500 characters. You can send it without using /echo.", nil)
 		return nil
 	}
 
