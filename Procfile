@@ -1,1 +1,1 @@
-web: ./app
+worker: ./app
