@@ -264,9 +264,9 @@ Alternatively, use /eco for sending longer messages. 📜
 `, ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName)
 
 			_, err := b.SendMessage(ctx.EffectiveChat.Id, text, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
-   if err != nil {
- return err
-}
+			if err != nil {
+				return err
+			}
 			deleteWarningTracker.chats[ctx.EffectiveChat.Id] = time.Now()
 		}
 		deleteWarningTracker.Unlock()
@@ -278,7 +278,7 @@ Alternatively, use /eco for sending longer messages. 📜
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if ctx.EffectiveChat.Type != "supergroup" {
-	ctx.EffectiveMessage.Reply(b, "This command can be used only in groups", nil)
+		ctx.EffectiveMessage.Reply(b, "This command can be used only in groups", nil)
 		return nil
 	}
 	if len(ctx.Args()) < 2 {
