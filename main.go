@@ -275,7 +275,7 @@ Alternatively, use /eco for sending longer messages. 📜
 }
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
-  if ctx.EffectiveChat.Type != "supergroup" {
+	if ctx.EffectiveChat.Type != "supergroup" {
 		ctx.EffectiveMessage.Reply(b, "This command can be used only in groups", nil)
 		return nil
 	}
