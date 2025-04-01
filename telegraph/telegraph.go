@@ -85,14 +85,26 @@ func init() {
 }
 
 // getAvailableToken returns an access token that is not under a flood wait
+// If no available token is found, it creates a new one.
 func getAvailableToken() (string, error) {
 	now := time.Now().Unix()
+
+	// Check for an available token
 	for token, waitTime := range AccountMap {
 		if waitTime == 0 || waitTime <= now {
 			return token, nil
 		}
 	}
-	return "", errors.New("no available accounts due to flood wait")
+
+	// If no available token, create a new account
+	newToken, err := createAccount("EcoBot" + strconv.Itoa(len(AccountMap)+1))
+	if err != nil {
+		return "", errors.New("no available accounts and failed to create new account")
+	}
+
+	// Store the new token with no flood wait time
+	AccountMap[newToken] = 0
+	return newToken, nil
 }
 
 // extractFloodWait extracts flood wait time from error message
