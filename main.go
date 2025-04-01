@@ -279,7 +279,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		ctx.EffectiveMessage.Reply(b, "Usage: /eco <long message>", nil)
 		return nil
 	}
-	if ctx.EffectiveMessage.Chat.Type != "group" {
+	if ctx.EffectiveChat.Type != "group" {
 		ctx.EffectiveMessage.Reply(b, "This command can be used only in groups", nil)
 	}
 	ctx.EffectiveMessage.Delete(b, nil)
