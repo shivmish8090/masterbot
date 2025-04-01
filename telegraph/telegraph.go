@@ -1,4 +1,4 @@
-package main
+package telegraph
 
 import (
 	"encoding/json"
