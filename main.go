@@ -109,6 +109,7 @@ func main() {
 	log.Printf("%s has been started...\n", b.User.Username)
 	b.SendMessage(config.LoggerId, fmt.Sprintf("%s has  started\n", b.User.Username), nil)
 	updaterSubpath := "/bots/"
+        webappURL := "https://gotgbothh-07d5390bc2f0.herokuapp.com"
 	mux := http.NewServeMux()
 	// This serves the home page.
 	mux.HandleFunc("/", index(webappURL))
