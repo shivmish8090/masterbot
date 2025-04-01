@@ -107,6 +107,25 @@ func main() {
 	}
 	log.Printf("%s has been started...\n", b.User.Username)
 	b.SendMessage(config.LoggerId, fmt.Sprintf("%s has  started\n", b.User.Username), nil)
+        mux := http.NewServeMux()
+        // This serves the home page.
+        mux.HandleFunc("/", index(webappURL))
+        // This serves our "validation" API, which checks if the input data is valid.
+        mux.HandleFunc("/validate", validate(config.Token))
+        // This serves the updater's webhook handler.
+        mux.HandleFunc(updaterSubpath, updater.GetHandlerFunc(updaterSubpath))
+
+        server := http.Server{
+                Handler: mux,
+                Addr:    "0.0.0.0:8080",
+        }
+
+        log.Printf("%s has been started...\n", b.User.Username)
+        // Start the webserver displaying the page.
+        // Note: ListenAndServe is a blocking operation, so we don't need to call updater.Idle() here.
+        if err := server.ListenAndServe(); err != nil {
+                panic("failed to listen and serve: " + err.Error())
+        }
 
 	// Idle, to keep updates coming in, and avoid bot stopping.
 	updater.Idle()
