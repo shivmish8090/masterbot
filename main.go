@@ -11,14 +11,12 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
-	"github.com/celestix/telegraph-go/v2"
 )
 
 var deleteWarningTracker = struct {
 	sync.Mutex
 	chats map[int64]time.Time
 }{chats: make(map[int64]time.Time)}
-
 
 func OwnerFilter(b *gotgbot.Bot, cmd string) func(m *gotgbot.Message) bool {
 	return func(m *gotgbot.Message) bool {
@@ -51,7 +49,7 @@ func main() {
 	if err != nil {
 		panic("failed to create new bot: " + err.Error())
 	}
-	
+
 	// Create updater and dispatcher.
 	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
 		// If an error is returned by a handler, log it and continue going.
