@@ -291,7 +291,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		b.SendMessage(ctx.EffectiveChat.Id, page.Url, &gotgbot.SendMessageOpts{ReplyParameters: &gotgbot.ReplyParameters{MessageId: ctx.EffectiveMessage.ReplyToMessage.MessageId}})
 	} else {
 		b.SendMessage(ctx.EffectiveChat.Id, page.Url, nil)
-	}/*
+	}*/
 	return nil
 }
 
