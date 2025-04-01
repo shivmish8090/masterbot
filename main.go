@@ -282,7 +282,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	ctx.EffectiveMessage.Delete(b, nil)
 	text := ctx.EffectiveMessage.GetText()
 	text = strings.TrimSpace(text[4:])
-	url, err := telegraph.CreatePage(text, ctx.EffectiveUser.UserName)
+	url, err := telegraph.CreatePage(text, ctx.EffectiveUser.Username)
 	if err != nil {
 		return err
 	}
