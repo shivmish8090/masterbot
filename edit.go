@@ -15,22 +15,22 @@ var deleteWarningTracker = struct {
 }{chats: make(map[int64]time.Time)}
 
 func deleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
-	if ctx.EditedMessage != nil {
-		_, err := ctx.EffectiveMessage.Delete(b, nil)
-		if err != nil {
-			return err
-		}
+    if ctx.EditedMessage == nil {
+        return nil
+    }
 
-		_, err = b.SendMessage(
-			ctx.EffectiveChat.Id,
-			"⚠️ Editing messages is not allowed!",
-			nil,
-		)
-		return err
-	}
-	return nil
+    if _, err := ctx.EffectiveMessage.Delete(b, nil); err != nil {
+        return err
+    }
+
+    _, err := b.SendMessage(
+        ctx.EffectiveChat.Id,
+        "⚠️ <b>Edits are not allowed!</b>",
+        &gotgbot.SendMessageOpts{ParseMode: "HTML"},
+    )
+
+    return err
 }
-
 func deleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	done, err := ctx.EffectiveMessage.Delete(b, nil)
 	if done {
