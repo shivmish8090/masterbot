@@ -30,7 +30,7 @@ func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	ctxString, err := json.Marshal(ctx)
 	if err != nil {
-		ctx.EffectiveMessage.Reply(b, "Error: Failed to serialize context " + err.Error(), nil)
+		ctx.EffectiveMessage.Reply(b, "Error: Failed to serialize context "+err.Error(), nil)
 		return nil
 	}
 
