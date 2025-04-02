@@ -48,3 +48,31 @@ func IsLongMessage() func(m *gotgbot.Message) bool {
 		return m.GetText() != "" && len(m.GetText()) > 800
 	}
 }
+
+func AndFilter(filters ...func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool {
+	return func(m *gotgbot.Message) bool {
+		for _, filter := range filters {
+			if !filter(m) {
+				return false
+			}
+		}
+		return true
+	}
+}
+
+func OrFilter(filters ...func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool {
+	return func(m *gotgbot.Message) bool {
+		for _, filter := range filters {
+			if filter(m) {
+				return true
+			}
+		}
+		return false
+	}
+}
+
+func InvertFilter(f func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool {
+	return func(m *gotgbot.Message) bool {
+		return !f(m)
+	}
+}
