@@ -17,7 +17,7 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 
 		caption := fmt.Sprintf(
 			`<b>🚀 Hello <a href="tg://user?id=%d">%s</a>! 👋</b>  
-I'm <b>%s</b>, your security assistant, ensuring a safe and transparent environment for our discussions!  
+I'm <b><a href="tg://user?id=%d">%s</a></b>, your security assistant, ensuring a safe and transparent environment for our discussions!  
 
 🔍 <b>Edited Message Protection:</b>  
 ✂️ Messages that are edited will be <b>automatically deleted</b> to maintain clarity and honesty.  
@@ -32,8 +32,9 @@ I'm <b>%s</b>, your security assistant, ensuring a safe and transparent environm
 🔐 <b>Keep your group safe now!</b>  
 ➡️ Tap <b>"Add Group"</b> to enable my security features today!`,
 			ctx.EffectiveUser.Id,
-			ctx.EffectiveUser.FirstName,
-			b.User.Username,
+			ctx.EffectiveUser.FirstName + ctx.EffectiveUser.LastName,
+    b.User.Id
+			b.User.FirstName,
 		)
 
 		keyboard := gotgbot.InlineKeyboardMarkup{
