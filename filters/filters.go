@@ -84,16 +84,6 @@ func Command(cmd string) func(m *gotgbot.Message) bool {
 
 func IsLongMessage() func(m *gotgbot.Message) bool {
 	return func(m *gotgbot.Message) bool {
-		sender := m.GetSender()
-		if sender.User != nil {
-			user, err := bot.GetChatMember(m.Chat.Id, sender.User.Id, nil)
-			if err != nil {
-				return false
-			}
-			if user.GetStatus() == "creator" || user.GetStatus() == "administrator" {
-				return false
-			}
-		}
-		return m.GetText() != "" && len(m.GetText()) > 800
+		return !IsChatAdmin()(m) && len(m.GetText()) > 800
 	}
 }
