@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"strings"
 	"sync"
 	"time"
 
@@ -13,7 +12,6 @@ import (
 
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 	"github.com/Vivekkumar-IN/EditguardianBot/filters"
-	"github.com/Vivekkumar-IN/EditguardianBot/telegraph"
 )
 
 var deleteWarningTracker = struct {
