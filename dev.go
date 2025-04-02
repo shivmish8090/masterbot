@@ -30,7 +30,7 @@ func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	ctxString, err := json.Marshal(ctx)
 	if err != nil {
-		ctx.EffectiveMessage.Reply(b, "Error: Failed to serialize context", nil)
+		ctx.EffectiveMessage.Reply(b, "Error: Failed to serialize context " + err.Error(), nil)
 		return nil
 	}
 
@@ -85,7 +85,7 @@ func main() {
 	%s
 }
 `
-	evalCode := fmt.Sprintf(evalTemplate, imports, botString, ctxString, code)
+	evalCode := fmt.Sprintf(evalTemplate, imports, ctxString, code)
 
 	tmpFile := fmt.Sprintf("/tmp/eval_%d.go", time.Now().UnixNano())
 	err := os.WriteFile(tmpFile, []byte(evalCode), 0o644)
