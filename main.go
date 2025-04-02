@@ -16,22 +16,6 @@ import (
 	"github.com/Vivekkumar-IN/EditguardianBot/telegraph"
 )
 
-import (
-	"fmt"
-	"log"
-	"strings"
-	"sync"
-	"time"
-
-	"github.com/PaulSonOfLars/gotgbot/v2"
-	"github.com/PaulSonOfLars/gotgbot/v2/ext"
-	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
-
-	"github.com/Vivekkumar-IN/EditguardianBot/config"
-	"github.com/Vivekkumar-IN/EditguardianBot/filters"
-	"github.com/Vivekkumar-IN/EditguardianBot/telegraph"
-)
-
 var deleteWarningTracker = struct {
 	sync.Mutex
 	chats map[int64]time.Time
