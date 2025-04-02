@@ -1,3 +1,5 @@
+package main
+
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
         chat := ctx.EffectiveChat.Type
 
