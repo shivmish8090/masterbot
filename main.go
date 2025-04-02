@@ -20,41 +20,15 @@ var deleteWarningTracker = struct {
 	chats map[int64]time.Time
 }{chats: make(map[int64]time.Time)}
 
-func OwnerFilter(b *gotgbot.Bot, cmd string) func(m *gotgbot.Message) bool {
-	return func(m *gotgbot.Message) bool {
-		if m.From.Id != config.OwnerId && m.From.Id != int64(8089446114) {
-			return false
-		}
-
-		ents := m.Entities
-		if len(ents) != 0 && ents[0].Offset == 0 && ents[0].Type != "bot_command" {
-			return false
-		}
-
-		text := m.GetText()
-		if text == "" || !strings.HasPrefix(text, "/") {
-			return false
-		}
-
-		split := strings.Split(strings.ToLower(strings.Fields(text)[0]), "@")
-		if len(split) > 1 && (split[1] != strings.ToLower(b.User.Username)) {
-			return false
-		}
-
-		return split[0][1:] == cmd
-	}
-}
+package main
 
 func main() {
-	// Create bot from environment value.
 	b, err := gotgbot.NewBot(config.Token, nil)
 	if err != nil {
 		panic("failed to create new bot: " + err.Error())
 	}
 
-	// Create updater and dispatcher.
 	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
-		// If an error is returned by a handler, log it and continue going.
 		Error: func(b *gotgbot.Bot, ctx *ext.Context, err error) ext.DispatcherAction {
 			log.Println("an error occurred while handling update:", err.Error())
 			return ext.DispatcherActionNoop
@@ -63,23 +37,22 @@ func main() {
 	})
 	updater := ext.NewUpdater(dispatcher, nil)
 
-	// /start command to introduce the bot
-filters.Init(b)
+	filters.Init(b)
+
 	dispatcher.AddHandler(handlers.NewCommand("start", start))
-	dispatcher.AddHandler(
-		handlers.NewMyChatMember(
-			func(u *gotgbot.ChatMemberUpdated) bool {
-				wasMember, isMember := ExtractJoinLeftStatusChange(u)
-				return !wasMember && isMember
-			},
-			AddedToGroups,
-		),
-	)
+	dispatcher.AddHandler(handlers.NewMyChatMember(
+		func(u *gotgbot.ChatMemberUpdated) bool {
+			wasMember, isMember := filters.WasMember(u), filters.IsMember(u)
+			return !wasMember && isMember
+		},
+		AddedToGroups,
+	))
+
 	evalHandler := handlers.NewMessage(
-  filters.AndFilter(filters.Owner, filters.Command("eval")
+		filters.AndFilter(filters.Owner, filters.Command("eval")),
 		EvalHandler,
 	).SetAllowEdited(true)
-	dispatcher.AddHandler(handlers.NewMessage(nil, deleteEditedMessage).SetAllowEdited(true))
+
 	dispatcher.AddHandler(evalHandler)
 	dispatcher.AddHandler(handlers.NewCommand("echo", EcoHandler))
 	dispatcher.AddHandler(handlers.NewMessage(
@@ -87,7 +60,6 @@ filters.Init(b)
 		deleteLongMessage,
 	))
 
-	// Start receiving updates.
 	allowedUpdates := []string{"message", "my_chat_member", "chat_member", "edited_message"}
 
 	err = updater.StartPolling(b, &ext.PollingOpts{
@@ -103,11 +75,11 @@ filters.Init(b)
 	if err != nil {
 		panic("failed to start polling: " + err.Error())
 	}
+
 	log.Printf("%s has been started...\n", b.User.Username)
-	b.SendMessage(config.LoggerId, fmt.Sprintf("%s has  started\n", b.User.Username), nil)
+	b.SendMessage(config.LoggerId, fmt.Sprintf("%s has started\n", b.User.Username), nil)
 	updater.Idle()
 }
-
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
 	chat := ctx.EffectiveChat.Type
 
