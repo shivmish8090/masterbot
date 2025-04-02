@@ -75,9 +75,10 @@ var ctxString = %q
 func main() {
 	var ctx ext.Context
  
- Bot, err := gotgbot.NewBot(config.Token, nil)
-if err != nil {
-return "", err}
+        Bot, err := gotgbot.NewBot(config.Token,  nil)
+        if err != nil {
+                panic("failed to create new bot: " + err.Error())
+        }
 
 	json.Unmarshal([]byte(ctxString), &ctx)
 
