@@ -14,11 +14,6 @@ import (
 	"github.com/Vivekkumar-IN/EditguardianBot/filters"
 )
 
-var deleteWarningTracker = struct {
-	sync.Mutex
-	chats map[int64]time.Time
-}{chats: make(map[int64]time.Time)}
-
 func main() {
 	b, err := gotgbot.NewBot(config.Token, nil)
 	if err != nil {
