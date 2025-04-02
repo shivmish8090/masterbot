@@ -8,6 +8,11 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
 
+var deleteWarningTracker = struct {
+        sync.Mutex
+        chats map[int64]time.Time
+}{chats: make(map[int64]time.Time)}
+
 func deleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	if ctx.EditedMessage != nil {
 		_, err := ctx.EffectiveMessage.Delete(b, nil)
