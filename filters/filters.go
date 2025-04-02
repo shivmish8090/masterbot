@@ -4,21 +4,15 @@ import (
 	"strings"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
-)
-
-
-import (
-	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 )
-
-
 
 var bot *gotgbot.Bot
 
 func Init(b *gotgbot.Bot) {
 	bot = b
 }
+
 func AndFilter(filters ...func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool {
 	return func(m *gotgbot.Message) bool {
 		for _, filter := range filters {
@@ -67,7 +61,6 @@ func ChatAdmin() func(m *gotgbot.Message) bool {
 	}
 }
 
-
 func Command(cmd string) func(m *gotgbot.Message) bool {
 	return func(m *gotgbot.Message) bool {
 		ents := m.Entities
@@ -104,4 +97,3 @@ func IsLongMessage() func(m *gotgbot.Message) bool {
 		return m.GetText() != "" && len(m.GetText()) > 800
 	}
 }
-
