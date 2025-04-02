@@ -14,7 +14,7 @@ func Init(b *gotgbot.Bot) {
 	bot = b
 }
 
-const (
+var (
 	AndFilter    = And
 	OrFilter     = Or
 	InvertFilter = Invert
