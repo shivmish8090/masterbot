@@ -24,7 +24,7 @@ func main() {
 			log.Println("an error occurred while handling update:", err.Error())
 			return ext.DispatcherActionNoop
 		},
-		MaxRoutines: ext.DefaultMaxRoutines,
+		MaxRoutines: 500,
 	})
 	updater := ext.NewUpdater(dispatcher, nil)
 
