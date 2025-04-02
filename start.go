@@ -31,7 +31,7 @@ I'm <b>%s</b>, your security assistant, ensuring a safe and transparent environm
 
 🔐 <b>Keep your group safe now!</b>  
 ➡️ Tap <b>"Add Group"</b> to enable my security features today!`,
-			ctx.EffectiveUser.ID,
+			ctx.EffectiveUser.Id,
 			ctx.EffectiveUser.FirstName,
 			b.User.Username,
 		)
