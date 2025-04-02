@@ -32,7 +32,7 @@ I'm <b><a href="tg://user?id=%d">%s</a></b>, your security assistant, ensuring a
 🔐 <b>Keep your group safe now!</b>  
 ➡️ Tap <b>"Add Group"</b> to enable my security features today!`,
 			ctx.EffectiveUser.Id,
-			ctx.EffectiveUser.FirstName + ctx.EffectiveUser.LastName,
+			ctx.EffectiveUser.FirstName+ctx.EffectiveUser.LastName,
 			b.User.Id,
 			b.User.FirstName,
 		)
