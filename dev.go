@@ -42,21 +42,21 @@ func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func extractImportsAndCode(code string) (string, string) {
-        importRegex := regexp.MustCompile(`(?m)^\s*import\s+("[^"]+"|[\s\S]+?)`)
-        matches := importRegex.FindString(code)
+	importRegex := regexp.MustCompile(`(?m)^\s*import\s+("[^"]+"|[\s\S]+?)`)
+	matches := importRegex.FindString(code)
 
-        if matches != "" {
-                cleanCode := importRegex.ReplaceAllString(code, "")
-                return strings.TrimSpace(cleanCode), matches
-        }
+	if matches != "" {
+		cleanCode := importRegex.ReplaceAllString(code, "")
+		return strings.TrimSpace(cleanCode), matches
+	}
 
-        return strings.TrimSpace(code), ""
+	return strings.TrimSpace(code), ""
 }
 
 func runGoCode(code, imports, ctxString string) (string, error) {
-        var importBlock string
-        if imports != "" {
-                importBlock = fmt.Sprintf(`import (
+	var importBlock string
+	if imports != "" {
+		importBlock = fmt.Sprintf(`import (
         "encoding/json"
         "fmt"
         %s
@@ -64,17 +64,17 @@ func runGoCode(code, imports, ctxString string) (string, error) {
         "github.com/PaulSonOfLars/gotgbot/v2/ext"
         "github.com/Vivekkumar-IN/EditguardianBot/config"
 )`, strings.TrimSpace(imports))
-        } else {
-                importBlock = `import (
+	} else {
+		importBlock = `import (
         "encoding/json"
         "fmt"
         "github.com/PaulSonOfLars/gotgbot/v2"
         "github.com/PaulSonOfLars/gotgbot/v2/ext"
         "github.com/Vivekkumar-IN/EditguardianBot/config"
 )`
-        }
+	}
 
-        evalTemplate := `package main
+	evalTemplate := `package main
 
 %s
 
@@ -97,20 +97,20 @@ func main() {
         _ = fmt.Println
 }`
 
-        evalCode := fmt.Sprintf(evalTemplate, importBlock, ctxString, code)
+	evalCode := fmt.Sprintf(evalTemplate, importBlock, ctxString, code)
 
-        tmpFile := fmt.Sprintf("/tmp/eval_%d.go", time.Now().UnixNano())
-        err := os.WriteFile(tmpFile, []byte(evalCode), 0o644)
-        if err != nil {
-                return "", fmt.Errorf("failed to write temp file: %w", err)
-        }
-        defer os.Remove(tmpFile)
+	tmpFile := fmt.Sprintf("/tmp/eval_%d.go", time.Now().UnixNano())
+	err := os.WriteFile(tmpFile, []byte(evalCode), 0o644)
+	if err != nil {
+		return "", fmt.Errorf("failed to write temp file: %w", err)
+	}
+	defer os.Remove(tmpFile)
 
-        cmd := exec.Command("go", "run", tmpFile)
-        output, err := cmd.CombinedOutput()
-        if err != nil {
-                return "", fmt.Errorf("%s: %w", string(output), err)
-        }
+	cmd := exec.Command("go", "run", tmpFile)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", string(output), err)
+	}
 
-        return string(output), nil
+	return string(output), nil
 }
