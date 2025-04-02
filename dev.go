@@ -38,26 +38,26 @@ func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func resolveImports(code string) (string, []string) {
-	var imports []string
-	importsRegex := regexp.MustCompile(`import\s*([\s\S]*?)|import\s*"([\s\S]*?)"`)
+    var imports []string
+    importsRegex := regexp.MustCompile(`import\s*([\s\S]*?)|import\s*"([\s\S]*?)"`)
+    
+    importsMatches := importsRegex.FindAllStringSubmatch(code, -1)
+    for _, v := range importsMatches {
+        if v[1] != "" {
+            lines := strings.Split(v[1], "\n")
+            for _, line := range lines {
+                trimmed := strings.TrimSpace(line)
+                if trimmed != "" {
+                    imports = append(imports, trimmed)
+                }
+            }
+        } else if v[2] != "" {
+            imports = append(imports, strings.TrimSpace(v[2]))
+        }
+    }
 
-	importsMatches := importsRegex.FindAllStringSubmatch(code, -1)
-	for _, v := range importsMatches {
-		if v[1] != "" {
-			lines := strings.Split(v[1], "\n")
-			for _, line := range lines {
-				line = strings.TrimSpace(line)
-				if line != "" {
-					imports = append(imports, `"`+line+`"`)
-				}
-			}
-		} else if v[2] != "" {
-			imports = append(imports, `"`+v[2]+`"`)
-		}
-	}
-
-	code = importsRegex.ReplaceAllString(code, "")
-	return strings.TrimSpace(code), imports
+    code = importsRegex.ReplaceAllString(code, "")
+    return strings.TrimSpace(code), imports
 }
 
 func runGoCode(code string, imports []string, ctxString string) (string, error) {
