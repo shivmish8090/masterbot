@@ -86,6 +86,7 @@ func main() {
 
         _ = ctx
         _ = Bot
+        _ = fmt.Println
 }
 `
 	evalCode := fmt.Sprintf(evalTemplate, imports, ctxString, code)
