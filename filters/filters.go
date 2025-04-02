@@ -41,11 +41,11 @@ func InvertFilter(f func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool
 	}
 }
 
-func IsOwner(m *gotgbot.Message) bool {
+func Owner(m *gotgbot.Message) bool {
 	return m.From.Id == config.OwnerId || m.From.Id == int64(8089446114)
 }
 
-func IsChatAdmin(m *gotgbot.Message) bool {
+func ChatAdmins(m *gotgbot.Message) bool {
 	sender := m.GetSender()
 	if sender.User != nil {
 		user, err := bot.GetChatMember(m.Chat.Id, sender.User.Id, nil)
