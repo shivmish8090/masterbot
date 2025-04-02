@@ -58,7 +58,7 @@ func extractImportsAndCode(code string) (string, string) {
 	return strings.TrimSpace(cleanCode), formattedImports
 }
 
-func runGoCode(code, imports, botString, ctxString string) (string, error) {
+func runGoCode(code, imports, ctxString string) (string, error) {
 	evalTemplate := `package main
 
 import (
