@@ -17,6 +17,15 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: "1.23"
+          cache: true
+
+      - name: Cache Go Binaries
+        uses: actions/cache@v4
+        with:
+          path: ~/go/bin
+          key: go-bin-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            go-bin-${{ runner.os }}-
 
       - name: Install Formatting Tools
         run: |
@@ -24,6 +33,7 @@ jobs:
           go install mvdan.cc/gofumpt@latest
           go install github.com/segmentio/golines@latest
           go install github.com/daixiang0/gci@latest
+
       - name: Format Codes
         run: |
           go mod tidy
@@ -31,7 +41,7 @@ jobs:
           goimports -w .
           gci write . --skip-format -s standard -s default -s "prefix(github.com/Vivekkumar-IN/EditguardianBot)"
           gofumpt -w -extra .
-          golines -w --max-len=80 .
+          golines --max-len=80 .
 
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
