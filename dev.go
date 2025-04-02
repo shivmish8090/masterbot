@@ -38,27 +38,28 @@ func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func resolveImports(code string) (string, []string) {
-    var imports []string
-    importsRegex := regexp.MustCompile(`import\s*([\s\S]*?)|import\s*"([^"]+)"`)
-    importsMatches := importsRegex.FindAllStringSubmatch(code, -1)
+	var imports []string
+	importsRegex := regexp.MustCompile(`import\s*([\s\S]*?)|import\s*"([^"]+)"`)
+	importsMatches := importsRegex.FindAllStringSubmatch(code, -1)
 
-    for _, v := range importsMatches {
-        if v[1] != "" { // Multi-line import
-            lines := strings.Split(v[1], "\n")
-            for _, line := range lines {
-                cleanLine := strings.TrimSpace(line)
-                if cleanLine != "" {
-                    imports = append(imports, fmt.Sprintf("%q", cleanLine))
-                }
-            }
-        } else if v[2] != "" { // Single-line import
-            imports = append(imports, fmt.Sprintf("%q", v[2]))
-        }
-    }
+	for _, v := range importsMatches {
+		if v[1] != "" { // Multi-line import
+			lines := strings.Split(v[1], "\n")
+			for _, line := range lines {
+				cleanLine := strings.TrimSpace(line)
+				if cleanLine != "" {
+					imports = append(imports, fmt.Sprintf("%q", cleanLine))
+				}
+			}
+		} else if v[2] != "" { // Single-line import
+			imports = append(imports, fmt.Sprintf("%q", v[2]))
+		}
+	}
 
-    code = importsRegex.ReplaceAllString(code, "")
-    return code, imports
+	code = importsRegex.ReplaceAllString(code, "")
+	return code, imports
 }
+
 func runGoCode(code string, imports []string, ctxString string) (string, error) {
 	var importBlock string
 	if len(imports) > 0 {
