@@ -92,6 +92,7 @@ func main() {
 	)
 	updater.Idle()
 }
+
 func AddedToGroups(b *gotgbot.Bot, ctx *ext.Context) error {
 	text := fmt.Sprintf(
 		`Hello 👋 I'm <b>%s</b>, here to help keep the chat transparent and secure.
