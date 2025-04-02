@@ -42,15 +42,11 @@ func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func extractImportsAndCode(code string) (string, string) {
-	importRegex := regexp.MustCompile(`(?m)^\s*import\s+("[^"]+"|[\s\S]+?)`)
+	importRegex := regexp.MustCompile(`(?m)^\s*import\s+(?:"[^"]+"|[\s\S]+?)`)
 	matches := importRegex.FindString(code)
 
-	if matches != "" {
-		cleanCode := importRegex.ReplaceAllString(code, "")
-		return strings.TrimSpace(cleanCode), matches
-	}
-
-	return strings.TrimSpace(code), ""
+	cleanCode := importRegex.ReplaceAllString(code, "")
+	return strings.TrimSpace(cleanCode), strings.TrimSpace(matches)
 }
 
 func runGoCode(code, imports, ctxString string) (string, error) {
