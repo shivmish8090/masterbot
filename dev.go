@@ -83,6 +83,9 @@ func main() {
 	json.Unmarshal([]byte(ctxString), &ctx)
 
 	%s
+
+        _ = ctx
+        _ = Bot
 }
 `
 	evalCode := fmt.Sprintf(evalTemplate, imports, ctxString, code)
