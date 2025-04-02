@@ -16,7 +16,7 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 		file := gotgbot.InputFileByURL(config.StartImage)
 
 		caption := fmt.Sprintf(
-    `<b>🚀 Hello <a href="tg://user?id=%d">%s</a>! 👋</b>  
+			`<b>🚀 Hello <a href="tg://user?id=%d">%s</a>! 👋</b>  
 I'm <b>%s</b>, your security assistant, ensuring a safe and transparent environment for our discussions!  
 
 🔍 <b>Edited Message Protection:</b>  
@@ -31,10 +31,10 @@ I'm <b>%s</b>, your security assistant, ensuring a safe and transparent environm
 
 🔐 <b>Keep your group safe now!</b>  
 ➡️ Tap <b>"Add Group"</b> to enable my security features today!`,
-    ctx.EffectiveUser.ID,
-    ctx.EffectiveUser.FirstName,
-    b.User.Username,
-)
+			ctx.EffectiveUser.ID,
+			ctx.EffectiveUser.FirstName,
+			b.User.Username,
+		)
 
 		keyboard := gotgbot.InlineKeyboardMarkup{
 			InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
