@@ -29,8 +29,8 @@ jobs:
           go mod tidy
           gofmt -w .
           goimports -w .
-          gofumpt -w .
-          golines -w --max-len=100 .
+          gofumpt -w -extra .
+          golines -w --max-len=80 .
 
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
