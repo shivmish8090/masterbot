@@ -22,12 +22,6 @@ func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	code := strings.SplitN(ctx.EffectiveMessage.GetText(), " ", 2)[1]
 	cleanCode, imports := extractImportsAndCode(code)
 
-	/*botString, err := json.Marshal(b)
-	if err != nil {
-		ctx.EffectiveMessage.Reply(b, "Error: Failed to serialize bot", nil)
-		return nil
-	}*/
-
 	ctxString, err := json.Marshal(ctx)
 	if err != nil {
 		ctx.EffectiveMessage.Reply(b, "Error: Failed to serialize context "+err.Error(), nil)
@@ -67,28 +61,28 @@ import (
 	%s
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
-        "github.com/Vivekkumar-IN/EditguardianBot/config"
+	"github.com/Vivekkumar-IN/EditguardianBot/config"
 )
 
 var ctxString = %q
 
 func main() {
 	var ctx ext.Context
- 
-        Bot, err := gotgbot.NewBot(config.Token,  nil)
-        if err != nil {
-                panic("failed to create new bot: " + err.Error())
-        }
+
+	Bot, err := gotgbot.NewBot(config.Token, nil)
+	if err != nil {
+		panic("failed to create new bot: " + err.Error())
+	}
 
 	json.Unmarshal([]byte(ctxString), &ctx)
 
 	%s
 
-        _ = ctx
-        _ = Bot
-        _ = fmt.Println
-}
-`
+	_ = ctx
+	_ = Bot
+	_ = fmt.Println
+}`
+
 	evalCode := fmt.Sprintf(evalTemplate, imports, ctxString, code)
 
 	tmpFile := fmt.Sprintf("/tmp/eval_%d.go", time.Now().UnixNano())
