@@ -6,6 +6,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+"net/http"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
