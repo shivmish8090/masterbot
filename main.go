@@ -20,7 +20,6 @@ var deleteWarningTracker = struct {
 	chats map[int64]time.Time
 }{chats: make(map[int64]time.Time)}
 
-
 func main() {
 	b, err := gotgbot.NewBot(config.Token, nil)
 	if err != nil {
@@ -79,6 +78,7 @@ func main() {
 	b.SendMessage(config.LoggerId, fmt.Sprintf("%s has started\n", b.User.Username), nil)
 	updater.Idle()
 }
+
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
 	chat := ctx.EffectiveChat.Type
 
