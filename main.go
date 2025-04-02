@@ -11,8 +11,8 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
+	"github.com/Vivekkumar-IN/EditguardianBot/filters"
 	"github.com/Vivekkumar-IN/EditguardianBot/telegraph"
-"github.com/Vivekkumar-IN/EditguardianBot/filters"
 )
 
 var deleteWarningTracker = struct {
