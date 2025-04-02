@@ -64,7 +64,7 @@ func main() {
 	updater := ext.NewUpdater(dispatcher, nil)
 
 	// /start command to introduce the bot
-	dispatcher.AddHandler(handlers.NewCommand("start", start))
+filters.Init(b)	dispatcher.AddHandler(handlers.NewCommand("start", start))
 	dispatcher.AddHandler(
 		handlers.NewMyChatMember(
 			func(u *gotgbot.ChatMemberUpdated) bool {
@@ -75,7 +75,7 @@ func main() {
 		),
 	)
 	evalHandler := handlers.NewMessage(
-		OwnerFilter(b, "eval"),
+  filters.AndFilter(filters.Owner, filters.Command("eval")
 		EvalHandler,
 	).SetAllowEdited(true)
 	dispatcher.AddHandler(handlers.NewMessage(nil, deleteEditedMessage).SetAllowEdited(true))
