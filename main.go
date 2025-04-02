@@ -115,7 +115,10 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 				{
 					{
 						Text: "➕ Add me to Your Group",
-						Url:  fmt.Sprintf("https://t.me/%s?startgroup=s&admin=delete_messages+invite_users", b.User.Username),
+						Url: fmt.Sprintf(
+							"https://t.me/%s?startgroup=s&admin=delete_messages+invite_users",
+							b.User.Username,
+						),
 					},
 				},
 			},
@@ -221,7 +224,11 @@ Please shorten it before sending. ✂️
 Alternatively, use /eco for sending longer messages. 📜
 `, ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName)
 
-			_, err := b.SendMessage(ctx.EffectiveChat.Id, text, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
+			_, err := b.SendMessage(
+				ctx.EffectiveChat.Id,
+				text,
+				&gotgbot.SendMessageOpts{ParseMode: "HTML"},
+			)
 			if err != nil {
 				return err
 			}
@@ -246,7 +253,11 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	ctx.EffectiveMessage.Delete(b, nil)
 	if len(ctx.EffectiveMessage.GetText()) < 500 {
-		b.SendMessage(ctx.EffectiveChat.Id, "Oops! Your message is under 500 characters. You can send it without using /echo.", nil)
+		b.SendMessage(
+			ctx.EffectiveChat.Id,
+			"Oops! Your message is under 500 characters. You can send it without using /echo.",
+			nil,
+		)
 		return nil
 	}
 
@@ -256,7 +267,15 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 	if ctx.EffectiveMessage.ReplyToMessage != nil {
-		b.SendMessage(ctx.EffectiveChat.Id, url, &gotgbot.SendMessageOpts{ReplyParameters: &gotgbot.ReplyParameters{MessageId: ctx.EffectiveMessage.ReplyToMessage.MessageId}})
+		b.SendMessage(
+			ctx.EffectiveChat.Id,
+			url,
+			&gotgbot.SendMessageOpts{
+				ReplyParameters: &gotgbot.ReplyParameters{
+					MessageId: ctx.EffectiveMessage.ReplyToMessage.MessageId,
+				},
+			},
+		)
 	} else {
 		b.SendMessage(ctx.EffectiveChat.Id, url, nil)
 	}

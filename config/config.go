@@ -23,7 +23,10 @@ func init() {
 		panic("TOKEN environment variable is empty")
 	}
 
-	StartImage = Getenv("START_IMG_URL", "https://telegra.ph/file/ba238ec5e542d8754cea7-dc1786aa23ae1224f2.jpg")
+	StartImage = Getenv(
+		"START_IMG_URL",
+		"https://telegra.ph/file/ba238ec5e542d8754cea7-dc1786aa23ae1224f2.jpg",
+	)
 
 	LoggerId = GetenvInt64("LOGGER_ID", "-1002647107199")
 	OwnerId = GetenvInt64("OWNER_ID", "7706682472")
