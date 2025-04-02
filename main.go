@@ -53,6 +53,11 @@ func main() {
 
 	dispatcher.AddHandler(evalHandler)
 	dispatcher.AddHandler(handlers.NewCommand("echo", EcoHandler))
+
+dispatcher.AddHandler(handlers.NewMessage(
+		filters.Invert(filters.ChatAdmins),
+		deleteEditedMessage,
+	))
 	dispatcher.AddHandler(handlers.NewMessage(
 		filters.LongMessage,
 		deleteLongMessage,
