@@ -99,7 +99,9 @@ func getAvailableToken() (string, error) {
 	// If no available token, create a new account
 	newToken, err := createAccount("EcoBot" + strconv.Itoa(len(AccountMap)+1))
 	if err != nil {
-		return "", errors.New("no available accounts and failed to create new account")
+		return "", errors.New(
+			"no available accounts and failed to create new account",
+		)
 	}
 
 	// Store the new token with no flood wait time
@@ -174,8 +176,10 @@ func CreatePage(content, firstName string) (string, error) {
 		// Check for flood wait error
 		floodWaitTime := extractFloodWait(result.Error)
 		if floodWaitTime > 0 {
-			AccountMap[accessToken] = time.Now().Unix() + floodWaitTime // Store expiration time
-			continue                                                    // Try another account
+			AccountMap[accessToken] = time.Now().
+				Unix() +
+				floodWaitTime // Store expiration time
+			continue // Try another account
 		}
 
 		// Other errors, return immediately

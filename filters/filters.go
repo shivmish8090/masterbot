@@ -19,7 +19,9 @@ const (
 	InvertFilter = Invert
 )
 
-func And(filters ...func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool {
+func And(
+	filters ...func(m *gotgbot.Message) bool,
+) func(m *gotgbot.Message) bool {
 	return func(m *gotgbot.Message) bool {
 		for _, filter := range filters {
 			if !filter(m) {
@@ -30,7 +32,9 @@ func And(filters ...func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool
 	}
 }
 
-func Or(filters ...func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool {
+func Or(
+	filters ...func(m *gotgbot.Message) bool,
+) func(m *gotgbot.Message) bool {
 	return func(m *gotgbot.Message) bool {
 		for _, filter := range filters {
 			if filter(m) {
@@ -58,7 +62,8 @@ func ChatAdmins(m *gotgbot.Message) bool {
 		if err != nil {
 			return false
 		}
-		return user.GetStatus() == "creator" || user.GetStatus() == "administrator"
+		return user.GetStatus() == "creator" ||
+			user.GetStatus() == "administrator"
 	}
 	return false
 }
@@ -66,7 +71,8 @@ func ChatAdmins(m *gotgbot.Message) bool {
 func Command(cmd string) func(m *gotgbot.Message) bool {
 	return func(m *gotgbot.Message) bool {
 		ents := m.Entities
-		if len(ents) != 0 && ents[0].Offset == 0 && ents[0].Type != "bot_command" {
+		if len(ents) != 0 && ents[0].Offset == 0 &&
+			ents[0].Type != "bot_command" {
 			return false
 		}
 

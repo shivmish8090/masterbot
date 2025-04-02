@@ -63,7 +63,12 @@ func main() {
 		deleteLongMessage,
 	))
 
-	allowedUpdates := []string{"message", "my_chat_member", "chat_member", "edited_message"}
+	allowedUpdates := []string{
+		"message",
+		"my_chat_member",
+		"chat_member",
+		"edited_message",
+	}
 
 	err = updater.StartPolling(b, &ext.PollingOpts{
 		DropPendingUpdates: true,
@@ -80,7 +85,11 @@ func main() {
 	}
 
 	log.Printf("%s has been started...\n", b.User.Username)
-	b.SendMessage(config.LoggerId, fmt.Sprintf("%s has started\n", b.User.Username), nil)
+	b.SendMessage(
+		config.LoggerId,
+		fmt.Sprintf("%s has started\n", b.User.Username),
+		nil,
+	)
 	updater.Idle()
 }
 
@@ -109,8 +118,14 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 		keyboard := gotgbot.InlineKeyboardMarkup{
 			InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
 				{
-					{Text: "🔄 Update Channel", Url: "https://t.me/Dns_Official_Channel"},
-					{Text: "💬 Update Group", Url: "https://t.me/dns_support_group"},
+					{
+						Text: "🔄 Update Channel",
+						Url:  "https://t.me/Dns_Official_Channel",
+					},
+					{
+						Text: "💬 Update Group",
+						Url:  "https://t.me/dns_support_group",
+					},
 				},
 				{
 					{
@@ -143,10 +158,17 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 
 <b>User ID:</b> <code>%d</code>
 <b>User Name:</b> %s %s`,
-			ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName,
-			ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName, ctx.EffectiveUser.LastName,
+			ctx.EffectiveUser.Id,
+			ctx.EffectiveUser.FirstName,
+			ctx.EffectiveUser.Id,
+			ctx.EffectiveUser.FirstName,
+			ctx.EffectiveUser.LastName,
 		)
-		b.SendMessage(config.LoggerId, logStr, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
+		b.SendMessage(
+			config.LoggerId,
+			logStr,
+			&gotgbot.SendMessageOpts{ParseMode: "HTML"},
+		)
 	} else if chat == "group" {
 		message := `⚠️ Warning: I can't function in a basic group!
 
@@ -166,14 +188,21 @@ To use my features, please upgrade this group to a supergroup.
 }
 
 func AddedToGroups(b *gotgbot.Bot, ctx *ext.Context) error {
-	text := fmt.Sprintf(`Hello 👋 I'm <b>%s</b>, here to help keep the chat transparent and secure.
+	text := fmt.Sprintf(
+		`Hello 👋 I'm <b>%s</b>, here to help keep the chat transparent and secure.
 
 🚫 I will automatically delete edited messages to maintain clarity.  
 
 I'm ready to protect this group! ✅  
-Let me know if you need any help.`, b.User.FirstName)
+Let me know if you need any help.`,
+		b.User.FirstName,
+	)
 
-	b.SendMessage(ctx.EffectiveChat.Id, text, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
+	b.SendMessage(
+		ctx.EffectiveChat.Id,
+		text,
+		&gotgbot.SendMessageOpts{ParseMode: "HTML"},
+	)
 	chatMemberCount, err := b.GetChatMemberCount(ctx.EffectiveChat.Id, nil)
 	if err != nil {
 		chatMemberCount = 0
@@ -203,7 +232,11 @@ Let me know if you need any help.`, b.User.FirstName)
 		chatMemberCount,
 	)
 
-	_, err = b.SendMessage(config.LoggerId, logStr, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
+	_, err = b.SendMessage(
+		config.LoggerId,
+		logStr,
+		&gotgbot.SendMessageOpts{ParseMode: "HTML"},
+	)
 	if err != nil {
 		return err
 	}
@@ -243,7 +276,11 @@ Alternatively, use /eco for sending longer messages. 📜
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if ctx.EffectiveChat.Type != "supergroup" {
-		ctx.EffectiveMessage.Reply(b, "This command can be used only in groups", nil)
+		ctx.EffectiveMessage.Reply(
+			b,
+			"This command can be used only in groups",
+			nil,
+		)
 		return nil
 	}
 	if len(ctx.Args()) < 2 {
@@ -289,7 +326,11 @@ func deleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 			return err
 		}
 
-		_, err = b.SendMessage(ctx.EffectiveChat.Id, "⚠️ Editing messages is not allowed!", nil)
+		_, err = b.SendMessage(
+			ctx.EffectiveChat.Id,
+			"⚠️ Editing messages is not allowed!",
+			nil,
+		)
 		return err
 	}
 	return nil
@@ -318,10 +359,16 @@ func ExtractJoinLeftStatusChange(u *gotgbot.ChatMemberUpdated) (bool, bool) {
 		return false
 	}
 
-	wasMember := findInSlice([]string{"member", "administrator", "creator"}, oldMemberStatus) ||
+	wasMember := findInSlice(
+		[]string{"member", "administrator", "creator"},
+		oldMemberStatus,
+	) ||
 		(oldMemberStatus == "restricted" && oldIsMember)
 
-	isMember := findInSlice([]string{"member", "administrator", "creator"}, newMemberStatus) ||
+	isMember := findInSlice(
+		[]string{"member", "administrator", "creator"},
+		newMemberStatus,
+	) ||
 		(newMemberStatus == "restricted" && newIsMember)
 
 	return wasMember, isMember

@@ -24,7 +24,11 @@ func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	ctxString, err := json.Marshal(ctx)
 	if err != nil {
-		ctx.EffectiveMessage.Reply(b, "Error: Failed to serialize context "+err.Error(), nil)
+		ctx.EffectiveMessage.Reply(
+			b,
+			"Error: Failed to serialize context "+err.Error(),
+			nil,
+		)
 		return nil
 	}
 
@@ -39,7 +43,9 @@ func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 func extractImportsAndCode(code string) (string, string) {
 	var imports []string
-	importRegex := regexp.MustCompile(`(?m)^\s*import\s+(\"[^"]+\"|[a-zA-Z0-9_]+?\s+"[^"]+")`)
+	importRegex := regexp.MustCompile(
+		`(?m)^\s*import\s+(\"[^"]+\"|[a-zA-Z0-9_]+?\s+"[^"]+")`,
+	)
 
 	matches := importRegex.FindAllString(code, -1)
 	for _, match := range matches {
