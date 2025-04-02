@@ -299,7 +299,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 func deleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	if ctx.EditedMessage != nil {
-		_, err := ctx.EffectiveMessage.Delete(b)
+		_, err := ctx.EffectiveMessage.Delete(b, nil)
 		if err != nil {
 			return err
 		}
