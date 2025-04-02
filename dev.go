@@ -1,11 +1,7 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"os"
-	"os/exec"
-	"path/filepath"
 	"regexp"
 	"strings"
 
@@ -14,6 +10,7 @@ import (
 	"github.com/traefik/yaegi/interp"
 	"github.com/traefik/yaegi/stdlib"
 )
+
 // Eval code
 
 func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
