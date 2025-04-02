@@ -12,6 +12,7 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 	"github.com/Vivekkumar-IN/EditguardianBot/telegraph"
+"github.com/Vivekkumar-IN/EditguardianBot/filters"
 )
 
 var deleteWarningTracker = struct {
@@ -80,23 +81,10 @@ func main() {
 	dispatcher.AddHandler(handlers.NewMessage(nil, deleteEditedMessage).SetAllowEdited(true))
 	dispatcher.AddHandler(evalHandler)
 	dispatcher.AddHandler(handlers.NewCommand("echo", EcoHandler))
-	deleteHandler := handlers.NewMessage(
-		func(m *gotgbot.Message) bool {
-			sender := m.GetSender()
-			if sender.User != nil {
-				user, err := b.GetChatMember(m.Chat.Id, sender.User.Id, nil)
-				if err != nil {
-					return false
-				}
-				if user.GetStatus() == "creator" || user.GetStatus() == "administrator" {
-					return false
-				}
-			}
-			return m.GetText() != "" && len(m.GetText()) > 800
-		},
+	dispatcher.AddHandler(handlers.NewMessage(
+		filters.LongMessage,
 		deleteLongMessage,
-	)
-	dispatcher.AddHandler(deleteHandler)
+	))
 
 	// Start receiving updates.
 	allowedUpdates := []string{"message", "my_chat_member", "chat_member", "edited_message"}
