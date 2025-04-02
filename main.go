@@ -135,6 +135,17 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 							b.User.Username,
 						),
 					},
+
+{
+					{
+						Text: "Help & Commands",
+						CallbackData: "help",
+					},
+
+
+
+				},
+
 				},
 			},
 		}
