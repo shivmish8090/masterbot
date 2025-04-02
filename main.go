@@ -78,7 +78,7 @@ func main() {
 		EvalHandler,
 	).SetAllowEdited(true)
 	dispatcher.AddHandler(handlers.NewMessage(nil, deleteEditedMessage).SetAllowEdited(true))
-dispatcher.AddHandler(evalHandler)
+	dispatcher.AddHandler(evalHandler)
 	dispatcher.AddHandler(handlers.NewCommand("echo", EcoHandler))
 	deleteHandler := handlers.NewMessage(
 		func(m *gotgbot.Message) bool {
