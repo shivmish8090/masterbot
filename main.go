@@ -76,8 +76,7 @@ func main() {
 	evalHandler := handlers.NewMessage(
 		OwnerFilter(b, "eval"),
 		EvalHandler,
-	)
-	evalHandler.SetAllowEdited(true)
+	).SetAllowEdited(true)
 	dispatcher.AddHandler(evalHandler)
 	dispatcher.AddHandler(handlers.NewCommand("echo", EcoHandler))
 	deleteHandler := handlers.NewMessage(
