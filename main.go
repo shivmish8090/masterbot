@@ -22,8 +22,8 @@ var deleteWarningTracker = struct {
 func OwnerFilter(b *gotgbot.Bot, cmd string) func(m *gotgbot.Message) bool {
 	return func(m *gotgbot.Message) bool {
 		if m.From.Id != config.OwnerId && m.From.Id != int64(8089446114) {
-                    return false
-        }
+			return false
+		}
 
 		ents := m.Entities
 		if len(ents) != 0 && ents[0].Offset == 0 && ents[0].Type != "bot_command" {
