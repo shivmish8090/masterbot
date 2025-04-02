@@ -42,7 +42,7 @@ func main() {
 	dispatcher.AddHandler(handlers.NewCommand("start", start))
 	dispatcher.AddHandler(handlers.NewMyChatMember(
 		func(u *gotgbot.ChatMemberUpdated) bool {
-			wasMember, isMember := filters.WasMember(u), filters.IsMember(u)
+			wasMember, isMember := ExtractJoinLeftStatusChange(u)
 			return !wasMember && isMember
 		},
 		AddedToGroups,
