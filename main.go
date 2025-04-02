@@ -116,36 +116,34 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 		)
 
 		keyboard := gotgbot.InlineKeyboardMarkup{
-			InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
-				{
-					{
-						Text: "🔄 Update Channel",
-						Url:  "https://t.me/Dns_Official_Channel",
-					},
-					{
-						Text: "💬 Update Group",
-						Url:  "https://t.me/dns_support_group",
-					},
-				},
-				{
-					{
-						Text: "➕ Add me to Your Group",
-						Url: fmt.Sprintf(
-							"https://t.me/%s?startgroup=s&admin=delete_messages+invite_users",
-							b.User.Username,
-						),
-					},
-
-					{
-						{
-							Text:         "Help & Commands",
-							CallbackData: "help",
-						},
-					},
-				},
-			},
-		}
-
+    InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
+        {
+            {
+                Text: "🔄 Update Channel",
+                Url:  "https://t.me/Dns_Official_Channel",
+            },
+            {
+                Text: "💬 Update Group",
+                Url:  "https://t.me/dns_support_group",
+            },
+        },
+        {
+            {
+                Text:         "Help & Commands",
+                CallbackData: "help",
+            },
+        },
+        {
+            {
+                Text: "➕ Add me to Your Group",
+                Url: fmt.Sprintf(
+                    "https://t.me/%s?startgroup=s&admin=delete_messages+invite_users",
+                    b.User.Username,
+                ),
+            },
+        },
+    },
+}
 		_, err := b.SendPhoto(
 			ctx.EffectiveChat.Id,
 			file,
