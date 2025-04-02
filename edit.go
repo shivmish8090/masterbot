@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
@@ -9,8 +10,8 @@ import (
 )
 
 var deleteWarningTracker = struct {
-        sync.Mutex
-        chats map[int64]time.Time
+	sync.Mutex
+	chats map[int64]time.Time
 }{chats: make(map[int64]time.Time)}
 
 func deleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
