@@ -22,6 +22,7 @@ jobs:
         run: |
           go install golang.org/x/tools/cmd/goimports@latest
           go install mvdan.cc/gofumpt@latest
+          go install github.com/segmentio/golines@latest
 
       - name: Format Codes
         run: |
@@ -29,6 +30,7 @@ jobs:
           gofmt -w .
           goimports -w .
           gofumpt -w .
+          golines -w --max-len=100 .
 
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
