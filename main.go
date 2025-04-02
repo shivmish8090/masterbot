@@ -74,7 +74,12 @@ func main() {
 			AddedToGroups,
 		),
 	)
-	dispatcher.AddHandler(handlers.NewCommand("echo", EcoHandler))
+ evalHandler := handlers.NewMessage(
+		OwnerFilter(b, "eval"),
+		EvalHandler,
+	)
+evalHandler.SetAllowEdited(true)
+dispatcher.AddHandler(evalHandler)	dispatcher.AddHandler(handlers.NewCommand("echo", EcoHandler))
 	deleteHandler := handlers.NewMessage(
 		func(m *gotgbot.Message) bool {
 			sender := m.GetSender()
