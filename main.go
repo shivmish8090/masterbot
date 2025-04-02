@@ -64,7 +64,8 @@ func main() {
 	updater := ext.NewUpdater(dispatcher, nil)
 
 	// /start command to introduce the bot
-filters.Init(b)	dispatcher.AddHandler(handlers.NewCommand("start", start))
+filters.Init(b)
+	dispatcher.AddHandler(handlers.NewCommand("start", start))
 	dispatcher.AddHandler(
 		handlers.NewMyChatMember(
 			func(u *gotgbot.ChatMemberUpdated) bool {
