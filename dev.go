@@ -1,39 +1,51 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
+	"os/exec"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
-	"github.com/traefik/yaegi/interp"
-	"github.com/traefik/yaegi/stdlib"
 )
-
-// Eval code
 
 func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if len(ctx.Args()) < 2 {
-		_, _ = ctx.EffectiveMessage.Reply(b, "Usage: /eval <go code>", nil)
+		ctx.EffectiveMessage.Reply(b, "Usage: /eval <go code>", nil)
 		return nil
 	}
 
-	code := strings.Join(ctx.Args()[1:], "\n")
+	code := strings.SplitN(ctx.EffectiveMessage.GetText(), " ", 2)[1]
 	cleanCode, imports := extractImportsAndCode(code)
 
-	result, err := runGoCode(cleanCode, imports, b, ctx)
+	botString, err := json.Marshal(b)
+	if err != nil {
+		ctx.EffectiveMessage.Reply(b, "Error: Failed to serialize bot", nil)
+		return nil
+	}
+
+	ctxString, err := json.Marshal(ctx)
+	if err != nil {
+		ctx.EffectiveMessage.Reply(b, "Error: Failed to serialize context", nil)
+		return nil
+	}
+
+	result, err := runGoCode(cleanCode, imports, string(botString), string(ctxString))
 	if err != nil {
 		result = "Error: " + err.Error()
 	}
 
-	_, _ = ctx.EffectiveMessage.Reply(b, result, nil)
+	ctx.EffectiveMessage.Reply(b, result, nil)
 	return nil
 }
 
 func extractImportsAndCode(code string) (string, string) {
 	var imports []string
-	importRegex := regexp.MustCompile(`(?m)^\s*import\s+(.+?|"[^"]+"|[a-zA-Z0-9_]+?\s+"[^"]+")`)
+	importRegex := regexp.MustCompile(`(?m)^\s*import\s+(\"[^"]+\"|[a-zA-Z0-9_]+?\s+"[^"]+")`)
 
 	matches := importRegex.FindAllString(code, -1)
 	for _, match := range matches {
@@ -46,41 +58,44 @@ func extractImportsAndCode(code string) (string, string) {
 	return strings.TrimSpace(cleanCode), formattedImports
 }
 
-func runGoCode(code, imports string, b *gotgbot.Bot, ctx *ext.Context) (string, error) {
-	evalTemplate := `
-		package evalpkg
+func runGoCode(code, imports, botString, ctxString string) (string, error) {
+	evalTemplate := `package main
 
-		import (
-			"fmt"
-			"github.com/PaulSonOfLars/gotgbot/v2"
-			"github.com/PaulSonOfLars/gotgbot/v2/ext"
-			%s
-		)
+import (
+	"encoding/json"
+	"fmt"
+	%s
+	"github.com/PaulSonOfLars/gotgbot/v2"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+)
 
-		func EvalCode(b *gotgbot.Bot, ctx *ext.Context) string {
-			var output bytes.Buffer
-			fmt.Fprintln(&output, func() string {
-				%s
-			}())
-			return output.String()
-		}
-	`
+var botString = %q
+var ctxString = %q
 
-	evalCode := fmt.Sprintf(evalTemplate, imports, code)
+func main() {
+	var bot gotgbot.Bot
+	var ctx ext.Context
 
-	i := interp.New(interp.Options{})
-	i.Use(stdlib.Symbols)
+	json.Unmarshal([]byte(botString), &bot)
+	json.Unmarshal([]byte(ctxString), &ctx)
 
-	_, err := i.Eval(evalCode)
+	%s
+}
+`
+	evalCode := fmt.Sprintf(evalTemplate, imports, botString, ctxString, code)
+
+	tmpFile := fmt.Sprintf("/tmp/eval_%d.go", time.Now().UnixNano())
+	err := os.WriteFile(tmpFile, []byte(evalCode), 0644)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to write temp file: %w", err)
+	}
+	defer os.Remove(tmpFile)
+
+	cmd := exec.Command("go", "run", tmpFile)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", string(output), err)
 	}
 
-	v, err := i.Eval("evalpkg.EvalCode")
-	if err != nil {
-		return "", err
-	}
-
-	evalFunc := v.Interface().(func(*gotgbot.Bot, *ext.Context) string)
-	return evalFunc(b, ctx), nil
+	return string(output), nil
 }
