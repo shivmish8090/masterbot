@@ -13,7 +13,10 @@ func Init(b *gotgbot.Bot) {
 	bot = b
 }
 
-func AndFilter(filters ...func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool {
+const AndFilter = And
+const OrFilter = Or
+const InvertFilter = Invert
+func And(filters ...func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool {
 	return func(m *gotgbot.Message) bool {
 		for _, filter := range filters {
 			if !filter(m) {
@@ -24,7 +27,7 @@ func AndFilter(filters ...func(m *gotgbot.Message) bool) func(m *gotgbot.Message
 	}
 }
 
-func OrFilter(filters ...func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool {
+func Or(filters ...func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool {
 	return func(m *gotgbot.Message) bool {
 		for _, filter := range filters {
 			if filter(m) {
@@ -35,7 +38,7 @@ func OrFilter(filters ...func(m *gotgbot.Message) bool) func(m *gotgbot.Message)
 	}
 }
 
-func InvertFilter(f func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool {
+func Invert(f func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool {
 	return func(m *gotgbot.Message) bool {
 		return !f(m)
 	}
