@@ -298,7 +298,16 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func deleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
-	return nil
+	if ctx.EditedMessage != nil {  
+		_, err := ctx.EffectiveMessage.Delete(b)  
+		if err != nil {  
+			return err  
+		}  
+
+		_, err = b.SendMessage(ctx.EffectiveChat.Id, "⚠️ Editing messages is not allowed!", nil)  
+		return err  
+	}  
+	return nil  
 }
 
 func ExtractJoinLeftStatusChange(u *gotgbot.ChatMemberUpdated) (bool, bool) {
