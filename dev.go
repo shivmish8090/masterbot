@@ -85,7 +85,7 @@ func main() {
 	evalCode := fmt.Sprintf(evalTemplate, imports, botString, ctxString, code)
 
 	tmpFile := fmt.Sprintf("/tmp/eval_%d.go", time.Now().UnixNano())
-	err := os.WriteFile(tmpFile, []byte(evalCode), 0644)
+	err := os.WriteFile(tmpFile, []byte(evalCode), 0o644)
 	if err != nil {
 		return "", fmt.Errorf("failed to write temp file: %w", err)
 	}
