@@ -98,13 +98,13 @@ func main() {
 	dispatcher.AddHandler(deleteHandler)
 
 	// Start receiving updates.
-         var allowedUpdates = []string{"message", "my_chat_member", "chat_member", "edited_message"}
+	allowedUpdates := []string{"message", "my_chat_member", "chat_member", "edited_message"}
 
 	err = updater.StartPolling(b, &ext.PollingOpts{
 		DropPendingUpdates: true,
 		GetUpdatesOpts: &gotgbot.GetUpdatesOpts{
-			Timeout: 9,
-    AllowedUpdates: allowedUpdates,
+			Timeout:        9,
+			AllowedUpdates: allowedUpdates,
 			RequestOpts: &gotgbot.RequestOpts{
 				Timeout: time.Second * 10,
 			},
