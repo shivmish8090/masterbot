@@ -136,16 +136,12 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 						),
 					},
 
-{
 					{
-						Text: "Help & Commands",
-						CallbackData: "help",
+						{
+							Text:         "Help & Commands",
+							CallbackData: "help",
+						},
 					},
-
-
-
-				},
-
 				},
 			},
 		}
