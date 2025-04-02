@@ -38,29 +38,19 @@ func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func resolveImports(code string) (string, []string) {
-	var imports []string
-	importsRegex := regexp.MustCompile(`(?m)^\s*import\s*([\s\S]*?)|^\s*import\s*"([^"]+)"`)
-
-	importsMatches := importsRegex.FindAllStringSubmatch(code, -1)
-	for _, v := range importsMatches {
-		if v[1] != "" {
-			lines := strings.Split(v[1], "\n")
-			for _, line := range lines {
-				trimmed := strings.TrimSpace(line)
-				if trimmed != "" && !strings.HasPrefix(trimmed, "//") {
-					imports = append(imports, trimmed) // Keep valid import paths
-				}
-			}
-		} else if v[2] != "" {
-			imports = append(imports, v[2]) // Single-line import
-		}
-	}
-
-	// Remove extracted imports from the original code
-	code = importsRegex.ReplaceAllString(code, "")
-	return strings.TrimSpace(code), imports
+        var imports []string
+        importsRegex := regexp.MustCompile(`import\s*\(([\s\S]*?)\)|import\s*\"([\s\S]*?)\"`)
+        importsMatches := importsRegex.FindAllStringSubmatch(code, -1)
+        for _, v := range importsMatches {
+                if v[1] != "" {
+                        imports = append(imports, v[1])
+                } else {
+                        imports = append(imports, v[2])
+                }
+        }
+        code = importsRegex.ReplaceAllString(code, "")
+        return code, imports
 }
-
 func runGoCode(code string, imports []string, ctxString string) (string, error) {
 	var importBlock string
 	if len(imports) > 0 {
