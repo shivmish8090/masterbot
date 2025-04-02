@@ -39,7 +39,7 @@ jobs:
           go mod tidy
           gofmt -w .
           goimports -w .
-          gci write . --skip-format -s standard -s default -s "prefix(github.com/Vivekkumar-IN/EditguardianBot)"
+          gci write . -s standard -s default -s "prefix(github.com/Vivekkumar-IN/EditguardianBot)"
           gofumpt -w -extra .
           golines --max-len=80 .
 
