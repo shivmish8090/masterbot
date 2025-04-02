@@ -53,16 +53,29 @@ func extractImportsAndCode(code string) (string, string) {
 }
 
 func runGoCode(code, imports, ctxString string) (string, error) {
-	evalTemplate := `package main
-
-import (
+	var importBlock string
+	if imports != "" {
+		importBlock = fmt.Sprintf(`import (
 	"encoding/json"
 	"fmt"
 	%s
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
-)
+)`, imports)
+	} else {
+		importBlock = `import (
+	"encoding/json"
+	"fmt"
+	"github.com/PaulSonOfLars/gotgbot/v2"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+	"github.com/Vivekkumar-IN/EditguardianBot/config"
+)`
+	}
+
+	evalTemplate := `package main
+
+%s
 
 var ctxString = %q
 
@@ -83,7 +96,7 @@ func main() {
 	_ = fmt.Println
 }`
 
-	evalCode := fmt.Sprintf(evalTemplate, imports, ctxString, code)
+	evalCode := fmt.Sprintf(evalTemplate, importBlock, ctxString, code)
 
 	tmpFile := fmt.Sprintf("/tmp/eval_%d.go", time.Now().UnixNano())
 	err := os.WriteFile(tmpFile, []byte(evalCode), 0o644)
