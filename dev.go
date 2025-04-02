@@ -22,11 +22,11 @@ func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	code := strings.SplitN(ctx.EffectiveMessage.GetText(), " ", 2)[1]
 	cleanCode, imports := extractImportsAndCode(code)
 
-	botString, err := json.Marshal(b)
+	/*botString, err := json.Marshal(b)
 	if err != nil {
 		ctx.EffectiveMessage.Reply(b, "Error: Failed to serialize bot", nil)
 		return nil
-	}
+	}*/
 
 	ctxString, err := json.Marshal(ctx)
 	if err != nil {
@@ -34,7 +34,7 @@ func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		return nil
 	}
 
-	result, err := runGoCode(cleanCode, imports, string(botString), string(ctxString))
+	result, err := runGoCode(cleanCode, imports, string(ctxString))
 	if err != nil {
 		result = "Error: " + err.Error()
 	}
@@ -67,16 +67,18 @@ import (
 	%s
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+        "github.com/Vivekkumar-IN/EditguardianBot/config"
 )
 
-var botString = %q
 var ctxString = %q
 
 func main() {
-	var bot gotgbot.Bot
 	var ctx ext.Context
+ 
+ Bot, err := gotgbot.NewBot(config.Token, nil)
+if err != nil {
+return "", err}
 
-	json.Unmarshal([]byte(botString), &bot)
 	json.Unmarshal([]byte(ctxString), &ctx)
 
 	%s
