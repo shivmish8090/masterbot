@@ -10,7 +10,7 @@ import (
 )
 
 func deleteCallback(b *gotgbot.Bot, ctx *ext.Context) error {
-	_, err = ctx.CallbackQuery.Message.Delete(b, nil)
+	_, err := ctx.CallbackQuery.Message.Delete(b, nil)
 	return err
 }
 
