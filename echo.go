@@ -13,7 +13,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if ctx.EffectiveChat.Type != "supergroup" {
 		ctx.EffectiveMessage.Reply(
 			b,
-			"This command can be used only in groups",
+			"This command is made to be used in supergrous, not in pm!",
 			nil,
 		)
 		return nil
