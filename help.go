@@ -20,6 +20,7 @@ func helpCB(b *gotgbot.Bot, ctx *ext.Context) error {
 			},
 		},
 	}
-	ctx.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{Caption: "Soon...", ReplyMarkup: keyboard})
+	_, _, err := ctx.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{Caption: "Soon...", ReplyMarkup: keyboard})
+ log.Println(err)
 	return nil
 }
