@@ -67,7 +67,7 @@ func deleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 ⚠️ <a href="tg://user?id=%d">%s</a>, your message exceeds the 800-character limit! 🚫  
 Please shorten it before sending. ✂️  
 
-Alternatively, use /eco for sending longer messages. 📜
+Alternatively, use /echo for sending longer messages. 📜
 `, ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName)
 
 			_, err := b.SendMessage(
