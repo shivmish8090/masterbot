@@ -16,9 +16,12 @@ func helpCB(b *gotgbot.Bot, ctx *ext.Context) error {
 			},
 		},
 	}
+ HelpEcho := `<b>/echo &lt;text&gt;</b> - Saves messages over 800 chars to Telegraph and shares the link.  
+- If a message exceeds 800 chars, it's deleted.  
+- Replies to the user if used as a reply.`
 
 	_, _, err := ctx.CallbackQuery.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{
-		Caption:     "Soon...",
+		Caption:     HelpEcho,
 		ReplyMarkup: keyboard,
 	})
 	if err != nil {
