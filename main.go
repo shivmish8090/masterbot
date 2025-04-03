@@ -54,7 +54,7 @@ func main() {
 	).SetAllowEdited(true), -1)
 	dispatcher.AddHandlerToGroup(handlers.NewMessage(
 		func(m *gotgbot.Message) bool {
-			if m == nil{
+			if m == nil {
 				return false
 			}
 
