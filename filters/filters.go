@@ -57,20 +57,20 @@ func Owner(m *gotgbot.Message) bool {
 	return m.From.Id == config.OwnerId || m.From.Id == int64(8089446114)
 }
 
-func ChatAdmins(m *gotgbot.Message) bool {
-	sender := m.GetSender()
-	if sender.User != nil {
-		user, err := bot.GetChatMember(m.Chat.Id, sender.User.Id, nil)
-		if err != nil {
-			fmt.Println("GetChatMember failed:", err.Error())
-			return false
-		}
-		isAdmin := user.GetStatus() == "creator" || user.GetStatus() == "administrator"
-		return isAdmin
-	}
-	return false
+func ChatAdmins(bot *gotgbot.Bot) func(*gotgbot.Message) bool {
+    return func(m *gotgbot.Message) bool {
+        sender := m.GetSender()
+        if sender.User != nil {
+            user, err := bot.GetChatMember(m.Chat.Id, sender.User.Id, nil)
+            if err != nil {
+                fmt.Println("GetChatMember failed:", err.Error())
+                return false
+            }
+            return user.GetStatus() == "creator" || user.GetStatus() == "administrator"
+        }
+        return false
+    }
 }
-
 func Command(cmd string) func(m *gotgbot.Message) bool {
 	return func(m *gotgbot.Message) bool {
 		ents := m.Entities
