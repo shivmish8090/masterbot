@@ -32,19 +32,19 @@ func deleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 		reason = "<b>✍️ Editing a caption is restricted.</b>"
 	} else if message.Photo != nil {
 		reason = "<b>📷 Replacing or editing a photo is not permitted.</b>"
-	} else if message.Video  != nil {
+	} else if message.Video != nil {
 		reason = "<b>🎥 Replacing or editing a video is not allowed.</b>"
-	} else if message.Document  != nil {
+	} else if message.Document != nil {
 		reason = "<b>📄 Replacing a document is restricted.</b>"
-	} else if message.Audio  != nil {
+	} else if message.Audio != nil {
 		reason = "<b>🎵 Replacing an audio file is not permitted.</b>"
-	} else if message.VideoNote  != nil {
+	} else if message.VideoNote != nil {
 		reason = "<b>📹 Changing a video note is not allowed.</b>"
-	} else if message.Voice  != nil {
+	} else if message.Voice != nil {
 		reason = "<b>🎙️ Editing a voice message is not permitted.</b>"
-	} else if message.Animation  != nil {
+	} else if message.Animation != nil {
 		reason = "<b>🎞️ Modifying a GIF is not allowed.</b>"
-	} else if message.Sticker  != nil {
+	} else if message.Sticker != nil {
 		reason = "<b>🖼️ Replacing a sticker is not permitted.</b>"
 	}
 
