@@ -54,7 +54,10 @@ func deleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 		&gotgbot.SendMessageOpts{ParseMode: "HTML"},
 	)
 
+ if err != nil {
 	return err
+}
+return nil
 }
 
 func deleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
