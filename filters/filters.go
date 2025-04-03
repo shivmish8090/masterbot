@@ -25,7 +25,6 @@ func And(filters ...func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool
 	return func(m *gotgbot.Message) bool {
 		for _, filter := range filters {
 			result := filter(m)
-			fmt.Println("And: Filter result:", result)
 			if !result {
 				return false
 			}
