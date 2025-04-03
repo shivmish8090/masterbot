@@ -95,7 +95,7 @@ func Command(cmd string) func(m *gotgbot.Message) bool {
 }
 
 func LongMessage(m *gotgbot.Message) bool {
-        text := m.GetText()
-        fmt.Println("Message length:", len(text))
-        return len(text) > 800
+	text := m.GetText()
+	fmt.Println("Message length:", len(text))
+	return len(text) > 800
 }
