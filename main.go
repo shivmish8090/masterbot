@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"html"
 	"log"
 	"time"
 
@@ -23,10 +22,7 @@ func main() {
 
 	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
 		Error: func(_ *gotgbot.Bot, _ *ext.Context, err error) ext.DispatcherAction {
-
 			log.Println("an error occurred while handling update:", err.Error())
-
-			
 
 			return ext.DispatcherActionNoop
 		},
@@ -57,28 +53,28 @@ func main() {
 		deleteEditedMessage,
 	).SetAllowEdited(true), -1)
 	dispatcher.AddHandlerToGroup(handlers.NewMessage(
-    func(m *gotgbot.Message) bool {
-        if m == nil {
-            fmt.Println("LongMessage: Message is nil")
-            return false
-        }
+		func(m *gotgbot.Message) bool {
+			if m == nil {
+				fmt.Println("LongMessage: Message is nil")
+				return false
+			}
 
-        text := m.GetText()
-        if text == "" {
-            fmt.Println("LongMessage: No text found in message")
-            return false
-        }
+			text := m.GetText()
+			if text == "" {
+				fmt.Println("LongMessage: No text found in message")
+				return false
+			}
 
-        isLong := len(text) > 800
-        isNotAdmin := filters.Invert(filters.ChatAdmins)(m)
+			isLong := len(text) > 800
+			isNotAdmin := filters.Invert(filters.ChatAdmins)(m)
 
-        fmt.Println("LongMessage: Checking message length =", len(text))
-        fmt.Println("LongMessage: isLong =", isLong, "isNotAdmin =", isNotAdmin)
+			fmt.Println("LongMessage: Checking message length =", len(text))
+			fmt.Println("LongMessage: isLong =", isLong, "isNotAdmin =", isNotAdmin)
 
-        return isLong && isNotAdmin
-    },
-    deleteLongMessage,
-), -1)
+			return isLong && isNotAdmin
+		},
+		deleteLongMessage,
+	), -1)
 	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("help_callback"), helpCB))
 	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("start_callback"), start))
 
