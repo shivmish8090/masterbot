@@ -9,7 +9,7 @@ import (
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 )
 
-func deleteCallback(b *gotgbot.Bot, ctx *ext.Context) error {
+func closeCallback(b *gotgbot.Bot, ctx *ext.Context) error {
 	_, err := ctx.CallbackQuery.Message.Delete(b, nil)
 	return err
 }
