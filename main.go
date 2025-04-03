@@ -57,6 +57,8 @@ func main() {
 	), -1)
 
 	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("help_callback"), helpCB))
+
+dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("close"), closeCallback))
 	allowedUpdates := []string{
 		"message",
 		"my_chat_member",
