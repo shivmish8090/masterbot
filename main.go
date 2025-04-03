@@ -65,7 +65,7 @@ func main() {
 		deleteEditedMessage,
 	).SetAllowEdited(true), -1)
 	dispatcher.AddHandlerToGroup(handlers.NewMessage(
-		filters.LongMessage,
+		filters.And(filters.LongMessage, filters.Invert(filters.ChatAdmins)),
 		deleteLongMessage,
 	), -1)
 
