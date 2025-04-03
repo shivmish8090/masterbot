@@ -50,7 +50,6 @@ func Or(
 func Invert(f func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool {
 	return func(m *gotgbot.Message) bool {
 		result := f(m)
-		fmt.Println("Invert: Original:", result, "Inverted:", !result)
 		return !result
 	}
 }
@@ -64,11 +63,10 @@ func ChatAdmins(m *gotgbot.Message) bool {
 	if sender.User != nil {
 		user, err := bot.GetChatMember(m.Chat.Id, sender.User.Id, nil)
 		if err != nil {
-			fmt.Println("GetChatMember failed:", err)
+			fmt.Println("GetChatMember failed:", err.Error())
 			return false
 		}
 		isAdmin := user.GetStatus() == "creator" || user.GetStatus() == "administrator"
-		fmt.Println("User is admin:", isAdmin)
 		return isAdmin
 	}
 	return false
@@ -97,5 +95,7 @@ func Command(cmd string) func(m *gotgbot.Message) bool {
 }
 
 func LongMessage(m *gotgbot.Message) bool {
-	return len(m.GetText()) > 800
+        text := m.GetText()
+        fmt.Println("Message length:", len(text))
+        return len(text) > 800
 }
