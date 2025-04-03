@@ -56,7 +56,7 @@ func main() {
 		deleteLongMessage,
 	), -1)
 
-	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("start_callback"), startCB))
+	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("help_callback"), helpCB))
 	allowedUpdates := []string{
 		"message",
 		"my_chat_member",
