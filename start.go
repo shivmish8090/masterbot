@@ -10,12 +10,15 @@ import (
 )
 
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
+	isCallback := ctx.CallbackQuery != nil
 	chat := ctx.EffectiveChat.Type
 
 	if chat == "private" {
-		ctx.EffectiveMessage.Delete(b, nil)
-		file := gotgbot.InputFileByURL(config.StartImage)
+		if !isCallback {
+			ctx.EffectiveMessage.Delete(b, nil)
+		}
 
+		file := gotgbot.InputFileByURL(config.StartImage)
 		caption := fmt.Sprintf(
 			`<b>🚀 Hello <a href="tg://user?id=%d">%s</a>! 👋</b>  
 I'm <b><a href="tg://user?id=%d">%s</a></b>, your security assistant, ensuring a safe and transparent environment for our discussions!  
@@ -67,37 +70,53 @@ I'm <b><a href="tg://user?id=%d">%s</a></b>, your security assistant, ensuring a
 				},
 			},
 		}
-		_, err := b.SendPhoto(
-			ctx.EffectiveChat.Id,
-			file,
-			&gotgbot.SendPhotoOpts{
-				Caption:        caption,
-				ProtectContent: true,
-				ParseMode:      "HTML",
-				ReplyMarkup:    keyboard,
-			},
-		)
-		if err != nil {
-			return fmt.Errorf("failed to send photo: %w", err)
-		}
 
-		logStr := fmt.Sprintf(
-			`<a href="tg://user?id=%d">%s</a> has started the bot.
+		if isCallback {
+			_, _, err := ctx.CallbackQuery.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{
+				Caption:     caption,
+				ReplyMarkup: keyboard,
+			})
+			if err != nil {
+				return err
+			}
+		} else {
+			_, err := b.SendPhoto(
+				ctx.EffectiveChat.Id,
+				file,
+				&gotgbot.SendPhotoOpts{
+					Caption:        caption,
+					ProtectContent: true,
+					ParseMode:      "HTML",
+					ReplyMarkup:    keyboard,
+				},
+			)
+			if err != nil {
+				return fmt.Errorf("failed to send photo: %w", err)
+			}
+
+			logStr := fmt.Sprintf(
+				`<a href="tg://user?id=%d">%s</a> has started the bot.
 
 <b>User ID:</b> <code>%d</code>
 <b>User Name:</b> %s %s`,
-			ctx.EffectiveUser.Id,
-			ctx.EffectiveUser.FirstName,
-			ctx.EffectiveUser.Id,
-			ctx.EffectiveUser.FirstName,
-			ctx.EffectiveUser.LastName,
-		)
-		b.SendMessage(
-			config.LoggerId,
-			logStr,
-			&gotgbot.SendMessageOpts{ParseMode: "HTML"},
-		)
+				ctx.EffectiveUser.Id,
+				ctx.EffectiveUser.FirstName,
+				ctx.EffectiveUser.Id,
+				ctx.EffectiveUser.FirstName,
+				ctx.EffectiveUser.LastName,
+			)
+			b.SendMessage(
+				config.LoggerId,
+				logStr,
+				&gotgbot.SendMessageOpts{ParseMode: "HTML"},
+			)
+		}
+
 	} else if chat == "group" {
+		if isCallback {
+			return nil
+		}
+
 		message := `⚠️ Warning: I can't function in a basic group!
 
 To use my features, please upgrade this group to a supergroup.
@@ -109,8 +128,14 @@ To use my features, please upgrade this group to a supergroup.
 
 		ctx.EffectiveMessage.Reply(b, message, nil)
 		ctx.EffectiveChat.Leave(b, nil)
+
 	} else if chat == "supergroup" {
+		if isCallback {
+			return nil
+		}
+
 		ctx.EffectiveMessage.Reply(b, "✅ I am active and ready to protect this supergroup!", nil)
 	}
+
 	return ext.EndGroups
 }
