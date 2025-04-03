@@ -27,7 +27,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if len(ctx.EffectiveMessage.GetText()) < 800 {
 		b.SendMessage(
 			ctx.EffectiveChat.Id,
-			"Oops! Your message is under 500 characters. You can send it without using /echo.",
+			"Oops! Your message is under 800 characters. You can send it without using /echo.",
 			nil,
 		)
 		return nil
