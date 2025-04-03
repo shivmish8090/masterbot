@@ -15,92 +15,85 @@ import (
 )
 
 func main() {
-	b, err := gotgbot.NewBot(config.Token, nil)
-	if err != nil {
-		panic("failed to create new bot: " + err.Error())
-	}
+    b, err := gotgbot.NewBot(config.Token, nil)
+    if err != nil {
+        panic("failed to create new bot: " + err.Error())
+    }
 
-	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
-		Error: func(_ *gotgbot.Bot, _ *ext.Context, err error) ext.DispatcherAction {
-			log.Println("an error occurred while handling update:", err.Error())
+    // Initialize filters AFTER bot is created
+    filters.Init(b)
 
-			return ext.DispatcherActionNoop
-		},
-		MaxRoutines: 500,
-	})
-	updater := ext.NewUpdater(dispatcher, nil)
+    dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
+        Error: func(_ *gotgbot.Bot, _ *ext.Context, err error) ext.DispatcherAction {
+            log.Println("An error occurred while handling update:", err.Error())
+            return ext.DispatcherActionNoop
+        },
+        MaxRoutines: 500,
+    })
+    updater := ext.NewUpdater(dispatcher, nil)
 
-	filters.Init(b)
+    // Handlers
+    dispatcher.AddHandler(handlers.NewCommand("start", start))
+    dispatcher.AddHandler(handlers.NewMyChatMember(
+        func(u *gotgbot.ChatMemberUpdated) bool {
+            wasMember, isMember := ExtractJoinLeftStatusChange(u)
+            return !wasMember && isMember
+        },
+        AddedToGroups,
+    ))
 
-	dispatcher.AddHandler(handlers.NewCommand("start", start))
-	dispatcher.AddHandler(handlers.NewMyChatMember(
-		func(u *gotgbot.ChatMemberUpdated) bool {
-			wasMember, isMember := ExtractJoinLeftStatusChange(u)
-			return !wasMember && isMember
-		},
-		AddedToGroups,
-	))
+    evalHandler := handlers.NewMessage(
+        filters.AndFilter(filters.Owner, filters.Command(b, "eval")),
+        EvalHandler,
+    ).SetAllowEdited(true)
 
-	evalHandler := handlers.NewMessage(
-		filters.AndFilter(filters.Owner, filters.Command("eval")),
-		EvalHandler,
-	).SetAllowEdited(true)
+    dispatcher.AddHandler(evalHandler)
+    dispatcher.AddHandler(handlers.NewCommand("echo", EcoHandler))
 
-	dispatcher.AddHandler(evalHandler)
-	dispatcher.AddHandler(handlers.NewCommand("echo", EcoHandler))
-	dispatcher.AddHandlerToGroup(handlers.NewMessage(
-		filters.Invert(filters.ChatAdmins),
-		deleteEditedMessage,
-	).SetAllowEdited(true), -1)
-	dispatcher.AddHandlerToGroup(handlers.NewMessage(
-		func(m *gotgbot.Message) bool {
-			if m == nil {
-				return false
-			}
+    // Message Handlers in Groups
+    dispatcher.AddHandlerToGroup(handlers.NewMessage(
+        filters.Invert(filters.ChatAdmins(b)),
+        deleteEditedMessage,
+    ).SetAllowEdited(true), -1)
 
-			text := m.GetText()
-			if text == "" {
-				return false
-			}
+    dispatcher.AddHandlerToGroup(handlers.NewMessage(
+        filters.And(filters.LongMessage, filters.Invert(filters.ChatAdmins(b))),
+        deleteLongMessage,
+    ), -1)
 
-			isLong := len(text) > 800
-			Admin := filters.ChatAdmins(m)
+    dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("help_callback"), helpCB))
+    dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("start_callback"), start))
+    dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("close"), closeCallback))
 
-			return isLong && !Admin
-		},
-		deleteLongMessage,
-	), -1)
-	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("help_callback"), helpCB))
-	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("start_callback"), start))
+    // Allowed updates
+    allowedUpdates := []string{
+        "message",
+        "my_chat_member",
+        "chat_member",
+        "edited_message",
+        "callback_query",
+    }
 
-	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("close"), closeCallback))
-	allowedUpdates := []string{
-		"message",
-		"my_chat_member",
-		"chat_member",
-		"edited_message",
-		"callback_query",
-	}
+    err = updater.StartPolling(b, &ext.PollingOpts{
+        DropPendingUpdates: true,
+        GetUpdatesOpts: &gotgbot.GetUpdatesOpts{
+            Timeout:        9,
+            AllowedUpdates: allowedUpdates,
+            RequestOpts: &gotgbot.RequestOpts{
+                Timeout: time.Second * 10,
+            },
+        },
+    })
+    if err != nil {
+        panic("Failed to start polling: " + err.Error())
+    }
 
-	err = updater.StartPolling(b, &ext.PollingOpts{
-		DropPendingUpdates: true,
-		GetUpdatesOpts: &gotgbot.GetUpdatesOpts{
-			Timeout:        9,
-			AllowedUpdates: allowedUpdates,
-			RequestOpts: &gotgbot.RequestOpts{
-				Timeout: time.Second * 10,
-			},
-		},
-	})
-	if err != nil {
-		panic("failed to start polling: " + err.Error())
-	}
+    log.Printf("%s has been started...\n", b.User.Username)
+    _, _ = b.SendMessage(
+        config.LoggerId,
+        fmt.Sprintf("%s has started\n", b.User.Username),
+        nil,
+    )
 
-	log.Printf("%s has been started...\n", b.User.Username)
-	b.SendMessage(
-		config.LoggerId,
-		fmt.Sprintf("%s has started\n", b.User.Username),
-		nil,
-	)
-	updater.Idle()
+    updater.Idle()
 }
