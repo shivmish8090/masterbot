@@ -138,5 +138,5 @@ To use my features, please upgrade this group to a supergroup.
 		ctx.EffectiveMessage.Reply(b, "✅ I am active and ready to protect this supergroup!", nil)
 	}
 
-	return ext.EndGroups
+	return nil
 }
