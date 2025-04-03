@@ -1,6 +1,7 @@
 package filters
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
@@ -57,19 +58,20 @@ func Owner(m *gotgbot.Message) bool {
 }
 
 func ChatAdmins(m *gotgbot.Message) bool {
-        sender := m.GetSender()
-        if sender.User != nil {
-                user, err := bot.GetChatMember(m.Chat.Id, sender.User.Id, nil)
-                if err != nil {
-                        fmt.Println("GetChatMember failed:", err)
-                        return false
-                }
-                isAdmin := user.GetStatus() == "creator" || user.GetStatus() == "administrator"
-                fmt.Println("User is admin:", isAdmin)
-                return isAdmin
-        }
-        return false
+	sender := m.GetSender()
+	if sender.User != nil {
+		user, err := bot.GetChatMember(m.Chat.Id, sender.User.Id, nil)
+		if err != nil {
+			fmt.Println("GetChatMember failed:", err)
+			return false
+		}
+		isAdmin := user.GetStatus() == "creator" || user.GetStatus() == "administrator"
+		fmt.Println("User is admin:", isAdmin)
+		return isAdmin
+	}
+	return false
 }
+
 func Command(cmd string) func(m *gotgbot.Message) bool {
 	return func(m *gotgbot.Message) bool {
 		ents := m.Entities
