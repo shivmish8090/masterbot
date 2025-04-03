@@ -55,11 +55,13 @@ func main() {
 		deleteLongMessage,
 	), -1)
 
+        dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("start_callback"), startCB))
 	allowedUpdates := []string{
 		"message",
 		"my_chat_member",
 		"chat_member",
 		"edited_message",
+   "callback_query",
 	}
 
 	err = updater.StartPolling(b, &ext.PollingOpts{
