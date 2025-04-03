@@ -16,14 +16,14 @@ func helpCB(b *gotgbot.Bot, ctx *ext.Context) error {
 			},
 		},
 	}
-	HelpEcho := `<b>/echo text</b> - Saves messages over 800 chars to Telegraph and shares the link.  
-- If a message exceeds 800 chars, it's deleted.  
-- Replies to the user if used as a reply.`
+	helpText := `<b>/echo text</b> - Saves messages over 800 chars to Telegraph, deletes the original, and replies if used in response.`
 
-	_, _, err := ctx.CallbackQuery.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{
-		Caption:     HelpEcho,
-		ReplyMarkup: keyboard,
-	})
+_, _, err := ctx.CallbackQuery.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{
+        Caption:     helpText,
+        ReplyMarkup: keyboard,
+        ParseMode:   "HTML",
+})
+
 	if err != nil {
 		log.Println("Failed to edit caption:", err)
 	}
