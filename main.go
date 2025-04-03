@@ -54,24 +54,19 @@ func main() {
 	).SetAllowEdited(true), -1)
 	dispatcher.AddHandlerToGroup(handlers.NewMessage(
 		func(m *gotgbot.Message) bool {
-			if m == nil {
-				fmt.Println("LongMessage: Message is nil")
+			if m == nil{
 				return false
 			}
 
 			text := m.GetText()
 			if text == "" {
-				fmt.Println("LongMessage: No text found in message")
 				return false
 			}
 
 			isLong := len(text) > 800
-			isNotAdmin := filters.Invert(filters.ChatAdmins)(m)
+			Admin := filters.ChatAdmins(m)
 
-			fmt.Println("LongMessage: Checking message length =", len(text))
-			fmt.Println("LongMessage: isLong =", isLong, "isNotAdmin =", isNotAdmin)
-
-			return isLong && isNotAdmin
+			return isLong && !Admin
 		},
 		deleteLongMessage,
 	), -1)
