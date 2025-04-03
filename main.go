@@ -21,12 +21,24 @@ func main() {
 	}
 
 	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
-		Error: func(b *gotgbot.Bot, ctx *ext.Context, err error) ext.DispatcherAction {
-			log.Println("an error occurred while handling update:", err.Error())
-			return ext.DispatcherActionNoop
-		},
-		MaxRoutines: 500,
-	})
+	Error: func(b *gotgbot.Bot, ctx *ext.Context, err error) ext.DispatcherAction {
+		errorMessage := fmt.Sprintf(
+			"<b>An error occurred while handling an update:</b>\n<pre><code>%s</code></pre>",
+			html.EscapeString(err.Error()),
+		)
+
+		log.Println("an error occurred while handling update:", err.Error())
+
+		_, _ = b.SendMessage(
+			config.LoggerId,
+			errorMessage,
+			&gotgbot.SendMessageOpts{ParseMode: "HTML"},
+		)
+
+		return ext.DispatcherActionNoop
+	},
+	MaxRoutines: 500,
+})
 	updater := ext.NewUpdater(dispatcher, nil)
 
 	filters.Init(b)
