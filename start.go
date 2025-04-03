@@ -13,6 +13,7 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 	chat := ctx.EffectiveChat.Type
 
 	if chat == "private" {
+  ctx.EffectiveMessage.Delete(b, nil)
 		file := gotgbot.InputFileByURL(config.StartImage)
 
 		caption := fmt.Sprintf(
