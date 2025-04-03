@@ -16,7 +16,7 @@ func helpCB(b *gotgbot.Bot, ctx *ext.Context) error {
 			},
 		},
 	}
-	HelpEcho := `<b>/echo &lt;text&gt;</b> - Saves messages over 800 chars to Telegraph and shares the link.  
+	HelpEcho := `<b>/echo text</b> - Saves messages over 800 chars to Telegraph and shares the link.  
 - If a message exceeds 800 chars, it's deleted.  
 - Replies to the user if used as a reply.`
 
