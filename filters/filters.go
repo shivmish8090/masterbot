@@ -22,18 +22,17 @@ var (
 )
 
 func And(filters ...func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool {
-        return func(m *gotgbot.Message) bool {
-                for _, filter := range filters {
-                        result := filter(m)
-                        fmt.Println("And: Filter result:", result)
-                        if !result {
-                                return false
-                        }
-                }
-                return true
-        }
+	return func(m *gotgbot.Message) bool {
+		for _, filter := range filters {
+			result := filter(m)
+			fmt.Println("And: Filter result:", result)
+			if !result {
+				return false
+			}
+		}
+		return true
+	}
 }
-
 
 func Or(
 	filters ...func(m *gotgbot.Message) bool,
@@ -49,11 +48,11 @@ func Or(
 }
 
 func Invert(f func(m *gotgbot.Message) bool) func(m *gotgbot.Message) bool {
-        return func(m *gotgbot.Message) bool {
-                result := f(m)
-                fmt.Println("Invert: Original:", result, "Inverted:", !result)
-                return !result
-        }
+	return func(m *gotgbot.Message) bool {
+		result := f(m)
+		fmt.Println("Invert: Original:", result, "Inverted:", !result)
+		return !result
+	}
 }
 
 func Owner(m *gotgbot.Message) bool {
