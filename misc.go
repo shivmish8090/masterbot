@@ -10,11 +10,10 @@ import (
 )
 
 func deleteCallback(b *gotgbot.Bot, ctx *ext.Context) error {
-
-_, err = ctx.CallbackQuery.Message.Delete(b, nil)
-return err
-
+	_, err = ctx.CallbackQuery.Message.Delete(b, nil)
+	return err
 }
+
 func AddedToGroups(b *gotgbot.Bot, ctx *ext.Context) error {
 	text := fmt.Sprintf(
 		`Hello 👋 I'm <b>%s</b>, here to help keep the chat transparent and secure.
