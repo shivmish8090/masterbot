@@ -9,27 +9,30 @@ import (
 )
 
 var (
+    LoggerId   int64
+    MongoUri   string
+    OwnerId    int64
+    StartImage string
 	Token      string
-	StartImage string
-	LoggerId   int64
-	OwnerId    int64
 )
 
 func init() {
 	godotenv.Load()
-
 	Token = Getenv("TOKEN", "8050656956:AAGtdazbq1CfUg1Ok1h4QR9rU023ZJf7cso")
-	if Token == "" {
-		panic("TOKEN environment variable is empty")
-	}
-
 	StartImage = Getenv(
 		"START_IMG_URL",
 		"https://telegra.ph/file/ba238ec5e542d8754cea7-dc1786aa23ae1224f2.jpg",
 	)
-
 	LoggerId = GetenvInt64("LOGGER_ID", "-1002647107199")
+	MongoUri = Getenv("MONGO_DB_URI", "")
 	OwnerId = GetenvInt64("OWNER_ID", "7706682472")
+	
+	if Token == "" {
+		log.panic("TOKEN environment variable is empty")
+	}
+	if MongoUri == "" {
+		log.panic("MONGO_DB_URI environment variable is empty")
+	}
 }
 
 func Getenv(key, defaultValue string) string {
