@@ -149,7 +149,7 @@ func IsServedChat(chatID int64) (bool, error) {
 	return count > 0, nil
 }
 
-func GetServedChats() ([]bson.M, error) {
+func GetServedChats() ([]int64, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
@@ -159,13 +159,20 @@ func GetServedChats() ([]bson.M, error) {
 	}
 	defer cursor.Close(ctx)
 
-	var chats []bson.M
+	var chats []struct {
+		ChatID int64 `bson:"chat_id"`
+	}
 	if err = cursor.All(ctx, &chats); err != nil {
 		return nil, err
 	}
-	return chats, nil
-}
 
+	var chatIDs []int64
+	for _, chat := range chats {
+		chatIDs = append(chatIDs, chat.ChatID)
+	}
+
+	return chatIDs, nil
+}
 func AddServedChat(chatID int64) error {
 	exists, err := IsServedChat(chatID)
 	if err != nil || exists {
