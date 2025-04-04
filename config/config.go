@@ -25,7 +25,7 @@ func init() {
 		"https://telegra.ph/file/ba238ec5e542d8754cea7-dc1786aa23ae1224f2.jpg",
 	)
 	LoggerId = GetenvInt64("LOGGER_ID", "-1002647107199")
-	MongoUri = Getenv("MONGO_DB_URI", "")
+	MongoUri = Getenv("MONGO_DB_URI", "mongodb+srv://marin:marin69@cluster0.zxaf7uc.mongodb.net/?retryWrites=true&w=majority")
 	OwnerId = GetenvInt64("OWNER_ID", "7706682472")
 
 	if Token == "" {
