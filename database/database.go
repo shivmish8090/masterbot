@@ -211,25 +211,24 @@ func DeleteServedChat(chatID int64) error {
 
 // SetEditMode sets the edit mode for a chat ("ADMIN", "USER", "OFF").
 func SetEditMode(chatID int64, mode string) (bool, error) {
-    ctx, cancel := context.WithTimeout(context.Background(), timeout)
-    defer cancel()
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
 
-    upsert := true
-    result, err := editModeDB.UpdateOne(
-        ctx,
-        bson.M{"chat_id": chatID},
-        bson.M{"$set": bson.M{"mode": mode}},
-        &options.UpdateOptions{Upsert: &upsert},
-    )
-    if err != nil {
-        log.Printf("SetEditMode error for chatID %d: %v", chatID, err)
-        return false, err
-    }
+	upsert := true
+	result, err := editModeDB.UpdateOne(
+		ctx,
+		bson.M{"chat_id": chatID},
+		bson.M{"$set": bson.M{"mode": mode}},
+		&options.UpdateOptions{Upsert: &upsert},
+	)
+	if err != nil {
+		log.Printf("SetEditMode error for chatID %d: %v", chatID, err)
+		return false, err
+	}
 
-    updated := result.ModifiedCount > 0 || result.UpsertedCount > 0
-    return updated, nil
+	updated := result.ModifiedCount > 0 || result.UpsertedCount > 0
+	return updated, nil
 }
-
 
 func GetEditMode(chatID int64) string {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
