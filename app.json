@@ -7,10 +7,8 @@
     "golang",
     "telegram",
     "bot",
-    "Gotg",
-    "GotgMusicBot",
     "telegram-bot",
-    "gogram"
+    "gotgbot"
   ],
   "stack": "container",
   "env": {
@@ -25,10 +23,5 @@
       "quantity": 1,
       "size": "basic"
     }
-  },
-  "buildpacks": [
-    {
-      "url": "heroku/go"
-    }
-  ]
+  }
 }
