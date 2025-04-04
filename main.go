@@ -11,8 +11,8 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/callbackquery"
 
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
+	"github.com/Vivekkumar-IN/EditguardianBot/database"
 	"github.com/Vivekkumar-IN/EditguardianBot/filters"
-"github.com/Vivekkumar-IN/EditguardianBot/database"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 	}
 
 	// Initialize filters AFTER bot is created
- defer database.Disconnect()
+	defer database.Disconnect()
 	filters.Init(b)
 
 	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
