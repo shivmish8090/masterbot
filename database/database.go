@@ -30,7 +30,7 @@ func init() {
 	defer cancel()
 
 	var err error
-	client, err = mongo.Connect(ctx, options.Client().ApplyURI(config.MongoUri))
+	client, err = mongo.Connect(options.Client().ApplyURI(config.MongoUri))
 	if err != nil {
 		log.Panicf("Failed to connect to MongoDB: %v", err)
 	}
