@@ -56,10 +56,10 @@ func main() {
 		deleteEditedMessage,
 	).SetAllowEdited(true), -1)
 
-	dispatcher.AddHandlerToGroup(handlers.NewMessage(
+	dispatcher.AddHandler(handlers.NewMessage(
 		filters.And(filters.LongMessage, filters.Invert(filters.ChatAdmins(b))),
 		deleteLongMessage,
-	), -1)
+	))
 
 	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("help_callback"), helpCB))
 	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("start_callback"), start))
