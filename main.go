@@ -53,7 +53,7 @@ func main() {
 		AddedToGroups,
 	))
 
-dispatcher.AddHandlerToGroup(handlers.NewMessage(
+	dispatcher.AddHandlerToGroup(handlers.NewMessage(
 		filters.Invert(filters.ChatAdmins(b)),
 		deleteEditedMessage,
 	).SetAllowEdited(true), -1)
