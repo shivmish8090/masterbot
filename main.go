@@ -45,7 +45,6 @@ func main() {
 		dispatcher.AddHandler(h)
 	}
 
-	dispatcher.AddHandler(handlers.NewCommand("start", start))
 	dispatcher.AddHandler(handlers.NewMyChatMember(
 		func(u *gotgbot.ChatMemberUpdated) bool {
 			wasMember, isMember := ExtractJoinLeftStatusChange(u)
@@ -75,7 +74,7 @@ func main() {
 	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("help_callback"), helpCB))
 
 	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("help_echo"), echoCB))
-	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("start_callback"), start))
+
 	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("close"), closeCallback))
 
 	// Allowed updates
