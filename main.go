@@ -9,7 +9,7 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/callbackquery"
- _ "go.mongodb.org/mongo-driver/v2/mongo"
+	_ "go.mongodb.org/mongo-driver/v2/mongo"
 
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 	"github.com/Vivekkumar-IN/EditguardianBot/filters"
