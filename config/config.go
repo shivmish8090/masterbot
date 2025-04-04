@@ -9,9 +9,9 @@ import (
 )
 
 var (
-	LoggerId   int64
-	OwnerId    int64
-	
+	LoggerId int64
+	OwnerId  int64
+
 	MongoUri   string
 	StartImage string
 	Token      string
