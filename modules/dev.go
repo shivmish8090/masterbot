@@ -13,6 +13,15 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
 
+func init(){
+
+        RegisterCommand(handlers.NewMessage(
+                filters.AndFilter(filters.Owner, filters.Command(b, "eval")),
+                EvalHandler,
+        ).SetAllowEdited(true))
+}
+
+
 func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if len(ctx.Args()) < 2 {
 		ctx.EffectiveMessage.Reply(b, "Usage: /eval <go code>", nil)
