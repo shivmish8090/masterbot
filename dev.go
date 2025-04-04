@@ -97,7 +97,7 @@ func main() {
 
     json.Unmarshal([]byte(ctxString), &ctx)
     b := Bot
-    print:= fmt.Println
+    print := fmt.Println
     printf := fmt.Printf
 
     %s
@@ -105,9 +105,8 @@ func main() {
     _ = ctx
     _ = b
     _ = print
-    - = printf
+    _ = printf
 }`
-
 	evalCode := fmt.Sprintf(evalTemplate, importBlock, ctxString, code)
 
 	tmpFile := fmt.Sprintf("/tmp/eval_%d.go", time.Now().UnixNano())
