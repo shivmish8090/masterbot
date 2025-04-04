@@ -214,11 +214,14 @@ func SetEditMode(chatID int64, mode string) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
+	opt := options.UpdateOptions{}
+	opt.SetUpsert(true)
+
 	result, err := editModeDB.UpdateOne(
 		ctx,
 		bson.M{"chat_id": chatID},
 		bson.M{"$set": bson.M{"mode": mode}},
-		options.Update().SetUpsert(true),
+		&opt,
 	)
 	if err != nil {
 		log.Printf("SetEditMode error for chatID %d: %v", chatID, err)
