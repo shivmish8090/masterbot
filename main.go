@@ -21,9 +21,7 @@ func main() {
 		panic("failed to create new bot: " + err.Error())
 	}
 
-	// Initialize filters AFTER bot is created
 	defer database.Disconnect()
-	filters.Init(b)
 
 	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
 		Error: func(_ *gotgbot.Bot, _ *ext.Context, err error) ext.DispatcherAction {
