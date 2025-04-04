@@ -59,7 +59,7 @@ func main() {
 	).SetAllowEdited(true)
 
 	dispatcher.AddHandler(evalHandler)
-	
+
 	dispatcher.AddHandlerToGroup(handlers.NewMessage(
 		filters.Invert(filters.ChatAdmins(b)),
 		deleteEditedMessage,
