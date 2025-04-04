@@ -53,14 +53,7 @@ func main() {
 		AddedToGroups,
 	))
 
-	evalHandler := handlers.NewMessage(
-		filters.AndFilter(filters.Owner, filters.Command(b, "eval")),
-		EvalHandler,
-	).SetAllowEdited(true)
-
-	dispatcher.AddHandler(evalHandler)
-
-	dispatcher.AddHandlerToGroup(handlers.NewMessage(
+dispatcher.AddHandlerToGroup(handlers.NewMessage(
 		filters.Invert(filters.ChatAdmins(b)),
 		deleteEditedMessage,
 	).SetAllowEdited(true), -1)
