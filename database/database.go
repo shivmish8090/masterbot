@@ -5,16 +5,17 @@ import (
 	"log"
 	"time"
 
-	"github.com/Vivekkumar-IN/EditguardianBot/config"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
+
+	"github.com/Vivekkumar-IN/EditguardianBot/config"
 )
 
 var (
-	client  *mongo.Client
-	userDB  *mongo.Collection
-	chatDB  *mongo.Collection
+	client *mongo.Client
+	userDB *mongo.Collection
+	chatDB *mongo.Collection
 )
 
 func Init() {
@@ -39,7 +40,7 @@ func Init() {
 func Disconnect() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	
+
 	if err := client.Disconnect(ctx); err != nil {
 		log.Printf("Error while disconnecting MongoDB: %v", err)
 	}
