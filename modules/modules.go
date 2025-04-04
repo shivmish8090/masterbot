@@ -1,6 +1,6 @@
 package modules
 
-import "github.com/PaulSonOfLars/gotgbot/v2/handlers"
+// import "github.com/PaulSonOfLars/gotgbot/v2/handlers"
 
 var (
 	CommandHandlers       []handlers.Command
