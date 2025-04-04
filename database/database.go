@@ -77,7 +77,7 @@ func IsServedUser(userID int64) (bool, error) {
 	return count > 0, nil
 }
 
-func GetServedUsers() ([]bson.M, error) {
+func GetServedUsers() ([]int64, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
@@ -87,11 +87,19 @@ func GetServedUsers() ([]bson.M, error) {
 	}
 	defer cursor.Close(ctx)
 
-	var users []bson.M
+	var users []struct {
+		UserID int64 `bson:"user_id"`
+	}
 	if err = cursor.All(ctx, &users); err != nil {
 		return nil, err
 	}
-	return users, nil
+
+	var userIDs []int64
+	for _, u := range users {
+		userIDs = append(userIDs, u.UserID)
+	}
+
+	return userIDs, nil
 }
 
 func AddServedUser(userID int64) error {
