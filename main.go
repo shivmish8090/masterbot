@@ -33,6 +33,17 @@ func main() {
 	updater := ext.NewUpdater(dispatcher, nil)
 
 	// Handlers
+
+	for _, h := range modules.CommandHandlers {
+		dispatcher.AddHandler(h)
+	}
+	for _, h := range modules.MessageHandlers {
+		dispatcher.AddHandler(h)
+	}
+	for _, h := range modules.CallbackQueryHandlers {
+		dispatcher.AddHandler(h)
+	}
+
 	dispatcher.AddHandler(handlers.NewCommand("start", start))
 	dispatcher.AddHandler(handlers.NewMyChatMember(
 		func(u *gotgbot.ChatMemberUpdated) bool {
