@@ -38,6 +38,7 @@ func init() {
 	db := client.Database("EditGuardainBot")
 	userDB = db.Collection("userstats")
 	chatDB = db.Collection("chats")
+	editModeDB = db.Collection("editmodes")
 
 	_, err = userDB.Indexes().CreateOne(ctx, mongo.IndexModel{Keys: bson.M{"user_id": 1}})
 	if err != nil {
@@ -47,6 +48,10 @@ func init() {
 	_, err = chatDB.Indexes().CreateOne(ctx, mongo.IndexModel{Keys: bson.M{"chat_id": 1}})
 	if err != nil {
 		log.Printf("Failed to create index on chats: %v", err)
+	}
+	_, err = editModeDB.Indexes().CreateOne(ctx, mongo.IndexModel{Keys: bson.M{"chat_id": 1}})
+	if err != nil {
+		log.Printf("Failed to create index on editmodes: %v", err)
 	}
 }
 
@@ -201,4 +206,40 @@ func DeleteServedChat(chatID int64) error {
 		cache.Delete(chatID)
 	}
 	return err
+}
+
+// SetEditMode sets the edit mode for a chat ("ADMIN", "USER", "OFF").
+func SetEditMode(chatID int64, mode string) (bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	result, err := editModeDB.UpdateOne(
+		ctx,
+		bson.M{"chat_id": chatID},
+		bson.M{"$set": bson.M{"mode": mode}},
+		options.Update().SetUpsert(true),
+	)
+	if err != nil {
+		log.Printf("SetEditMode error for chatID %d: %v", chatID, err)
+		return false, err
+	}
+
+	updated := result.ModifiedCount > 0 || result.UpsertedCount > 0
+	return updated, nil
+}
+
+
+func GetEditMode(chatID int64) string {
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	var result struct {
+		Mode string `bson:"mode"`
+	}
+
+	err := editModeDB.FindOne(ctx, bson.M{"chat_id": chatID}).Decode(&result)
+	if err != nil || result.Mode == "" {
+		return "USER"
+	}
+	return result.Mode
 }
