@@ -89,11 +89,11 @@ func Command(bot *gotgbot.Bot, cmd string) func(m *gotgbot.Message) bool {
 
 func LongMessage(m *gotgbot.Message) bool {
 	if m != nil {
-    	text := m.GetText()
-	    if text == "" {
-		       return false
-        }
-    	return len(text) > 800
+		text := m.GetText()
+		if text == "" {
+			return false
+		}
+		return len(text) > 800
 	}
 	return false
 }
