@@ -7,6 +7,7 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
+"github.com/Vivekkumar-IN/EditguardianBot/database"
 )
 
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
@@ -81,6 +82,7 @@ I'm <b><a href="tg://user?id=%d">%s</a></b>, your security assistant, ensuring a
 				return err
 			}
 		} else {
+database.AddServedUser(ctx.EffectiveUser.Id)
 			_, err := b.SendPhoto(
 				ctx.EffectiveChat.Id,
 				file,
