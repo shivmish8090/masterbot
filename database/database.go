@@ -19,7 +19,7 @@ var (
 	timeout  = 10 * time.Second
 )
 
-func InitDB() {
+func init() {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
@@ -31,6 +31,7 @@ func InitDB() {
 
 	userDB = client.Database(dbName).Collection("userstats")
 	chatDB = client.Database(dbName).Collection("chats")
+	log.Println("Database initialized")
 }
 
 func DisconnectDB() {
@@ -39,6 +40,8 @@ func DisconnectDB() {
 
 	if err := client.Disconnect(ctx); err != nil {
 		log.Printf("Error disconnecting MongoDB: %v", err)
+	} else {
+		log.Println("Database disconnected")
 	}
 }
 
@@ -46,10 +49,7 @@ func DisconnectDB() {
 func IsServedUser(ctx context.Context, userID int) (bool, error) {
 	filter := bson.M{"user_id": userID}
 	count, err := userDB.CountDocuments(ctx, filter)
-	if err != nil {
-		return false, err
-	}
-	return count > 0, nil
+	return count > 0, err
 }
 
 func GetServedUsers(ctx context.Context) ([]bson.M, error) {
@@ -60,19 +60,14 @@ func GetServedUsers(ctx context.Context) ([]bson.M, error) {
 	defer cursor.Close(ctx)
 
 	var users []bson.M
-	if err = cursor.All(ctx, &users); err != nil {
-		return nil, err
-	}
-	return users, nil
+	err = cursor.All(ctx, &users)
+	return users, err
 }
 
 func AddServedUser(ctx context.Context, userID int) error {
 	exists, err := IsServedUser(ctx, userID)
-	if err != nil {
+	if err != nil || exists {
 		return err
-	}
-	if exists {
-		return nil
 	}
 	_, err = userDB.InsertOne(ctx, bson.M{"user_id": userID})
 	return err
@@ -87,10 +82,7 @@ func DeleteServedUser(ctx context.Context, userID int) error {
 func IsServedChat(ctx context.Context, chatID int) (bool, error) {
 	filter := bson.M{"chat_id": chatID}
 	count, err := chatDB.CountDocuments(ctx, filter)
-	if err != nil {
-		return false, err
-	}
-	return count > 0, nil
+	return count > 0, err
 }
 
 func GetServedChats(ctx context.Context) ([]bson.M, error) {
@@ -101,19 +93,14 @@ func GetServedChats(ctx context.Context) ([]bson.M, error) {
 	defer cursor.Close(ctx)
 
 	var chats []bson.M
-	if err = cursor.All(ctx, &chats); err != nil {
-		return nil, err
-	}
-	return chats, nil
+	err = cursor.All(ctx, &chats)
+	return chats, err
 }
 
 func AddServedChat(ctx context.Context, chatID int) error {
 	exists, err := IsServedChat(ctx, chatID)
-	if err != nil {
+	if err != nil || exists {
 		return err
-	}
-	if exists {
-		return nil
 	}
 	_, err = chatDB.InsertOne(ctx, bson.M{"chat_id": chatID})
 	return err
