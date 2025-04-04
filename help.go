@@ -10,17 +10,17 @@ import (
 func helpCB(b *gotgbot.Bot, ctx *ext.Context) error {
 	keyboard := gotgbot.InlineKeyboardMarkup{
 		InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
-   {
-{Text: "Echo", CallbackData: "help_echo"},
-{Text: "EditMode", CallbackData: "help_editmode"}
-
-},
 			{
-				{Text: "Back", CallbackData: "start_callback"},
-				{Text: "Close", CallbackData: "close"},
+				{Text: "📝 Echo", CallbackData: "help_echo"},
+				{Text: "✍️ EditMode", CallbackData: "help_editmode"},
+			},
+			{
+				{Text: "⬅️ Back", CallbackData: "start_callback"},
+				{Text: "❌ Close", CallbackData: "close"},
 			},
 		},
 	}
+
 	helpText := `📚 <b>Bot Command Help</b>
 
 Here you'll find details for all available plugins and features.
@@ -37,7 +37,6 @@ Here you'll find details for all available plugins and features.
 	}
 	return nil
 }
-
 
 func echoCB(b *gotgbot.Bot, ctx *ext.Context) error {
 	keyboard := gotgbot.InlineKeyboardMarkup{
