@@ -173,6 +173,7 @@ func GetServedChats() ([]int64, error) {
 
 	return chatIDs, nil
 }
+
 func AddServedChat(chatID int64) error {
 	exists, err := IsServedChat(chatID)
 	if err != nil || exists {
