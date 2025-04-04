@@ -59,7 +59,7 @@ func Disconnect() {
 	}
 }
 
-func IsServedUser(userID int) (bool, error) {
+func IsServedUser(userID int64) (bool, error) {
 	if _, ok := cache.Load(userID); ok {
 		return true, nil
 	}
@@ -94,7 +94,7 @@ func GetServedUsers() ([]bson.M, error) {
 	return users, nil
 }
 
-func AddServedUser(userID int) error {
+func AddServedUser(userID int64) error {
 	exists, err := IsServedUser(userID)
 	if err != nil || exists {
 		return err
@@ -112,7 +112,7 @@ func AddServedUser(userID int) error {
 	return nil
 }
 
-func DeleteServedUser(userID int) error {
+func DeleteServedUser(userID int64) error {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
@@ -123,7 +123,7 @@ func DeleteServedUser(userID int) error {
 	return err
 }
 
-func IsServedChat(chatID int) (bool, error) {
+func IsServedChat(chatID int64) (bool, error) {
 	if _, ok := cache.Load(chatID); ok {
 		return true, nil
 	}
@@ -158,7 +158,7 @@ func GetServedChats() ([]bson.M, error) {
 	return chats, nil
 }
 
-func AddServedChat(chatID int) error {
+func AddServedChat(chatID int64) error {
 	exists, err := IsServedChat(chatID)
 	if err != nil || exists {
 		return err
@@ -176,7 +176,7 @@ func AddServedChat(chatID int) error {
 	return nil
 }
 
-func DeleteServedChat(chatID int) error {
+func DeleteServedChat(chatID int64) error {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
