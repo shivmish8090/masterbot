@@ -48,14 +48,15 @@ func echoCB(b *gotgbot.Bot, ctx *ext.Context) error {
 		},
 	}
 
-	echoHelp := `<b>Echo Settings</b>
+	echoHelp := `<b>⚙️ Echo Settings</b>
 
-/echo <text> - If message is longer than 800 characters:
-• Uploads to Telegraph.
-• Deletes original message.
-• Replies with a Telegraph link (if used in reply, it will tag the replied user).
+<code>/echo &lt;text&gt;</code> - If the message is longer than 800 characters:
+• 📝 Automatically uploads to Telegraph  
+• ❌ Deletes the original message  
+• 🔗 Replies with a Telegraph link  
+(If used in reply, it will tag the replied user)
 
-Useful for avoiding spam and large message clutter.`
+💡 <i>Useful for avoiding spam and large message clutter.</i>`
 
 	_, _, err := ctx.CallbackQuery.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{
 		Caption:     echoHelp,
