@@ -9,10 +9,10 @@ import (
 )
 
 var (
-    LoggerId   int64
-    MongoUri   string
-    OwnerId    int64
-    StartImage string
+	LoggerId   int64
+	MongoUri   string
+	OwnerId    int64
+	StartImage string
 	Token      string
 )
 
@@ -26,7 +26,7 @@ func init() {
 	LoggerId = GetenvInt64("LOGGER_ID", "-1002647107199")
 	MongoUri = Getenv("MONGO_DB_URI", "")
 	OwnerId = GetenvInt64("OWNER_ID", "7706682472")
-	
+
 	if Token == "" {
 		log.panic("TOKEN environment variable is empty")
 	}
