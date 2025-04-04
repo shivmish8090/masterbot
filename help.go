@@ -21,7 +21,11 @@ func helpCB(b *gotgbot.Bot, ctx *ext.Context) error {
 			},
 		},
 	}
-	helpText := `<b>/echo text</b> - Saves messages over 800 chars to Telegraph, deletes the original, and replies if used in response.`
+	helpText := `📚 <b>Bot Command Help</b>
+
+Here you'll find details for all available plugins and features.
+
+👇 Tap the buttons below to view help for each module:`
 
 	_, _, err := ctx.CallbackQuery.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{
 		Caption:     helpText,
