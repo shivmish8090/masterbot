@@ -11,16 +11,17 @@ import (
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
+
+	"github.com/Vivekkumar-IN/EditguardianBot/filters"
 )
 
-func init(){
-
-        RegisterCommand(handlers.NewMessage(
-                filters.AndFilter(filters.Owner, filters.Command(b, "eval")),
-                EvalHandler,
-        ).SetAllowEdited(true))
+func init() {
+	RegisterCommand(handlers.NewMessage(
+		filters.AndFilter(filters.Owner, filters.Command(b, "eval")),
+		EvalHandler,
+	).SetAllowEdited(true))
 }
-
 
 func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if len(ctx.Args()) < 2 {
