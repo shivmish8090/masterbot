@@ -13,6 +13,7 @@ import (
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 	"github.com/Vivekkumar-IN/EditguardianBot/database"
 	"github.com/Vivekkumar-IN/EditguardianBot/filters"
+	"github.com/Vivekkumar-IN/EditguardianBot/modules"
 )
 
 func main() {
