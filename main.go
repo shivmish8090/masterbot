@@ -62,7 +62,7 @@ func main() {
 
 	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("help_callback"), helpCB))
 
-        dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("help_echo"), echoCB))
+	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("help_echo"), echoCB))
 	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("start_callback"), start))
 	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("close"), closeCallback))
 
