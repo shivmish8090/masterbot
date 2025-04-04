@@ -59,10 +59,13 @@ func Disconnect() {
 	}
 }
 
-func IsServedUser(ctx context.Context, userID int) (bool, error) {
+func IsServedUser(userID int) (bool, error) {
 	if _, ok := cache.Load(userID); ok {
 		return true, nil
 	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
 
 	count, err := userDB.CountDocuments(ctx, bson.M{"user_id": userID})
 	if err != nil {
@@ -74,7 +77,10 @@ func IsServedUser(ctx context.Context, userID int) (bool, error) {
 	return count > 0, nil
 }
 
-func GetServedUsers(ctx context.Context) ([]bson.M, error) {
+func GetServedUsers() ([]bson.M, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
 	cursor, err := userDB.Find(ctx, bson.M{"user_id": bson.M{"$gt": 0}})
 	if err != nil {
 		return nil, err
@@ -88,14 +94,17 @@ func GetServedUsers(ctx context.Context) ([]bson.M, error) {
 	return users, nil
 }
 
-func AddServedUser(ctx context.Context, userID int) error {
-	exists, err := IsServedUser(ctx, userID)
+func AddServedUser(userID int) error {
+	exists, err := IsServedUser(userID)
 	if err != nil || exists {
 		return err
 	}
 
 	go func() {
-		_, err := userDB.InsertOne(context.Background(), bson.M{"user_id": userID})
+		ctx, cancel := context.WithTimeout(context.Background(), timeout)
+		defer cancel()
+
+		_, err := userDB.InsertOne(ctx, bson.M{"user_id": userID})
 		if err == nil {
 			cache.Store(userID, true)
 		}
@@ -103,7 +112,10 @@ func AddServedUser(ctx context.Context, userID int) error {
 	return nil
 }
 
-func DeleteServedUser(ctx context.Context, userID int) error {
+func DeleteServedUser(userID int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
 	_, err := userDB.DeleteOne(ctx, bson.M{"user_id": userID})
 	if err == nil {
 		cache.Delete(userID)
@@ -111,10 +123,13 @@ func DeleteServedUser(ctx context.Context, userID int) error {
 	return err
 }
 
-func IsServedChat(ctx context.Context, chatID int) (bool, error) {
+func IsServedChat(chatID int) (bool, error) {
 	if _, ok := cache.Load(chatID); ok {
 		return true, nil
 	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
 
 	count, err := chatDB.CountDocuments(ctx, bson.M{"chat_id": chatID})
 	if err != nil {
@@ -126,7 +141,10 @@ func IsServedChat(ctx context.Context, chatID int) (bool, error) {
 	return count > 0, nil
 }
 
-func GetServedChats(ctx context.Context) ([]bson.M, error) {
+func GetServedChats() ([]bson.M, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
 	cursor, err := chatDB.Find(ctx, bson.M{"chat_id": bson.M{"$lt": 0}})
 	if err != nil {
 		return nil, err
@@ -140,14 +158,17 @@ func GetServedChats(ctx context.Context) ([]bson.M, error) {
 	return chats, nil
 }
 
-func AddServedChat(ctx context.Context, chatID int) error {
-	exists, err := IsServedChat(ctx, chatID)
+func AddServedChat(chatID int) error {
+	exists, err := IsServedChat(chatID)
 	if err != nil || exists {
 		return err
 	}
 
 	go func() {
-		_, err := chatDB.InsertOne(context.Background(), bson.M{"chat_id": chatID})
+		ctx, cancel := context.WithTimeout(context.Background(), timeout)
+		defer cancel()
+
+		_, err := chatDB.InsertOne(ctx, bson.M{"chat_id": chatID})
 		if err == nil {
 			cache.Store(chatID, true)
 		}
@@ -155,7 +176,10 @@ func AddServedChat(ctx context.Context, chatID int) error {
 	return nil
 }
 
-func DeleteServedChat(ctx context.Context, chatID int) error {
+func DeleteServedChat(chatID int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
 	_, err := chatDB.DeleteOne(ctx, bson.M{"chat_id": chatID})
 	if err == nil {
 		cache.Delete(chatID)
