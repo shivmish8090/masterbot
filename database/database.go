@@ -5,51 +5,52 @@ import (
 	"log"
 	"time"
 
+	"github.com/Vivekkumar-IN/EditguardianBot/config"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 var (
-	client   *mongo.Client
-	userDB   *mongo.Collection
-	chatDB   *mongo.Collection
-	dbName   = "your_db_name"
-	mongoURI = "your_mongo_uri"
-	timeout  = 10 * time.Second
+	client  *mongo.Client
+	userDB  *mongo.Collection
+	chatDB  *mongo.Collection
 )
 
-func init() {
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+func Init() {
+	if config.MongoUri == "" {
+		log.Panic("MongoDB URI is missing in config.MongoUri")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	var err error
-	client, err = mongo.Connect(ctx, options.Client().ApplyURI(mongoURI))
+	client, err = mongo.Connect(ctx, options.Client().ApplyURI(config.MongoUri))
 	if err != nil {
-		log.Fatalf("Failed to connect to MongoDB: %v", err)
+		log.Panicf("Failed to connect to MongoDB: %v", err)
 	}
 
-	userDB = client.Database(dbName).Collection("userstats")
-	chatDB = client.Database(dbName).Collection("chats")
-	log.Println("Database initialized")
+	db := client.Database("EditGuardainBot")
+	userDB = db.Collection("userstats")
+	chatDB = db.Collection("chats")
 }
 
-func DisconnectDB() {
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+func Disconnect() {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-
+	
 	if err := client.Disconnect(ctx); err != nil {
-		log.Printf("Error disconnecting MongoDB: %v", err)
-	} else {
-		log.Println("Database disconnected")
+		log.Printf("Error while disconnecting MongoDB: %v", err)
 	}
 }
 
-// User Functions
 func IsServedUser(ctx context.Context, userID int) (bool, error) {
-	filter := bson.M{"user_id": userID}
-	count, err := userDB.CountDocuments(ctx, filter)
-	return count > 0, err
+	count, err := userDB.CountDocuments(ctx, bson.M{"user_id": userID})
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
 }
 
 func GetServedUsers(ctx context.Context) ([]bson.M, error) {
@@ -60,14 +61,19 @@ func GetServedUsers(ctx context.Context) ([]bson.M, error) {
 	defer cursor.Close(ctx)
 
 	var users []bson.M
-	err = cursor.All(ctx, &users)
-	return users, err
+	if err = cursor.All(ctx, &users); err != nil {
+		return nil, err
+	}
+	return users, nil
 }
 
 func AddServedUser(ctx context.Context, userID int) error {
 	exists, err := IsServedUser(ctx, userID)
-	if err != nil || exists {
+	if err != nil {
 		return err
+	}
+	if exists {
+		return nil
 	}
 	_, err = userDB.InsertOne(ctx, bson.M{"user_id": userID})
 	return err
@@ -78,11 +84,12 @@ func DeleteServedUser(ctx context.Context, userID int) error {
 	return err
 }
 
-// Chat Functions
 func IsServedChat(ctx context.Context, chatID int) (bool, error) {
-	filter := bson.M{"chat_id": chatID}
-	count, err := chatDB.CountDocuments(ctx, filter)
-	return count > 0, err
+	count, err := chatDB.CountDocuments(ctx, bson.M{"chat_id": chatID})
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
 }
 
 func GetServedChats(ctx context.Context) ([]bson.M, error) {
@@ -93,14 +100,19 @@ func GetServedChats(ctx context.Context) ([]bson.M, error) {
 	defer cursor.Close(ctx)
 
 	var chats []bson.M
-	err = cursor.All(ctx, &chats)
-	return chats, err
+	if err = cursor.All(ctx, &chats); err != nil {
+		return nil, err
+	}
+	return chats, nil
 }
 
 func AddServedChat(ctx context.Context, chatID int) error {
 	exists, err := IsServedChat(ctx, chatID)
-	if err != nil || exists {
+	if err != nil {
 		return err
+	}
+	if exists {
+		return nil
 	}
 	_, err = chatDB.InsertOne(ctx, bson.M{"chat_id": chatID})
 	return err
