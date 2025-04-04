@@ -13,9 +13,9 @@ import (
 )
 
 var (
-	client *mongo.Client
-	userDB *mongo.Collection
-	chatDB *mongo.Collection
+	client  *mongo.Client
+	userDB  *mongo.Collection
+	chatDB  *mongo.Collection
 	timeout = 10 * time.Second
 )
 
