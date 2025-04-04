@@ -228,7 +228,6 @@ func SetEditMode(chatID int64, mode string) (bool, error) {
 	return updated, nil
 }
 
-
 func GetEditMode(chatID int64) string {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
