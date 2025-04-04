@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 	"os"
-"log"
 	"strconv"
 
 	"github.com/joho/godotenv"
