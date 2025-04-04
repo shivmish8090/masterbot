@@ -1,28 +1,34 @@
 {
-    "name": "EditguardianBot",
-    "description": "Editguardun bot",
-    "logo": "https://graph.org/file/c0e014ff34f34d1056627.png",
-    "keywords": [
-        "golang",
-        "telegram",
-        "bot",
-        "Gotg",
-        "GotgMusicBot",
-        "telegram-bot",
-        "gogram"
-    ],
-    "stack": "container",
-    "env": {
-        "BOT_TOKEN": {
-            "description": "A Bot's token. Get it from BotFather",
-            "value": "",
-            "required": true
-        },
-    },
-    "formation": {
-        "worker": {
-            "quantity": 1,
-            "size": "basic"
-        }
+  "name": "EditguardianBot",
+  "description": "Editguardun bot",
+  "logo": "https://graph.org/file/c0e014ff34f34d1056627.png",
+  "success_url": "https://github.com/Vivekkumar-IN/EditguardianBot",
+  "keywords": [
+    "golang",
+    "telegram",
+    "bot",
+    "Gotg",
+    "GotgMusicBot",
+    "telegram-bot",
+    "gogram"
+  ],
+  "stack": "container",
+  "env": {
+    "BOT_TOKEN": {
+      "description": "A Bot's token. Get it from BotFather",
+      "value": "",
+      "required": true
     }
+  },
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/go"
+    }
+  ]
 }
