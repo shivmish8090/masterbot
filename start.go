@@ -136,7 +136,7 @@ To use my features, please upgrade this group to a supergroup.
 		if isCallback {
 			return nil
 		}
-  database.AddServedChat(ctx.EffectiveChat.Id)
+		database.AddServedChat(ctx.EffectiveChat.Id)
 		ctx.EffectiveMessage.Reply(b, "✅ I am active and ready to protect this supergroup!", nil)
 	}
 
