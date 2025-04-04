@@ -50,7 +50,7 @@ func echoCB(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	echoHelp := `<b>⚙️ Echo Settings</b>
 
-<code>/echo &lt;text&gt;</code> - If the message is longer than 800 characters:
+<b>/echo &lt;text&gt;</b> - If the message is longer than 800 characters:
 • 📝 Automatically uploads to Telegraph  
 • ❌ Deletes the original message  
 • 🔗 Replies with a Telegraph link  
