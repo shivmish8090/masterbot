@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+  "log"
 	"strconv"
 
 	"github.com/joho/godotenv"
@@ -29,10 +30,10 @@ func init() {
 	OwnerId = GetenvInt64("OWNER_ID", "7706682472")
 
 	if Token == "" {
-		log.panic("TOKEN environment variable is empty")
+		log.Panic("TOKEN environment variable is empty")
 	}
 	if MongoUri == "" {
-		log.panic("MONGO_DB_URI environment variable is empty")
+		log.Panic("MONGO_DB_URI environment variable is empty")
 	}
 }
 
