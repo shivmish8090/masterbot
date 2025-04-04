@@ -16,6 +16,7 @@ var (
 	client *mongo.Client
 	userDB *mongo.Collection
 	chatDB *mongo.Collection
+	timeout = 10 * time.Second
 )
 
 func Init() {
@@ -23,7 +24,7 @@ func Init() {
 		log.Panic("MongoDB URI is missing in config.MongoUri")
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
 	var err error
@@ -38,7 +39,7 @@ func Init() {
 }
 
 func Disconnect() {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
 	if err := client.Disconnect(ctx); err != nil {
