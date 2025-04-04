@@ -1,1 +1,1 @@
-worker: ./app
+worker: ./bin/EditguardianBot
