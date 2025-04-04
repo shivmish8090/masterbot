@@ -14,12 +14,12 @@ import (
 )
 
 var (
-	client  *mongo.Client
-	userDB  *mongo.Collection
-	chatDB  *mongo.Collection
+	client     *mongo.Client
+	userDB     *mongo.Collection
+	chatDB     *mongo.Collection
 	editModeDB *mongo.Collection
-	cache   sync.Map
-	timeout = 10 * time.Second
+	cache      sync.Map
+	timeout    = 10 * time.Second
 )
 
 func init() {
