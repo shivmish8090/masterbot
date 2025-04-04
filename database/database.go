@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"log"
+	"sync"
 	"time"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -16,10 +17,11 @@ var (
 	client  *mongo.Client
 	userDB  *mongo.Collection
 	chatDB  *mongo.Collection
+	cache   sync.Map
 	timeout = 10 * time.Second
 )
 
-func Init() {
+func init() {
 	if config.MongoUri == "" {
 		log.Panic("MongoDB URI is missing in config.MongoUri")
 	}
@@ -36,6 +38,16 @@ func Init() {
 	db := client.Database("EditGuardainBot")
 	userDB = db.Collection("userstats")
 	chatDB = db.Collection("chats")
+
+	_, err = userDB.Indexes().CreateOne(ctx, mongo.IndexModel{Keys: bson.M{"user_id": 1}})
+	if err != nil {
+		log.Printf("Failed to create index on userstats: %v", err)
+	}
+
+	_, err = chatDB.Indexes().CreateOne(ctx, mongo.IndexModel{Keys: bson.M{"chat_id": 1}})
+	if err != nil {
+		log.Printf("Failed to create index on chats: %v", err)
+	}
 }
 
 func Disconnect() {
@@ -48,9 +60,16 @@ func Disconnect() {
 }
 
 func IsServedUser(ctx context.Context, userID int) (bool, error) {
+	if _, ok := cache.Load(userID); ok {
+		return true, nil
+	}
+
 	count, err := userDB.CountDocuments(ctx, bson.M{"user_id": userID})
 	if err != nil {
 		return false, err
+	}
+	if count > 0 {
+		cache.Store(userID, true)
 	}
 	return count > 0, nil
 }
@@ -71,25 +90,38 @@ func GetServedUsers(ctx context.Context) ([]bson.M, error) {
 
 func AddServedUser(ctx context.Context, userID int) error {
 	exists, err := IsServedUser(ctx, userID)
-	if err != nil {
+	if err != nil || exists {
 		return err
 	}
-	if exists {
-		return nil
-	}
-	_, err = userDB.InsertOne(ctx, bson.M{"user_id": userID})
-	return err
+
+	go func() {
+		_, err := userDB.InsertOne(context.Background(), bson.M{"user_id": userID})
+		if err == nil {
+			cache.Store(userID, true)
+		}
+	}()
+	return nil
 }
 
 func DeleteServedUser(ctx context.Context, userID int) error {
 	_, err := userDB.DeleteOne(ctx, bson.M{"user_id": userID})
+	if err == nil {
+		cache.Delete(userID)
+	}
 	return err
 }
 
 func IsServedChat(ctx context.Context, chatID int) (bool, error) {
+	if _, ok := cache.Load(chatID); ok {
+		return true, nil
+	}
+
 	count, err := chatDB.CountDocuments(ctx, bson.M{"chat_id": chatID})
 	if err != nil {
 		return false, err
+	}
+	if count > 0 {
+		cache.Store(chatID, true)
 	}
 	return count > 0, nil
 }
@@ -110,17 +142,23 @@ func GetServedChats(ctx context.Context) ([]bson.M, error) {
 
 func AddServedChat(ctx context.Context, chatID int) error {
 	exists, err := IsServedChat(ctx, chatID)
-	if err != nil {
+	if err != nil || exists {
 		return err
 	}
-	if exists {
-		return nil
-	}
-	_, err = chatDB.InsertOne(ctx, bson.M{"chat_id": chatID})
-	return err
+
+	go func() {
+		_, err := chatDB.InsertOne(context.Background(), bson.M{"chat_id": chatID})
+		if err == nil {
+			cache.Store(chatID, true)
+		}
+	}()
+	return nil
 }
 
 func DeleteServedChat(ctx context.Context, chatID int) error {
 	_, err := chatDB.DeleteOne(ctx, bson.M{"chat_id": chatID})
+	if err == nil {
+		cache.Delete(chatID)
+	}
 	return err
 }
