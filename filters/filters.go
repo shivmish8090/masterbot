@@ -9,12 +9,6 @@ import (
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 )
 
-var bot *gotgbot.Bot
-
-func Init(b *gotgbot.Bot) {
-	bot = b
-}
-
 var (
 	AndFilter    = And
 	OrFilter     = Or
@@ -63,7 +57,7 @@ func ChatAdmins(bot *gotgbot.Bot) func(*gotgbot.Message) bool {
 		if sender.User != nil {
 			user, err := bot.GetChatMember(m.Chat.Id, sender.User.Id, nil)
 			if err != nil {
-				fmt.Println("GetChatMember failed:", err.Error())
+				fmt.Println("flites.GetChatMember failed:", err.Error())
 				return false
 			}
 			return user.GetStatus() == "creator" || user.GetStatus() == "administrator"
@@ -94,15 +88,12 @@ func Command(bot *gotgbot.Bot, cmd string) func(m *gotgbot.Message) bool {
 }
 
 func LongMessage(m *gotgbot.Message) bool {
-	if m == nil {
-		fmt.Println("LongMessage: Message is nil")
-		return false
+	if m != nil {
+    	text := m.GetText()
+	    if text == "" {
+		       return false
+        }
+    	return len(text) > 800
 	}
-	text := m.GetText()
-	if text == "" {
-		fmt.Println("LongMessage: No text found in message")
-		return false
-	}
-	fmt.Println("LongMessage: Message length =", len(text))
-	return len(text) > 800
+	return false
 }
