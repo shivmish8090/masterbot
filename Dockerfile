@@ -2,7 +2,7 @@ FROM golang:1.24-bullseye AS builder
 
 WORKDIR /app
 
-COPY go.mod go.sum ./
+COPY go.* ./
 RUN go mod tidy && go mod download
 
 COPY . .
@@ -21,4 +21,4 @@ COPY --from=builder /app/app .
 
 RUN chmod +x ./app
 
-CMD ["./app"]
+ENTRYPOINT ["./app"]
