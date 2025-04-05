@@ -17,8 +17,8 @@ func helpCB(b *gotgbot.Bot, ctx *ext.Context) error {
 	keyboard := gotgbot.InlineKeyboardMarkup{
 		InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
 			{
-				{Text: "📝 Echo", CallbackData: "help_echo"},
-				{Text: "✍️ EditMode", CallbackData: "help_editmode"},
+				{Text: "📝 Echo", CallbackData: "echo"},
+				{Text: "✍️ EditMode", CallbackData: "editmode"},
 			},
 			{
 				{Text: "⬅️ Back", CallbackData: "start_callback"},
