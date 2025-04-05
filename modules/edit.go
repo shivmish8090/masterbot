@@ -13,15 +13,6 @@ var deleteWarningTracker = struct {
         chats map[int64]time.Time
 }{chats: make(map[int64]time.Time)}
 
-func init(){
-         RegisterCommand((
-                filters.And(filters.LongMessage, filters.Invert(filters.ChatAdmins(b))),
-                deleteLongMessage,
-        ))
-
-
-}
-
 
 func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
         message := ctx.EditedMessage
