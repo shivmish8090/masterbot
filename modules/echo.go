@@ -39,7 +39,8 @@ Sends back the provided text. Also allows setting how the bot handles long messa
 • In <b>manual</b> and <b>automatic</b> modes, long messages are deleted.  
 • In <b>automatic</b>, a Telegraph link is sent.  
 • In <b>manual</b>, the user is warned.  
-• Helps keep chat clean and readable.`, nil)}
+• Helps keep chat clean and readable.`, nil)
+}
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if ctx.EffectiveChat.Type != "supergroup" {
