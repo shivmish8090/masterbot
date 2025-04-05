@@ -7,18 +7,17 @@ RUN go mod tidy && go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o app .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+    go build -ldflags="-s -w" -o app .
 
-FROM debian:bullseye-slim
+# Final minimal image
+FROM scratch
 
 WORKDIR /app
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
+# Optional: Add CA certs for HTTPS
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 COPY --from=builder /app/app .
 
-RUN chmod +x ./app
-
-ENTRYPOINT ["./app"]
+ENTRYPOINT ["/app/app"]
