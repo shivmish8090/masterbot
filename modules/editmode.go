@@ -32,6 +32,7 @@ func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 			fmt.Sprintf("Usage: <code>/editmod &lt;off|admin|user&gt;</code>\n<b>For more help, check out:</b> <a href=\"%s\">Edit Mode Help</a>",
 				fmt.Sprintf("https://t.me/%s?start=help", b.User.Username)),
 			&gotgbot.SendMessageOpts{ParseMode: "HTML"})
+ctx.EffectiveMessage.Delete(b, nil)
 		return nil
 	}
 
@@ -42,10 +43,11 @@ func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 			fmt.Sprintf("Usage: <code>/editmod &lt;off|admin|user&gt;</code>\n<b>For more help, check out:</b> <a href=\"%s\">Edit Mode Help</a>",
 				fmt.Sprintf("https://t.me/%s?start=help", b.User.Username)),
 			&gotgbot.SendMessageOpts{ParseMode: "HTML"})
+ ctx.EffectiveMessage.Delete(b, nil)
 		return nil
 	}
 
 	ctx.EffectiveMessage.Reply(b, "This command will be available soon..", nil)
-
+ctx.EffectiveMessage.Delete(b, nil)
 	return nil
 }
