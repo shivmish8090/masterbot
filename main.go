@@ -39,7 +39,10 @@ func main() {
 		dispatcher.AddHandler(h)
 	}
 
-	dispatcher.AddHandler(handlers.NewMyChatMember(
+dispatcher.AddHandler(handlers.NewMessage(
+                filters.AndFilter(filters.Owner, filters.Command(b, "eval")),
+                EvalHandler,
+        ).SetAllowEdited(true))	dispatcher.AddHandler(handlers.NewMyChatMember(
 		func(u *gotgbot.ChatMemberUpdated) bool {
 			wasMember, isMember := ExtractJoinLeftStatusChange(u)
 			return !wasMember && isMember
