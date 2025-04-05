@@ -14,7 +14,7 @@ func Register(h ext.Handler) {
 	Handlers = append(Handlers, h)
 }
 
-func AddHelp(name, callback, help string) {
+func AddHelp(name, callback, help string, h ext.Handler) {
 	ModulesHelp[name] = struct {
 		Callback string
 		Help     string
@@ -22,4 +22,12 @@ func AddHelp(name, callback, help string) {
 		Callback: callback,
 		Help:     help,
 	}
+      
+if h != nil {
+
+handler:= h
+} else {
+ handler:= handlers.NewCallback(callbackquery.Equal(callback), helpModuleCB)
+}
+Register(handler)
 }
