@@ -25,28 +25,27 @@ Control how the bot handles <b>edited messages</b> in the group.
 }
 
 func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
-    args := ctx.Args()
+	args := ctx.Args()
 
-    if len(args) < 2 {
-        ctx.EffectiveMessage.Reply(b,
-            fmt.Sprintf("Usage: <code>/editmod &lt;off|admin|user&gt;</code>\n<b>For more help, check out:</b> <a href=\"%s\">Edit Mode Help</a>", 
-                fmt.Sprintf("https://t.me/%s?start=help", b.User.Username)),
-            &gotgbot.SendMessageOpts{ParseMode: "HTML"})
-        return nil
-    }
+	if len(args) < 2 {
+		ctx.EffectiveMessage.Reply(b,
+			fmt.Sprintf("Usage: <code>/editmod &lt;off|admin|user&gt;</code>\n<b>For more help, check out:</b> <a href=\"%s\">Edit Mode Help</a>",
+				fmt.Sprintf("https://t.me/%s?start=help", b.User.Username)),
+			&gotgbot.SendMessageOpts{ParseMode: "HTML"})
+		return nil
+	}
 
-    y := strings.ToLower(args[1])
+	y := strings.ToLower(args[1])
 
-    if y != "off" && y != "user" && y != "admin" {
-        ctx.EffectiveMessage.Reply(b,
-            fmt.Sprintf("Usage: <code>/editmod &lt;off|admin|user&gt;</code>\n<b>For more help, check out:</b> <a href=\"%s\">Edit Mode Help</a>", 
-                fmt.Sprintf("https://t.me/%s?start=help", b.User.Username)),
-            &gotgbot.SendMessageOpts{ParseMode: "HTML"})
-        return nil
-    }
+	if y != "off" && y != "user" && y != "admin" {
+		ctx.EffectiveMessage.Reply(b,
+			fmt.Sprintf("Usage: <code>/editmod &lt;off|admin|user&gt;</code>\n<b>For more help, check out:</b> <a href=\"%s\">Edit Mode Help</a>",
+				fmt.Sprintf("https://t.me/%s?start=help", b.User.Username)),
+			&gotgbot.SendMessageOpts{ParseMode: "HTML"})
+		return nil
+	}
 
+	ctx.EffectiveMessage.Reply(b, "This command will be available soon..", nil)
 
-    ctx.EffectiveMessage.Reply(b, "This command will be available soon..", nil)
-
-    return nil
+	return nil
 }
