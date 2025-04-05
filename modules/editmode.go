@@ -3,11 +3,11 @@ package modules
 import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 )
 
 func init() {
-        Register(handlers.NewCommand("editmode", EditMode))
-
+	Register(handlers.NewCommand("editmode", EditMode))
 }
 
 func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
