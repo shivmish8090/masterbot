@@ -44,7 +44,8 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 	if ctx.EffectiveMessage.ReplyToMessage != nil {
-		text := `Hello %s, %s wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <a href=%s>Telegraph 📝</a>`
+ Rmsg := ctx.EffectiveMessage.ReplyToMessage
+		text := fmt.Sprintf(`Hello <a href=\d>%s</a>, %s wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <a href=%s>Telegraph 📝</a>`, "<a>)
 		_ = text
 		b.SendMessage(
 			ctx.EffectiveChat.Id,
