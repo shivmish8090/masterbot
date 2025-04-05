@@ -1,4 +1,4 @@
-FROM golang:1.24-bullseye AS builder
+FROM golang:1.24-alpine AS builder
 
 WORKDIR /app
 
@@ -10,13 +10,11 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
     go build -ldflags="-s -w" -o app .
 
-# Final minimal image
-FROM scratch
+FROM alpine:latest
 
 WORKDIR /app
 
-# Optional: Add CA certs for HTTPS
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+RUN apk add --no-cache go ca-certificates
 
 COPY --from=builder /app/app .
 
