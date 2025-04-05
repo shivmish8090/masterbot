@@ -19,18 +19,20 @@ func Register(h ext.Handler) {
 }
 
 func AddHelp(name, callback, help string, h ext.Handler) {
-	ModulesHelp[name] = struct {
-		Callback string
-		Help     string
-	}{
-		Callback: callback,
-		Help:     help,
-	}
+        ModulesHelp[name] = struct {
+                Callback string
+                Help     string
+        }{
+                Callback: callback,
+                Help:     help,
+        }
 
-	if h != nil {
-		handler := h
-	} else {
-		handler := handlers.NewCallback(callbackquery.Equal(callback), helpModuleCB)
-	}
-	Register(handler)
+        var handler ext.Handler
+        if h != nil {
+                handler = h
+        } else {
+                handler = handlers.NewCallback(callbackquery.Equal(callback), helpModuleCB)
+        }
+
+        Register(handler)
 }
