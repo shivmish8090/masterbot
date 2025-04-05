@@ -37,8 +37,6 @@ func AddHelp(name, callback, help string, h ext.Handler) {
 	Register(handler)
 }
 
-
-func init(){
-
-AddHelp("✍️ Edit Mode", "help_editmode", "...", nil)
+func init() {
+	AddHelp("✍️ Edit Mode", "help_editmode", "...", nil)
 }
