@@ -13,7 +13,7 @@ import (
 
 func init() {
 	Register(handlers.NewCommand("echo", EcoHandler))
-	AddHelp("📝 Echo", "help_echo", `<b>🔹 Echo</b>
+	AddHelp("📝 Echo", "echo", `<b>🔹 Echo</b>
 
 <b>Command:</b> <code>/echo &lt;text&gt;</code>
 
