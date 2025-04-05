@@ -1,21 +1,18 @@
 package modules
 
 import (
-	"github.com/PaulSonOfLars/gotgbot/v2"
-	"github.com/PaulSonOfLars/gotgbot/v2/ext"
-)
-
-import (
 	"log"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/callbackquery"
 )
 
-func init(){
-
-        Register(handlers.NewCallback(callbackquery.Equal("help"), helpCB))
+func init() {
+	Register(handlers.NewCallback(callbackquery.Equal("help"), helpCB))
 }
+
 func helpCB(b *gotgbot.Bot, ctx *ext.Context) error {
 	keyboard := gotgbot.InlineKeyboardMarkup{
 		InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
