@@ -95,8 +95,11 @@ func ExtractJoinLeftStatusChange(u *gotgbot.ChatMemberUpdated) (bool, bool) {
 		"creator":      {},
 	}
 
-	wasMember := _, ok := memberStatuses[old.Status]; ok || (old.Status == "restricted" && old.IsMember)
-	isMember := _, ok := memberStatuses[new.Status]; ok || (new.Status == "restricted" && new.IsMember)
+	_, wasIn := memberStatuses[old.Status]
+	wasMember := wasIn || (old.Status == "restricted" && old.IsMember)
+
+	_, isIn := memberStatuses[new.Status]
+	isMember := isIn || (new.Status == "restricted" && new.IsMember)
 
 	return wasMember, isMember
 }
