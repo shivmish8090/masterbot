@@ -16,12 +16,6 @@ import (
 	"github.com/Vivekkumar-IN/EditguardianBot/filters"
 )
 
-func init() {
-	Register(handlers.NewMessage(
-		filters.AndFilter(filters.Owner, filters.Command(b, "eval")),
-		EvalHandler,
-	).SetAllowEdited(true))
-}
 
 func EvalHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if len(ctx.Args()) < 2 {
