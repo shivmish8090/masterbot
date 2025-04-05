@@ -12,5 +12,6 @@ func init() {
 }
 
 func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
+ ctx.EffectiveMessage.Reply("hii", nil)
 	return nil
 }
