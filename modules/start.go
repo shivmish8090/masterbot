@@ -65,7 +65,7 @@ I'm <b><a href="tg://user?id=%d">%s</a></b>, your security assistant, ensuring a
 				{
 					{
 						Text:         "❓ Help & Commands",
-						CallbackData: "help_callback",
+						CallbackData: "help",
 					},
 				},
 				{
