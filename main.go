@@ -8,7 +8,6 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
-	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/callbackquery"
 
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 	"github.com/Vivekkumar-IN/EditguardianBot/database"
@@ -58,8 +57,6 @@ func main() {
 	dispatcher.AddHandler(handlers.NewMessage(
 		filters.And(filters.LongMessage, filters.Invert(filters.ChatAdmins(b))),
 		modules.DeleteLongMessage).SetAllowEdited(true))
-
-	
 
 	// Allowed updates
 	allowedUpdates := []string{
