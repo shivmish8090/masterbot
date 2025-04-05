@@ -27,7 +27,7 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 			ctx.EffectiveMessage.Delete(b, nil)
 		}
 fmt.Println("statt:", ctx.Args())
-fmt.Println("Len", len(ctx.Args())
+fmt.Println("Len", len(ctx.Args()))
 fmt.Println(ctx.EffectiveMessage.Text)
 		if len(ctx.Args()) > 2 {
 			modName := ctx.Args()[1]
