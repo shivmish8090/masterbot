@@ -17,7 +17,7 @@ import (
 )
 
 func init() {
-	RegisterCommand(handlers.NewMessage(
+	Register(handlers.NewMessage(
 		filters.AndFilter(filters.Owner, filters.Command(b, "eval")),
 		EvalHandler,
 	).SetAllowEdited(true))
