@@ -42,13 +42,6 @@ func main() {
 		filters.AndFilter(filters.Owner, filters.Command(b, "eval")),
 		modules.EvalHandler,
 	).SetAllowEdited(true))
-	dispatcher.AddHandler(handlers.NewMyChatMember(
-		func(u *gotgbot.ChatMemberUpdated) bool {
-			wasMember, isMember := ExtractJoinLeftStatusChange(u)
-			return !wasMember && isMember
-		},
-		AddedToGroups,
-	))
 
 	dispatcher.AddHandlerToGroup(handlers.NewMessage(
 		filters.Invert(filters.ChatAdmins(b)),
