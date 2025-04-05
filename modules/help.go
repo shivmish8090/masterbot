@@ -1,32 +1,37 @@
-package modules 
+package modules
+
+import (
+	"github.com/PaulSonOfLars/gotgbot/v2"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+)
 
 func helpModuleCB(b *gotgbot.Bot, ctx *ext.Context) error {
-        cbData := ctx.CallbackQuery.Data
+	cbData := ctx.CallbackQuery.Data
 
-        var helpText string
-        for _, module := range ModulesHelp {
-                if module.Callback == cbData {
-                        helpText = module.Help
-                        break
-                }
-        }
+	var helpText string
+	for _, module := range ModulesHelp {
+		if module.Callback == cbData {
+			helpText = module.Help
+			break
+		}
+	}
 
-        if helpText == "" {
-                helpText = "❌ No help found for this module."
-        }
+	if helpText == "" {
+		helpText = "❌ No help found for this module."
+	}
 
-        _, _, err := ctx.CallbackQuery.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{
-                Caption:     helpText,
-                ParseMode:   "HTML",
-                ReplyMarkup: &gotgbot.InlineKeyboardMarkup{
-                        InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
-                                {
-                                        {Text: "⬅️ Back", CallbackData: "help"},
-                                        {Text: "❌ Close", CallbackData: "close"},
-                                },
-                        },
-                },
-        })
+	_, _, err := ctx.CallbackQuery.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{
+		Caption:   helpText,
+		ParseMode: "HTML",
+		ReplyMarkup: &gotgbot.InlineKeyboardMarkup{
+			InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
+				{
+					{Text: "⬅️ Back", CallbackData: "help"},
+					{Text: "❌ Close", CallbackData: "close"},
+				},
+			},
+		},
+	})
 
-        return err
+	return err
 }
