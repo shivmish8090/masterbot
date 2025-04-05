@@ -90,9 +90,9 @@ func ExtractJoinLeftStatusChange(u *gotgbot.ChatMemberUpdated) (bool, bool) {
 	}
 
 	memberStatuses := map[string]struct{}{
-		"member":       {},
+		"member":        {},
 		"administrator": {},
-		"creator":      {},
+		"creator":       {},
 	}
 
 	_, wasIn := memberStatuses[old.Status]
