@@ -9,14 +9,8 @@ COPY . .
 
 RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o app .
 
-FROM debian:bullseye-slim
+FROM gcr.io/distroless/static-debian11
 
-WORKDIR /app
+COPY --from=builder /app/app /
 
-RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
-
-COPY --from=builder /app/app .
-
-RUN chmod +x ./app
-
-CMD ["./app"]
+ENTRYPOINT ["/app"]
