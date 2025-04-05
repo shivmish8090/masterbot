@@ -22,7 +22,7 @@ Sends back the provided text. If the message exceeds 800 characters, it automati
 
 <b>Options:</b>
 • <b>/echo &lt;text&gt;</b> - Sends the text as a message or uploads to Telegraph if too long.  
-• <b>Reply + /echo &lt;text&gt;</b> - Tags the replied user and echoes the text.  
+• <b>/echo &lt;text&gt; + Reply</b> - Tags the replied user and echoes the text.  
 
 <b>Note:</b>
 • Messages longer than 800 characters are deleted after being uploaded.  
