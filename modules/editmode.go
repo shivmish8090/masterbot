@@ -25,6 +25,6 @@ Use this to prevent spam edits or maintain message consistency in the group.`, n
 }
 
 func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
-	ctx.EffectiveMessage.Reply(b, "hii", nil)
+	ctx.EffectiveMessage.Reply(b, "Soon..", nil)
 	return nil
 }
