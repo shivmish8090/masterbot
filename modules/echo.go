@@ -45,12 +45,12 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 	if ctx.EffectiveMessage.ReplyToMessage != nil {
  Rmsg := ctx.EffectiveMessage.ReplyToMessage
-		text := fmt.Sprintf(`Hello <a href=\d>%s</a>, %s wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <a href=%s>Telegraph 📝</a>`, "<a>)
-		_ = text
+		text := fmt.Sprintf(`<b>Hello <a href="tg://user?id=%d">%s</a></b>, <b><a href="tg://user?id=%d">%s</a></b> wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <b><a href=%s>Telegraph 📝</a></b>`, Rmsg.From.Id, Rmsg.From.FirstName + Rmsg.From.LastName, ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName + ctx.EffectiveUser.LasrName, url)
 		b.SendMessage(
 			ctx.EffectiveChat.Id,
-			url,
+			text,
 			&gotgbot.SendMessageOpts{
+     ParseMode: "HTML",
 				ReplyParameters: &gotgbot.ReplyParameters{
 					MessageId: ctx.EffectiveMessage.ReplyToMessage.MessageId,
 				},
