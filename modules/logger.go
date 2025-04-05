@@ -82,35 +82,21 @@ func ExtractJoinLeftStatusChange(u *gotgbot.ChatMemberUpdated) (bool, bool) {
 		return false, false
 	}
 
-	oldMemberStatus := u.OldChatMember.MergeChatMember().Status
-	newMemberStatus := u.NewChatMember.MergeChatMember().Status
-	oldIsMember := u.OldChatMember.MergeChatMember().IsMember
-	newIsMember := u.NewChatMember.MergeChatMember().IsMember
+	old := u.OldChatMember.MergeChatMember()
+	new := u.NewChatMember.MergeChatMember()
 
-	if oldMemberStatus == newMemberStatus {
+	if old.Status == new.Status {
 		return false, false
 	}
 
-	findInSlice := func(slice []string, val string) bool {
-		for _, item := range slice {
-			if item == val {
-				return true
-			}
-		}
-		return false
+	memberStatuses := map[string]struct{}{
+		"member":       {},
+		"administrator": {},
+		"creator":      {},
 	}
 
-	wasMember := findInSlice(
-		[]string{"member", "administrator", "creator"},
-		oldMemberStatus,
-	) ||
-		(oldMemberStatus == "restricted" && oldIsMember)
-
-	isMember := findInSlice(
-		[]string{"member", "administrator", "creator"},
-		newMemberStatus,
-	) ||
-		(newMemberStatus == "restricted" && newIsMember)
+	wasMember := _, ok := memberStatuses[old.Status]; ok || (old.Status == "restricted" && old.IsMember)
+	isMember := _, ok := memberStatuses[new.Status]; ok || (new.Status == "restricted" && new.IsMember)
 
 	return wasMember, isMember
 }
