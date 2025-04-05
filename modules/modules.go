@@ -27,14 +27,10 @@ func AddHelp(name, callback, help string, h ext.Handler) {
 		Help:     help,
 	}
 
-	var handler ext.Handler
-	if h != nil {
-		handler = h
-	} else {
-		handler = handlers.NewCallback(callbackquery.Equal(callback), helpModuleCB)
-	}
-
-	Register(handler)
+	if h == nil {
+    h = handlers.NewCallback(callbackquery.Equal(callback), helpModuleCB)
+}
+Register(h)
 }
 
 func init() {
