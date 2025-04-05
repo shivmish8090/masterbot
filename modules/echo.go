@@ -13,15 +13,21 @@ import (
 
 func init() {
 	Register(handlers.NewCommand("echo", EcoHandler))
-	AddHelp("📝 Echo", "help_echo", `<b>⚙️ Echo Settings</b>
+	AddHelp("📝 Echo", "help_echo", `<b>🔹 Echo</b>
 
-<b>/echo &lt;text&gt;</b> - If the message is longer than 800 characters:
-• 📝 Automatically uploads to Telegraph  
-• ❌ Deletes the original message  
-• 🔗 Replies with a Telegraph link  
-(If used in reply, it will tag the replied user)
+<b>Command:</b> <code>/echo &lt;text&gt;</code>
 
-💡 <i>Useful for avoiding spam and large message clutter.</i>`, nil)
+<b>Description:</b>
+Sends back the provided text. If the message exceeds 800 characters, it automatically uploads it to Telegraph to prevent spam and large message clutter.
+
+<b>Options:</b>
+• <b>/echo &lt;text&gt;</b> - Sends the text as a message or uploads to Telegraph if too long.  
+• <b>Reply + /echo &lt;text&gt;</b> - Tags the replied user and echoes the text.  
+
+<b>Note:</b>
+• Messages longer than 800 characters are deleted after being uploaded.  
+• The Telegraph link is sent as a reply instead.  
+• Helps in maintaining message readability and reducing clutter.`, nil)
 }
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
