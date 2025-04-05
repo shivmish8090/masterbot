@@ -51,11 +51,37 @@ func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	} else if message.Sticker != nil {
 		reason = "<b>🖼️ Replacing a sticker is not permitted.</b>"
 	}
+                                       
+                keyboard := gotgbot.InlineKeyboardMarkup{
+                        InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
+                                {
+                                        {
+                                                Text: "🔄 Update Channel",
+                                                Url:  "https://t.me/Dns_Official_Channel",
+                                        },
+                                        {
+                                                Text: "💬 Update Group",
+                                                Url:  "https://t.me/dns_support_group",
+                                        },
+                                },
+                               
+                                {
+                                        {
+                                                Text: "➕ Add me to Your Group",
+                                                Url: fmt.Sprintf(
+                                                        "https://t.me/%s?startgroup=s&admin=delete_messages+invite_users",
+                                                        b.User.Username,
+                                                ),
+                                        },
+                                },
+                        },
+                }
+
 
 	_, err := b.SendMessage(
 		ctx.EffectiveChat.Id,
 		reason,
-		&gotgbot.SendMessageOpts{ParseMode: "HTML"},
+		&gotgbot.SendMessageOpts{ParseMode: "HTML", ReplyMarkup:    keyboard},
 	)
 	if err != nil {
 		return err
