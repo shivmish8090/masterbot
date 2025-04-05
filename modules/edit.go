@@ -28,10 +28,10 @@ func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 
-	reason := "<b>❌ Editing messages is not allowed here.</b>"
+	reason := "<b>🚫 Editing messages is prohibited in this chat.</b>"
 
 	if message.Text != "" {
-		reason = "<b>❌ Editing a message is not allowed.</b>"
+		reason = "<b>🚫 Editing messages is prohibited in this chat.</b>"
 	} else if message.Caption != "" {
 		reason = "<b>✍️ Editing a caption is restricted.</b>"
 	} else if message.Photo != nil {
