@@ -26,7 +26,18 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 		if !isCallback {
 			ctx.EffectiveMessage.Delete(b, nil)
 		}
+   if len(ctx.Args()) > 2 {
+        modName := ctx.Args()[1]
+        helpString := modules.GetHelp(modName)
+if helpString != "" {
 
+ctx.EffectiveMessage.Reply(b,
+				helpString,
+				&gotgbot.SendMessageOpts{ParseMode: "HTML"},
+			)
+return nil
+
+}
 		file := gotgbot.InputFileByURL(config.StartImage)
 		caption := fmt.Sprintf(
 			`<b>🚀 Hello <a href="tg://user?id=%d">%s</a>! 👋</b>  
