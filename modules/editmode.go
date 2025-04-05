@@ -16,7 +16,7 @@ func init() {
 Control how the bot handles <b>edited messages</b> in the group.
 
 <b>Options:</b>
-• <code>/editmode off</code> - Bot won't delete any edited messages.  
+• <code>/editmode off</code> - Bot won't delete any edited messages.
 • <code>/editmode user</code> - Deletes edited messages from <b>normal users</b>. (default)  
 • <code>/editmode admin</code> - Deletes edited messages from <b>both users and admins</b>.
 
