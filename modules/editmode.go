@@ -11,7 +11,7 @@ import (
 
 func init() {
 	Register(handlers.NewCommand("editmode", EditMode))
-	AddHelp("✍️ Edit Mode", "help_editmode", `<b>✍️ Edit Mode</b>
+	AddHelp("✍️ Edit Mode", "editmode", `<b>✍️ Edit Mode</b>
 
 <b>Command:</b> <code>/editmode &lt;off|admin|user&gt;</code>
 
