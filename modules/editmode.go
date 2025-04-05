@@ -8,6 +8,7 @@ import (
 
 func init() {
 	Register(handlers.NewCommand("editmode", EditMode))
+        AddHelp("✍️ Edit Mode", "help_editmode", "...", nil)
 }
 
 func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
