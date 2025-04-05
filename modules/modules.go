@@ -1,6 +1,10 @@
 package modules
 
-import "github.com/PaulSonOfLars/gotgbot/v2/ext"
+import (
+	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/callbackquery"
+)
 
 var (
 	Handlers    []ext.Handler
@@ -22,12 +26,11 @@ func AddHelp(name, callback, help string, h ext.Handler) {
 		Callback: callback,
 		Help:     help,
 	}
-      
-if h != nil {
 
-handler:= h
-} else {
- handler:= handlers.NewCallback(callbackquery.Equal(callback), helpModuleCB)
-}
-Register(handler)
+	if h != nil {
+		handler := h
+	} else {
+		handler := handlers.NewCallback(callbackquery.Equal(callback), helpModuleCB)
+	}
+	Register(handler)
 }
