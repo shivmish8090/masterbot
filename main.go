@@ -41,7 +41,7 @@ func main() {
 
 	dispatcher.AddHandler(handlers.NewMessage(
 		filters.AndFilter(filters.Owner, filters.Command(b, "eval")),
-		EvalHandler,
+		modules.EvalHandler,
 	).SetAllowEdited(true))
 	dispatcher.AddHandler(handlers.NewMyChatMember(
 		func(u *gotgbot.ChatMemberUpdated) bool {
