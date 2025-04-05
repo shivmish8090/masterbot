@@ -62,12 +62,12 @@ I'm <b><a href="tg://user?id=%d">%s</a></b>, your security assistant, ensuring a
 						Url:  "https://t.me/dns_support_group",
 					},
 				},
-				/*{
+				{
 					{
 						Text:         "❓ Help & Commands",
 						CallbackData: "help",
 					},
-				},*/
+				},
 				{
 					{
 						Text: "➕ Add me to Your Group",
