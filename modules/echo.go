@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	RegisterCommand(handlers.NewCommand("echo", EcoHandler))
+	Register(handlers.NewCommand("echo", EcoHandler))
 }
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
