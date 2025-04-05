@@ -35,16 +35,10 @@ func main() {
 
 	// Handlers
 
-	for _, h := range modules.CommandHandlers {
+	for _, h := range modules.Handlers {
 		dispatcher.AddHandler(h)
 	}
-	for _, h := range modules.MessageHandlers {
-		dispatcher.AddHandler(h)
-	}
-	for _, h := range modules.CallbackQueryHandlers {
-		dispatcher.AddHandler(h)
-	}
-
+	
 	dispatcher.AddHandler(handlers.NewMyChatMember(
 		func(u *gotgbot.ChatMemberUpdated) bool {
 			wasMember, isMember := ExtractJoinLeftStatusChange(u)
@@ -55,13 +49,10 @@ func main() {
 
 	dispatcher.AddHandlerToGroup(handlers.NewMessage(
 		filters.Invert(filters.ChatAdmins(b)),
-		deleteEditedMessage,
+		modules.DeleteEditedMessage,
 	).SetAllowEdited(true), -1)
 
-	dispatcher.AddHandler(handlers.NewMessage(
-		filters.And(filters.LongMessage, filters.Invert(filters.ChatAdmins(b))),
-		deleteLongMessage,
-	))
+
 
 	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("help_callback"), helpCB))
 
