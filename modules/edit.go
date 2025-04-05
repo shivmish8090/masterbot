@@ -59,7 +59,7 @@ func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
         return nil
 }
 
-func deleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
+func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
         fmt.Println("deleteLongMessage triggered")
 
         done, err := ctx.EffectiveMessage.Delete(b, nil)
