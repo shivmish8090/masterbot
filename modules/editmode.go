@@ -1,6 +1,8 @@
 package modules
 
 import (
+	"fmt"
+
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
@@ -26,9 +28,9 @@ func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 	return nil
 	if len(ctx.Args()) < 2 {
 
-ctx.EffectiveMessage.Reply(b, 
-    fmt.Sprintf("Usage: <code>/editmod &lt;off|admin|user&gt;</code>\n<b>For more help, check out:</b> <a href=\"%s\">Edit Mode Help</a>", fmt.Sprintf("https://t.me/%s?start=help", b.User.Username)), 
-    &gotgbot.SendMessageOpts{ParseMode: "HTML"})
+		ctx.EffectiveMessage.Reply(b,
+			fmt.Sprintf("Usage: <code>/editmod &lt;off|admin|user&gt;</code>\n<b>For more help, check out:</b> <a href=\"%s\">Edit Mode Help</a>", fmt.Sprintf("https://t.me/%s?start=help", b.User.Username)),
+			&gotgbot.SendMessageOpts{ParseMode: "HTML"})
 		return nil
 	}
 }
