@@ -16,10 +16,9 @@ func init() {
 Control how the bot handles <b>edited messages</b> in the group.
 
 <b>Options:</b>
-• <b>/editmode off</b> - Bot won't delete any edited messages.
+• <b>/editmode off</b> - Bot won't delete any edited messages.  
 • <b>/editmode user</b> - Deletes edited messages from <b>normal users</b>. (default)  
-• <b>/editmode admin</b> - Deletes edited messages from <b>both users and admins</b>. <i>(Only group owner can set this)</i>`
-}
+• <b>/editmode admin</b> - Deletes edited messages from <b>both users and admins</b>. <i>(Only group owner can set this)</i>`, nil)
 
 func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 	ctx.EffectiveMessage.Reply(b, "Soon..", nil)
