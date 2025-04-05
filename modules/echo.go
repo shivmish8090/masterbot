@@ -19,17 +19,19 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if ctx.EffectiveChat.Type != "supergroup" {
 		ctx.EffectiveMessage.Reply(
 			b,
-			"This command is made to be used in supergrous, not in pm!",
+			"This command is meant to be used in supergroups, not in private messages!",
 			nil,
 		)
 		return nil
 	}
+
 	if len(ctx.Args()) < 2 {
 		ctx.EffectiveMessage.Reply(b, "Usage: /echo <long message>", nil)
 		return nil
 	}
 
 	ctx.EffectiveMessage.Delete(b, nil)
+
 	if len(ctx.EffectiveMessage.GetText()) < 800 {
 		b.SendMessage(
 			ctx.EffectiveChat.Id,
@@ -44,23 +46,45 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if err != nil {
 		return err
 	}
-	Msg := `<b>Hello <a href="tg://user?id=%d">%s</a></b>, <b><a href="tg://user?id=%d">%s</a></b> wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <b><a href=%s>Telegraph 📝</a></b>`
+
+	msgTemplate := `<b>Hello <a href="tg://user?id=%d">%s</a></b>, <b><a href="tg://user?id=%d">%s</a></b> wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <b><a href="%s">Telegraph 📝</a></b>`
+
+	var msg string
 	if ctx.EffectiveMessage.ReplyToMessage != nil {
-		Rmsg := ctx.EffectiveMessage.ReplyToMessage
-		Msg = fmt.Sprintf(Msg, Rmsg.From.Id, Rmsg.From.FirstName+Rmsg.From.LastName, ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName+ctx.EffectiveUser.LasrName, url)
+		rmsg := ctx.EffectiveMessage.ReplyToMessage
+
+		rFirst := rmsg.From.FirstName
+		if rmsg.From.LastName != "" {
+			rFirst += " " + rmsg.From.LastName
+		}
+
+		uFirst := ctx.EffectiveUser.FirstName
+		if ctx.EffectiveUser.LastName != "" {
+			uFirst += " " + ctx.EffectiveUser.LastName
+		}
+
+		msg = fmt.Sprintf(msgTemplate, rmsg.From.Id, rFirst, ctx.EffectiveUser.Id, uFirst, url)
 		b.SendMessage(
 			ctx.EffectiveChat.Id,
-			Msg,
+			msg,
 			&gotgbot.SendMessageOpts{
 				ParseMode: "HTML",
 				ReplyParameters: &gotgbot.ReplyParameters{
-					MessageId: ctx.EffectiveMessage.ReplyToMessage.MessageId,
+					MessageId: rmsg.MessageId,
 				},
 			},
 		)
 	} else {
-		Msg = fmt.Sprintf(Msg, 0, "", ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName+ctx.EffectiveUser.LasrName, url)
-		b.SendMessage(ctx.EffectiveChat.Id, Msg, nil)
+		uFirst := ctx.EffectiveUser.FirstName
+		if ctx.EffectiveUser.LastName != "" {
+			uFirst += " " + ctx.EffectiveUser.LastName
+		}
+
+		msg = fmt.Sprintf(msgTemplate, 0, "", ctx.EffectiveUser.Id, uFirst, url)
+		b.SendMessage(ctx.EffectiveChat.Id, msg, &gotgbot.SendMessageOpts{
+			ParseMode: "HTML",
+		})
 	}
+
 	return nil
 }
