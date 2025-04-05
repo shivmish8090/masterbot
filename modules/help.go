@@ -14,7 +14,7 @@ import (
 
 func init(){
 
-        Register(handlers.NewCallback(callbackquery.Equal("help"), helpCB)
+        Register(handlers.NewCallback(callbackquery.Equal("help"), helpCB))
 }
 func helpCB(b *gotgbot.Bot, ctx *ext.Context) error {
 	keyboard := gotgbot.InlineKeyboardMarkup{
