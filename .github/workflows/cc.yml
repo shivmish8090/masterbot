@@ -16,7 +16,7 @@ jobs:
       - name: Setup Go Environment
         uses: actions/setup-go@v5
         with:
-          go-version: "1.23"
+          go-version: "1.24"
 
       - name: Install Formatting Tools
         run: |
@@ -27,6 +27,7 @@ jobs:
 
       - name: Format Codes
         run: |
+          go get -u ./...
           go mod tidy
           gofmt -w .
           goimports -w .
