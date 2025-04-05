@@ -56,11 +56,11 @@ func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 		InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
 			{
 				{
-					Text: "🔄 Update Channel",
+					Text: "🔄 Updates",
 					Url:  "https://t.me/Dns_Official_Channel",
 				},
 				{
-					Text: "💬 Update Group",
+					Text: "💬 Support",
 					Url:  "https://t.me/dns_support_group",
 				},
 			},
