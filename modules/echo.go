@@ -13,7 +13,7 @@ import (
 
 func init() {
 	Register(handlers.NewCommand("echo", EcoHandler))
-	AddHelp("📝 Echo", "help_echo", `<b>⚙️ Echo Settings</b>
+	AddHelp("📝 Echo", "echo", `<b>⚙️ Echo Settings</b>
 
 <b>/echo &lt;text&gt;</b> - If the message is longer than 800 characters:
 • 📝 Automatically uploads to Telegraph  
@@ -21,7 +21,7 @@ func init() {
 • 🔗 Replies with a Telegraph link  
 (If used in reply, it will tag the replied user)
 
-💡 <i>Useful for avoiding spam and large message clutter.</i>`)
+💡 <i>Useful for avoiding spam and large message clutter.</i>`, nil)
 }
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
