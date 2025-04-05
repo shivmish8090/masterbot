@@ -44,3 +44,12 @@ func AddHelp(name, callback, help string, h ext.Handler) {
 		Help:     help,
 	}
 }
+
+func GetHelp(callback string) string {
+	for _, data := range ModulesHelp {
+		if data.Callback == callback {
+			return data.Help
+		}
+	}
+	return ""
+}
