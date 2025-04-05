@@ -44,7 +44,3 @@ func AddHelp(name, callback, help string, h ext.Handler) {
 		Help:     help,
 	}
 }
-
-func init() {
-	AddHelp("✍️ Edit Mode", "help_editmode", "...", nil)
-}
