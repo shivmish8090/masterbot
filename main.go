@@ -51,9 +51,9 @@ func main() {
 		filters.Invert(filters.ChatAdmins(b)),
 		modules.DeleteEditedMessage,
 	).SetAllowEdited(true), -1)
-dispatcher.AddHandler(handlers.NewMessage(
+	dispatcher.AddHandler(handlers.NewMessage(
 		filters.And(filters.LongMessage, filters.Invert(filters.ChatAdmins(b))),
-                modules.DeleteLongMessage).SetAllowEdited(true))
+		modules.DeleteLongMessage).SetAllowEdited(true))
 
 	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("help_callback"), helpCB))
 
