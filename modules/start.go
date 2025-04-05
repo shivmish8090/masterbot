@@ -30,7 +30,7 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 			modName := ctx.Args()[1]
 			helpString := GetHelp(modName)
 			if helpString != "" {
-				_, err := ctx.EffectiveMessage.Reply(b, helpString, &gotgbot.SendMessageOpts{
+				_, err := b.SendMessage(ctx.EffectiveChat.Id, helpString, &gotgbot.SendMessageOpts{
 					ParseMode: "HTML",
 				})
 				if err != nil {
