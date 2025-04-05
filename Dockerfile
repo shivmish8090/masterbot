@@ -1,4 +1,4 @@
-FROM golang:1.24-alpine AS builder
+FROM golang:1.24-bullseye AS builder
 
 WORKDIR /app
 
@@ -10,11 +10,14 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
     go build -ldflags="-s -w" -o app .
 
-FROM alpine:latest
+FROM debian:bullseye-slim
 
 WORKDIR /app
 
-RUN apk add --no-cache go ca-certificates
+# Install necessary certificates
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /app/app .
 
