@@ -2,18 +2,19 @@ package modules
 
 import "github.com/PaulSonOfLars/gotgbot/v2/ext"
 
-var Handlers []ext.Handler
-var ModulesHelp = map[string]struct {
-	Callback string
-	Help     string
-}{}
+var (
+	Handlers    []ext.Handler
+	ModulesHelp = map[string]struct {
+		Callback string
+		Help     string
+	}{}
+)
 
 func Register(h ext.Handler) {
 	Handlers = append(Handlers, h)
 }
 
-
-func AddHelp(name string, callback string, help string) {
+func AddHelp(name, callback, help string) {
 	ModulesHelp[name] = struct {
 		Callback string
 		Help     string
