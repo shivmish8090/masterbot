@@ -24,8 +24,8 @@ Control how the bot handles <b>edited messages</b> in the group.
 func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 	ctx.EffectiveMessage.Reply(b, "Soon..", nil)
 	return nil
-        if len(ctx.Args()) < 2 {
-                ctx.EffectiveMessage.Reply(b, "Usage: /editmod &lt;off|admin|user&gt;", nil)
-                return nil
-        }
+	if len(ctx.Args()) < 2 {
+		ctx.EffectiveMessage.Reply(b, "Usage: /editmod &lt;off|admin|user&gt;", nil)
+		return nil
+	}
 }
