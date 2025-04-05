@@ -13,9 +13,9 @@ import (
 )
 
 func init() {
-	RegisterCommand(handlers.NewCommand("start", start))
+	Register(handlers.NewCommand("start", start))
 
-	RegisterCallback(handlers.NewCallback(callbackquery.Equal("start_callback"), start))
+	Register(handlers.NewCallback(callbackquery.Equal("start_callback"), start))
 }
 
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
