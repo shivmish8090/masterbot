@@ -27,16 +27,17 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 			ctx.EffectiveMessage.Delete(b, nil)
 		}
    if len(ctx.Args()) > 2 {
-        modName := ctx.Args()[1]
-        helpString := modules.GetHelp(modName)
-if helpString != "" {
-
-ctx.EffectiveMessage.Reply(b,
-				helpString,
-				&gotgbot.SendMessageOpts{ParseMode: "HTML"},
-			)
-return nil
-
+    modName := ctx.Args()[1]
+    helpString := modules.GetHelp(modName)
+    if helpString != "" {
+        _, err := ctx.EffectiveMessage.Reply(b, helpString, &gotgbot.SendMessageOpts{
+            ParseMode: "HTML",
+        })
+        if err != nil {
+            return err
+        }
+        return nil
+    }
 }
 		file := gotgbot.InputFileByURL(config.StartImage)
 		caption := fmt.Sprintf(
