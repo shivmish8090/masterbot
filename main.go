@@ -59,7 +59,7 @@ func main() {
 		filters.And(filters.LongMessage, filters.Invert(filters.ChatAdmins(b))),
 		modules.DeleteLongMessage).SetAllowEdited(true))
 
-	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("close"), closeCallback))
+	
 
 	// Allowed updates
 	allowedUpdates := []string{
