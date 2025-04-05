@@ -2,7 +2,6 @@ package modules
 
 import "github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 
-
 var (
 	CommandHandlers       []handlers.Command
 	MessageHandlers       []handlers.Message
