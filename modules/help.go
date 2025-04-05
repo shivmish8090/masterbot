@@ -60,16 +60,16 @@ func helpModuleCB(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 
 	_, _, err := ctx.CallbackQuery.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{
-    Caption:   helpText,
-    ParseMode: "HTML",
-    ReplyMarkup: gotgbot.InlineKeyboardMarkup{
-        InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
-            {
-                {Text: "⬅️ Back", CallbackData: "help"},
-                {Text: "❌ Close", CallbackData: "close"},
-            },
-        },
-    },
-})
+		Caption:   helpText,
+		ParseMode: "HTML",
+		ReplyMarkup: gotgbot.InlineKeyboardMarkup{
+			InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
+				{
+					{Text: "⬅️ Back", CallbackData: "help"},
+					{Text: "❌ Close", CallbackData: "close"},
+				},
+			},
+		},
+	})
 	return err
 }
