@@ -61,8 +61,6 @@ func main() {
 
 	
 
-	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("help_echo"), echoCB))
-
 	dispatcher.AddHandler(handlers.NewCallback(callbackquery.Equal("close"), closeCallback))
 
 	// Allowed updates
