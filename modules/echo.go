@@ -17,7 +17,7 @@ func init() {
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if ctx.EffectiveChat.Type != "supergroup" {
-		_, _ = ctx.EffectiveMessage.Reply(
+	ctx.EffectiveMessage.Reply(
 			b,
 			"This command is meant to be used in supergroups, not in private messages!",
 			nil,
@@ -26,14 +26,13 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 
 	if len(ctx.Args()) < 2 {
-		_, _ = ctx.EffectiveMessage.Reply(b, "Usage: /echo <long message>", nil)
+		ctx.EffectiveMessage.Reply(b, "Usage: /echo <long message>", nil)
 		return nil
 	}
-
-	_, _ = ctx.EffectiveMessage.Delete(b, nil)
+ ctx.EffectiveMessage.Delete(b, nil)
 
 	if len(ctx.EffectiveMessage.GetText()) < 800 {
-		_, _ = b.SendMessage(
+		 b.SendMessage(
 			ctx.EffectiveChat.Id,
 			"Oops! Your message is under 800 characters. You can send it without using /echo.",
 			nil,
