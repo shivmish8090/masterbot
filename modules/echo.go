@@ -13,7 +13,7 @@ import (
 
 func init() {
 	Register(handlers.NewCommand("echo", EcoHandler))
-	AddHelpModule("📝 Echo", "help_echo", `<b>⚙️ Echo Settings</b>
+	AddHelp("📝 Echo", "help_echo", `<b>⚙️ Echo Settings</b>
 
 <b>/echo &lt;text&gt;</b> - If the message is longer than 800 characters:
 • 📝 Automatically uploads to Telegraph  
