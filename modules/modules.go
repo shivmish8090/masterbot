@@ -9,12 +9,12 @@ import (
 )
 
 const (
-	MaxHandlers   = 10 // <- Change this to increase/decrease handler limit
+	MaxHandlers    = 10 // <- Change this to increase/decrease handler limit
 	MaxHelpModules = 10 // <- Change this to increase/decrease help module limit
 )
 
 var (
-	Handlers = make([]ext.Handler, 0, MaxHandlers)
+	Handlers    = make([]ext.Handler, 0, MaxHandlers)
 	ModulesHelp = make(map[string]struct {
 		Callback string
 		Help     string
