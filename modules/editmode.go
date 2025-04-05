@@ -25,7 +25,10 @@ func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 	ctx.EffectiveMessage.Reply(b, "Soon..", nil)
 	return nil
 	if len(ctx.Args()) < 2 {
-		ctx.EffectiveMessage.Reply(b, "Usage: /editmod &lt;off|admin|user&gt;", nil)
+
+ctx.EffectiveMessage.Reply(b, 
+    fmt.Sprintf("Usage: <code>/editmod &lt;off|admin|user&gt;</code>\n<b>For more help, check out:</b> <a href=\"%s\">Edit Mode Help</a>", fmt.Sprintf("https://t.me/%s?start=help", b.User.Username)), 
+    &gotgbot.SendMessageOpts{ParseMode: "HTML"})
 		return nil
 	}
 }
