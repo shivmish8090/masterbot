@@ -9,10 +9,14 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
 
-var deleteWarningTracker = struct {
+type warningTracker struct {
 	sync.Mutex
 	chats map[int64]time.Time
-}{chats: make(map[int64]time.Time)}
+}
+
+var deleteWarningTracker = warningTracker{
+	chats: make(map[int64]time.Time),
+}
 
 func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	message := ctx.EditedMessage
