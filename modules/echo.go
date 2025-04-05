@@ -44,12 +44,13 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if err != nil {
 		return err
 	}
+  Msg := `<b>Hello <a href="tg://user?id=%d">%s</a></b>, <b><a href="tg://user?id=%d">%s</a></b> wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <b><a href=%s>Telegraph 📝</a></b>`
 	if ctx.EffectiveMessage.ReplyToMessage != nil {
 		Rmsg := ctx.EffectiveMessage.ReplyToMessage
-		text := fmt.Sprintf(`<b>Hello <a href="tg://user?id=%d">%s</a></b>, <b><a href="tg://user?id=%d">%s</a></b> wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <b><a href=%s>Telegraph 📝</a></b>`, Rmsg.From.Id, Rmsg.From.FirstName+Rmsg.From.LastName, ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName+ctx.EffectiveUser.LasrName, url)
+		Msg = fmt.Sprintf(Msg, Rmsg.From.Id, Rmsg.From.FirstName+Rmsg.From.LastName, ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName+ctx.EffectiveUser.LasrName, url)
 		b.SendMessage(
 			ctx.EffectiveChat.Id,
-			text,
+			Msg,
 			&gotgbot.SendMessageOpts{
 				ParseMode: "HTML",
 				ReplyParameters: &gotgbot.ReplyParameters{
@@ -58,7 +59,8 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 			},
 		)
 	} else {
-		b.SendMessage(ctx.EffectiveChat.Id, url, nil)
+       Msg = fmt.Sprintf(Msg, 0, "", ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName+ctx.EffectiveUser.LasrName, url)
+		b.SendMessage(ctx.EffectiveChat.Id, Msg, nil)
 	}
 	return nil
 }
