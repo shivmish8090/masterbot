@@ -72,7 +72,6 @@ func Disconnect() {
 	}
 }
 
-
 // SetEditMode sets the edit mode for a chat ("ADMIN", "USER", "OFF").
 func SetEditMode(chatID int64, mode string) (bool, error) {
 	key := fmt.Sprintf("editmode:%d", chatID)
