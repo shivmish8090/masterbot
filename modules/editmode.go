@@ -20,9 +20,9 @@ func init() {
 Controls how the bot deletes <b>edited messages</b>.
 
 <b>Modes:</b>  
-• <b>/editmode</b> <code>off</code> – No deletion  
-• <b>/editmode</b> <code>user</code> – Delete edits from users (default)  
-• <b>/editmode</b> <code>admin</code> – Delete edits from users & admins <i>(owner only)</i>
+• <b>/editmode</b> <code>--set-mode=off</code> – No deletion  
+• <b>/editmode</b> <code>--set-mode=user</code> – Delete edits from users (default)  
+• <b>/editmode</b> <code>--set-mode=admin</code> – Delete edits from users & admins <i>(owner only)</i>
 
 <b>Duration:</b>  
 • <b>0</b> – Deletes immediately <i>(default)</i> & warns users  
