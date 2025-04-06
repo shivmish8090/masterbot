@@ -43,22 +43,22 @@ func init() {
 	editModeDB = db.Collection("editmodes")
 	echoDB = db.Collection("echos")
 
-	// Index on userstats.user_id
+	// Unique index on userstats.user_id
 	_, err = userDB.Indexes().CreateOne(ctx, mongo.IndexModel{
 		Keys:    bson.M{"user_id": 1},
-		Options: options.Index().SetName("user_id_index"),
+		Options: options.Index().SetName("unique_user_id").SetUnique(true),
 	})
 	if err != nil {
-		log.Printf("Failed to create index on userstats: %v", err)
+		log.Printf("Failed to create unique index on userstats: %v", err)
 	}
 
-	// Index on chats.chat_id
+	// Unique index on chats.chat_id
 	_, err = chatDB.Indexes().CreateOne(ctx, mongo.IndexModel{
 		Keys:    bson.M{"chat_id": 1},
-		Options: options.Index().SetName("chat_id_index"),
+		Options: options.Index().SetName("unique_chat_id").SetUnique(true),
 	})
 	if err != nil {
-		log.Printf("Failed to create index on chats: %v", err)
+		log.Printf("Failed to create unique index on chats: %v", err)
 	}
 
 	// Unique index on editmodes.chat_id
@@ -70,13 +70,13 @@ func init() {
 		log.Printf("Failed to create unique index on editmodes: %v", err)
 	}
 
-	// Index on echos.chat_id
+	// Unique index on echos.chat_id
 	_, err = echoDB.Indexes().CreateOne(ctx, mongo.IndexModel{
 		Keys:    bson.M{"chat_id": 1},
-		Options: options.Index().SetName("chat_id_echo_index"),
+		Options: options.Index().SetName("unique_chat_id_echo").SetUnique(true),
 	})
 	if err != nil {
-		log.Printf("Failed to create index on echos: %v", err)
+		log.Printf("Failed to create unique index on echos: %v", err)
 	}
 }
 
