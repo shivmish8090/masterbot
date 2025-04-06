@@ -14,7 +14,7 @@ func init() {
 	AddHelp("✍️ Edit Mode", "editmode", `<b>Command:</b>
 <blockquote><b>/editmode</b> – Show current settings  
 <b>/editmode --set-mode=&lt;off|user|admin&gt;</b>  
-<b>/editmode --setduration=&lt;0-10&gt;</code></b></blockquote>
+<b>/editmode --setduration=&lt;0-10&gt;</b></blockquote>
 
 <b>Description:</b>  
 Controls how the bot deletes <b>edited messages</b>.
@@ -30,8 +30,8 @@ Controls how the bot deletes <b>edited messages</b>.
 • <b>&gt;10</b> – Disables deletion
 
 <b>Example:</b>  
-<code>/editmode --set-mode=user</code>  
-<code>/editmode --setduration=5</code>`, nil)
+<blockquote><code>/editmode --set-mode=user</code>  
+<code>/editmode --setduration=5</code></blockquote>`, nil)
 }
 
 func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
