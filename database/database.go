@@ -120,45 +120,45 @@ func GetServedUsers() ([]int64, error) {
 }
 
 func AddServedUser(userID int64) error {
-        key := fmt.Sprintf("users:%d", userID)
-        if _, ok := cache.Load(key); !ok {
-                exists, err := IsServedUser(userID)
-                if err != nil || exists {
-                        return err
-                }
-        }
+	key := fmt.Sprintf("users:%d", userID)
+	if _, ok := cache.Load(key); !ok {
+		exists, err := IsServedUser(userID)
+		if err != nil || exists {
+			return err
+		}
+	}
 
-        go func() {
-                ctx, cancel := context.WithTimeout(context.Background(), timeout)
-                defer cancel()
+	go func() {
+		ctx, cancel := context.WithTimeout(context.Background(), timeout)
+		defer cancel()
 
-                _, err := userDB.InsertOne(ctx, bson.M{"user_id": userID})
-                if err == nil {
-                        cache.Store(key, true)
-                }
-        }()
-        return nil
+		_, err := userDB.InsertOne(ctx, bson.M{"user_id": userID})
+		if err == nil {
+			cache.Store(key, true)
+		}
+	}()
+	return nil
 }
 
 func DeleteServedUser(userID int64) error {
-        key := fmt.Sprintf("users:%d", userID)
-        if _, ok := cache.Load(key); !ok {
-                exists, err := IsServedUser(userID)
-                if err != nil || !exists {
-                        return err
-                }
-        }
+	key := fmt.Sprintf("users:%d", userID)
+	if _, ok := cache.Load(key); !ok {
+		exists, err := IsServedUser(userID)
+		if err != nil || !exists {
+			return err
+		}
+	}
 
-        go func() {
-                ctx, cancel := context.WithTimeout(context.Background(), timeout)
-                defer cancel()
+	go func() {
+		ctx, cancel := context.WithTimeout(context.Background(), timeout)
+		defer cancel()
 
-                _, err := userDB.DeleteOne(ctx, bson.M{"user_id": userID})
-                if err == nil {
-                        cache.Delete(key)
-                }
-        }()
-        return nil
+		_, err := userDB.DeleteOne(ctx, bson.M{"user_id": userID})
+		if err == nil {
+			cache.Delete(key)
+		}
+	}()
+	return nil
 }
 
 func IsServedChat(chatID int64) (bool, error) {
@@ -208,47 +208,46 @@ func GetServedChats() ([]int64, error) {
 }
 
 func AddServedChat(chatID int64) error {
-        key := fmt.Sprintf("chats:%d", chatID)
-        if _, ok := cache.Load(key); !ok {
-                exists, err := IsServedChat(chatID)
-                if err != nil || exists {
-                        return err
-                }
-        }
+	key := fmt.Sprintf("chats:%d", chatID)
+	if _, ok := cache.Load(key); !ok {
+		exists, err := IsServedChat(chatID)
+		if err != nil || exists {
+			return err
+		}
+	}
 
-        go func() {
-                ctx, cancel := context.WithTimeout(context.Background(), timeout)
-                defer cancel()
+	go func() {
+		ctx, cancel := context.WithTimeout(context.Background(), timeout)
+		defer cancel()
 
-                _, err := chatDB.InsertOne(ctx, bson.M{"chat_id": chatID})
-                if err == nil {
-                        cache.Store(key, true)
-                }
-        }()
-        return nil
+		_, err := chatDB.InsertOne(ctx, bson.M{"chat_id": chatID})
+		if err == nil {
+			cache.Store(key, true)
+		}
+	}()
+	return nil
 }
 
 func DeleteServedChat(chatID int64) error {
-        key := fmt.Sprintf("chats:%d", chatID)
-        if _, ok := cache.Load(key); !ok {
-                exists, err := IsServedChat(chatID)
-                if err != nil || !exists {
-                        return err
-                }
-        }
+	key := fmt.Sprintf("chats:%d", chatID)
+	if _, ok := cache.Load(key); !ok {
+		exists, err := IsServedChat(chatID)
+		if err != nil || !exists {
+			return err
+		}
+	}
 
-        go func() {
-                ctx, cancel := context.WithTimeout(context.Background(), timeout)
-                defer cancel()
+	go func() {
+		ctx, cancel := context.WithTimeout(context.Background(), timeout)
+		defer cancel()
 
-                _, err := chatDB.DeleteOne(ctx, bson.M{"chat_id": chatID})
-                if err == nil {
-                        cache.Delete(key)
-                }
-        }()
-        return nil
+		_, err := chatDB.DeleteOne(ctx, bson.M{"chat_id": chatID})
+		if err == nil {
+			cache.Delete(key)
+		}
+	}()
+	return nil
 }
-
 
 // SetEditMode sets the edit mode for a chat ("ADMIN", "USER", "OFF").
 func SetEditMode(chatID int64, mode string) (bool, error) {
