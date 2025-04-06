@@ -26,12 +26,12 @@ Sends back the provided text. Also allows setting how the bot handles long messa
 • <b>/echo &lt;text&gt;</b> (reply) – Tags replied user and echoes text.
 
 <b>Mode Settings:</b>
-• <b>--set-mode=off</b> – No action on long messages.  
-• <b>--set-mode=manual</b> – Deletes, warns user.  
-• <b>--set-mode=automatic</b> – Deletes, sends Telegraph link.
+• <b>/echo --set-mode=off</b> – No action on long messages.  
+• <b>/echo --set-mode=manual</b> – Deletes, warns user.  
+• <b>/echo --set-mode=automatic</b> – Deletes, sends Telegraph link.
 
 <b>Custom Limit:</b>  
-• <b>--set-limit=&lt;number&gt;</b> – Set character limit (default: 800).`, nil)
+• <b>/echo --set-limit=&lt;number&gt;</b> – Set character limit (default: 800).`, nil)
 }
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
