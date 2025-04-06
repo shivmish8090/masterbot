@@ -43,13 +43,16 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		)
 		return nil
 	}
-
-	if len(ctx.Args()) < 2 {
+args := ctx.Args()
+	if len(args) < 2 {
 		ctx.EffectiveMessage.Reply(b, "Usage: /echo <long message>", nil)
 		return nil
 	}
 	ctx.EffectiveMessage.Delete(b, nil)
-
+ keys := []string{"set-mode", "set-limit"}
+ res := utils.ParseArgs(keys, true, args...)
+ctx.EffectiveMessage.Reply(b, fmt.Sprint(res), nil)
+		return nil
 	if len(ctx.EffectiveMessage.GetText()) < 800 {
 		b.SendMessage(
 			ctx.EffectiveChat.Id,
