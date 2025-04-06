@@ -54,7 +54,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	res := utils.ParseFlags(keys, true, args...)
 	mssg := fmt.Sprintf("set-mode: %s\nset-limit: %s", res["set-mode"], res["set-limit"])
 	_, err := b.SendMessage(
-			ctx.EffectiveChat.Id, mssg, nil)
+		ctx.EffectiveChat.Id, mssg, nil)
 	return err
 
 	if len(ctx.EffectiveMessage.GetText()) < 800 {
