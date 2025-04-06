@@ -24,16 +24,16 @@ func init() {
 Sends back the provided text. Also allows setting how the bot handles long messages.
 
 <b>Echo Text:</b>
-• <code>/echo &lt;text&gt;</code> – Sends message or uploads to Telegraph if too long.  
-• <code>/echo &lt;text&gt;</code> (reply) – Tags replied user and echoes text.
+• <b>/echo &lt;text&gt;</b> – Sends message or uploads to Telegraph if too long.  
+• <b>/echo &lt;text&gt;</b> (reply) – Tags replied user and echoes text.
 
 <b>Mode Settings:</b>
-• <code>--set-mode=off</code> – No action on long messages.  
-• <code>--set-mode=manual</code> – Deletes, warns user.  
-• <code>--set-mode=automatic</code> – Deletes, sends Telegraph link.
+• <b>--set-mode=off</b> – No action on long messages.  
+• <b>--set-mode=manual</b> – Deletes, warns user.  
+• <b>--set-mode=automatic</b> – Deletes, sends Telegraph link.
 
-<b>Limit:</b>  
-• <code>--set-limit=&lt;number&gt;</code> – Set character limit (default: 800).`, nil)
+<b>Custom Limit:</b>  
+• <b>--set-limit=&lt;number&gt;</b> – Set character limit (default: 800).`, nil)
 }
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
