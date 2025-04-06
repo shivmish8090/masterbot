@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-func ParseValues(keys []string, strict bool, args ...string) map[string]string {
+func ParseFlags(keys []string, strict bool, args ...string) map[string]string {
 	values := make(map[string]string)
 	keySet := make(map[string]struct{})
 	unmatchedKeys := []string{}
