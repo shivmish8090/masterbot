@@ -20,6 +20,29 @@ const (
 )
 
 func SetEchoSettings(data *EchoSettings) error {
+	key := fmt.Sprintf("echos:%d", data.ChatID)
+
+	if val, ok := cache.Load(key); ok {
+		existing := val.(*EchoSettings)
+		if data.Mode == "" {
+			data.Mode = existing.Mode
+		}
+		if data.Limit == 0 {
+			data.Limit = existing.Limit
+		}
+		if data.Mode == existing.Mode && data.Limit == existing.Limit {
+			return nil
+		}
+	} else {
+		existing, _ := GetEchoSettings(data.ChatID)
+		if data.Mode == "" {
+			data.Mode = existing.Mode
+		}
+		if data.Limit == 0 {
+			data.Limit = existing.Limit
+		}
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
@@ -35,8 +58,11 @@ func SetEchoSettings(data *EchoSettings) error {
 		return err
 	}
 
-	key := fmt.Sprintf("echos:%d", data.ChatID)
-	cache.Store(key, data)
+	go cache.Store(key, &EchoSettings{
+		ChatID: data.ChatID,
+		Mode:   data.Mode,
+		Limit:  data.Limit,
+	})
 
 	return nil
 }
