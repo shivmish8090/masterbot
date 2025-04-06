@@ -18,6 +18,7 @@ var (
 	userDB     *mongo.Collection
 	chatDB     *mongo.Collection
 	editModeDB *mongo.Collection
+        echoDB *mongo.Collection
 	cache      sync.Map
 	timeout    = 10 * time.Second
 )
@@ -40,6 +41,8 @@ func init() {
 	userDB = db.Collection("userstats")
 	chatDB = db.Collection("chats")
 	editModeDB = db.Collection("editmodes")
+	echoDB = db.Collection("echos")
+
 
 	_, err = userDB.Indexes().CreateOne(ctx, mongo.IndexModel{Keys: bson.M{"user_id": 1}})
 	if err != nil {
@@ -54,6 +57,12 @@ func init() {
 	if err != nil {
 		log.Printf("Failed to create index on editmodes: %v", err)
 	}
+	_, err = echoDB.Indexes().CreateOne(ctx, mongo.IndexModel{
+    Keys: bson.M{"chat_id": 1},
+})
+if err != nil {
+    log.Printf("Failed to create index on echos: %v", err)
+}
 }
 
 func Disconnect() {
