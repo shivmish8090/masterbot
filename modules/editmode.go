@@ -11,18 +11,18 @@ import (
 
 func init() {
 	Register(handlers.NewCommand("editmode", EditMode))
-	AddHelp("✍️ Edit Mode", "editmode", `<b>Command:</b>  
-<code>/editmode</code> – Show current settings  
-<code>/editmode --set-mode=&lt;off|user|admin&gt;</code>  
-<code>/editmode --setduration=&lt;0-10&gt;</code>
+	AddHelp("✍️ Edit Mode", "editmode", `<b>Command:</b>
+<blockquote><b>/editmode</b> – Show current settings  
+<b>/editmode --set-mode=&lt;off|user|admin&gt;</b>  
+<b>/editmode --setduration=&lt;0-10&gt;</code></b></blockquote>
 
 <b>Description:</b>  
 Controls how the bot deletes <b>edited messages</b>.
 
 <b>Modes:</b>  
-• <b>off</b> – No deletion  
-• <b>user</b> – Delete edits from users (default)  
-• <b>admin</b> – Delete edits from users & admins <i>(owner only)</i>
+• <b>/editmode</b> <code>off</code> – No deletion  
+• <b>/editmode</b> <code>user</code> – Delete edits from users (default)  
+• <b>/editmode</b> <code>admin</code> – Delete edits from users & admins <i>(owner only)</i>
 
 <b>Duration:</b>  
 • <b>0</b> – Deletes immediately <i>(default)</i> & warns users  
