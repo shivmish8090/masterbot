@@ -31,7 +31,8 @@ Controls how the bot deletes <b>edited messages</b>.
 
 <b>Example:</b>  
 <code>/editmode --set-mode=user</code>  
-<code>/editmode --setduration=5</code>`, nil)}
+<code>/editmode --setduration=5</code>`, nil)
+}
 
 func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 	args := ctx.Args()
