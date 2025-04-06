@@ -9,60 +9,86 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
-// SetEditMode sets the edit mode for a chat ("ADMIN", "USER", "OFF").
-func SetEditMode(chatID int64, mode string) (bool, error) {
-	key := fmt.Sprintf("editmode:%d", chatID)
+var (
+	editmodeDuration = 0
+	editmodeMode     = "USER"
+)
 
-	if cachedMode, ok := cache.Load(key); ok {
-		if strMode, valid := cachedMode.(string); valid && strMode == mode {
-			return true, nil
+//  mode for a chat ("ADMIN", "USER", "OFF").
+type EditModeSettings struct {
+	ChatID   int64  `bson:"chat_id"`
+	Mode     string `bson:"mode"`
+	Duration int    `bson:"duration"`
+)
+
+func SetEditMode(setting EditModeSettings) (bool, error) {
+	key := fmt.Sprintf("editmode:%d", setting.ChatID)
+
+	if cachedVal, ok := cache.Load(key); ok {
+		if cachedSetting, valid := cachedVal.(EditModeSettings); valid {
+			if cachedSetting.Mode == setting.Mode && cachedSetting.Duration == setting.Duration {
+				return true, nil
+			}
 		}
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
+
+	update := bson.M{
+		"$set": bson.M{
+			"mode":     setting.Mode,
+			"duration": setting.Duration,
+		},
+	}
 
 	result, err := editModeDB.UpdateOne(
 		ctx,
-		bson.M{"chat_id": chatID},
-		bson.M{"$set": bson.M{"mode": mode}},
+		bson.M{"chat_id": setting.ChatID},
+		update,
 		options.UpdateOne().SetUpsert(true),
 	)
 	if err != nil {
-		log.Printf("SetEditMode error for chatID %d: %v", chatID, err)
+		log.Printf("SetEditMode error for chatID %d: %v", setting.ChatID, err)
 		return false, err
 	}
 
-	if result.ModifiedCount > 0 || result.UpsertedCount > 0 {
-		cache.Store(key, mode)
-		return true, nil
-	}
-
-	cache.Store(key, mode)
-	return false, nil
+	cache.Store(key, setting)
+	return result.ModifiedCount > 0 || result.UpsertedCount > 0, nil
 }
 
-func GetEditMode(chatID int64) string {
+func GetEditMode(chatID int64) EditModeSettings {
 	key := fmt.Sprintf("editmode:%d", chatID)
 
-	if value, ok := cache.Load(key); ok {
-		if mode, valid := value.(string); valid {
-			return mode
+	if cachedVal, ok := cache.Load(key); ok {
+		if settings, valid := cachedVal.(EditModeSettings); valid {
+			return settings
 		}
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	var result struct {
-		Mode string `bson:"mode"`
+	var settings EditModeSettings
+	err := editModeDB.FindOne(ctx, bson.M{"chat_id": chatID}).Decode(&settings)
+	if err != nil || settings.Mode == "" {
+		settings = EditModeSettings{
+			ChatID:   chatID,
+			Mode:     editmodeMode,
+			Duration: editmodeDuration,
+		}
 	}
 
-	err := editModeDB.FindOne(ctx, bson.M{"chat_id": chatID}).Decode(&result)
-	if err != nil || result.Mode == "" {
-		return "USER"
-	}
+	cache.Store(key, settings)
+	return settings
+}
 
-	cache.Store(key, result.Mode)
-	return result.Mode
+func ResetEditMode(chatID int64) error {
+	setting := EditModeSettings{
+		ChatID:   chatID,
+		Mode:     editmodeMode,
+		Duration: editmodeDuration,
+	}
+	_, err := SetEditMode(setting)
+	return err
 }
