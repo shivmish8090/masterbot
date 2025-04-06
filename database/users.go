@@ -86,22 +86,25 @@ func DeleteServedUser(userID int64) error {
 	if err != nil || !exists {
 		return err
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
-	defer cancel()
 
-	_, err = userDB.DeleteOne(ctx, bson.M{"user_id": userID})
-	if err == nil {
-		val, _ := cache.Load("users")
-		if val != nil {
-			users := val.([]int64)
-			for i, id := range users {
-				if id == userID {
-					users = append(users[:i], users[i+1:]...)
-					break
+	go func() {
+		ctx, cancel := context.WithTimeout(context.Background(), timeout)
+		defer cancel()
+
+		_, err := userDB.DeleteOne(ctx, bson.M{"user_id": userID})
+		if err == nil {
+			if val, ok := cache.Load("users"); ok {
+				users := val.([]int64)
+				for i, id := range users {
+					if id == userID {
+						users = append(users[:i], users[i+1:]...)
+						break
+					}
 				}
+				cache.Store("users", users)
 			}
-			cache.Store("users", users)
 		}
-	}
-	return err
+	}()
+
+	return nil
 }
