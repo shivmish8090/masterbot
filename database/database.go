@@ -52,7 +52,10 @@ func init() {
 	if err != nil {
 		log.Printf("Failed to create index on chats: %v", err)
 	}
-	_, err = editModeDB.Indexes().CreateOne(ctx, mongo.IndexModel{Keys: bson.M{"chat_id": 1}})
+	_, err = editModeDB.Indexes().CreateOne(ctx, mongo.IndexModel{
+	Keys:    bson.M{"chat_id": 1},
+	Options: options.Index().SetUnique(true),
+})
 	if err != nil {
 		log.Printf("Failed to create index on editmodes: %v", err)
 	}
