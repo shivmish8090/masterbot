@@ -270,16 +270,26 @@ func SetEditMode(chatID int64, mode string) (bool, error) {
 }
 
 func GetEditMode(chatID int64) string {
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
-	defer cancel()
+        key := fmt.Sprintf("editmode:%d", chatID)
 
-	var result struct {
-		Mode string `bson:"mode"`
-	}
+        if value, ok := cache.Load(key); ok {
+                if mode, valid := value.(string); valid {
+                        return mode
+                }
+        }
 
-	err := editModeDB.FindOne(ctx, bson.M{"chat_id": chatID}).Decode(&result)
-	if err != nil || result.Mode == "" {
-		return "USER"
-	}
-	return result.Mode
+        ctx, cancel := context.WithTimeout(context.Background(), timeout)
+        defer cancel()
+
+        var result struct {
+                Mode string `bson:"mode"`
+        }
+
+        err := editModeDB.FindOne(ctx, bson.M{"chat_id": chatID}).Decode(&result)
+        if err != nil || result.Mode == "" {
+                return "USER"
+        }
+
+        cache.Store(key, result.Mode)
+        return result.Mode
 }
