@@ -19,7 +19,7 @@ type EditModeSettings struct {
 	ChatID   int64  `bson:"chat_id"`
 	Mode     string `bson:"mode"`
 	Duration int    `bson:"duration"`
-)
+}
 
 func SetEditMode(setting EditModeSettings) (bool, error) {
 	key := fmt.Sprintf("editmode:%d", setting.ChatID)
