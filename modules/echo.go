@@ -14,25 +14,26 @@ import (
 func init() {
 	Register(handlers.NewCommand("echo", EcoHandler))
 	AddHelp("📝 Echo", "echo", `<b>Command:</b> 
-<code>/echo &lt;text&gt;</code>  
-<code>/echo --set-mode=&lt;off|manual|automatic&gt;</code>  
-<code>/echo --set-limit=&lt;number&gt;</code>
+<blockquote>/echo &lt;text&gt;
+/echo --set-mode=&lt;off|manual|automatic&gt;
+/echo --set-limit=&lt;number&gt;</blockquote>
 
 <b>Description:</b>
 Sends back the provided text. Also allows setting how the bot handles long messages.
 
 <b>Echo Text:</b>  
-• <b>/echo &lt;text&gt;</b> – If the message is too long, uploads it to Telegraph and sends the link.  
-• <b>/echo &lt;text&gt;</b> (with reply) – Same as above, but replies to the replied message with the Telegraph link.
+• <b>/echo</b> &lt;text&gt; – If the message is too long, uploads it to Telegraph and sends the link.  
+• <b>/echo</b> &lt;text&gt; (with reply) – Same as above, but replies to the replied message with the Telegraph link.
 
 <b>Mode Settings:</b>
-• <b>/echo --set-mode=off</b> – No action on long messages.  
-• <b>/echo --set-mode=manual</b> – Deletes, warns user.  
-• <b>/echo --set-mode=automatic</b> – Deletes, sends Telegraph link.
+• <b>/echo</b> <code>--set-mode=off</code> – No action on long messages.  
+• <b>/echo</b> <code>--set-mode=manual</code> – Deletes, warns user.  
+• <b>/echo</b> <code>--set-mode=automatic</code> – Deletes, sends Telegraph link.
 
 <b>Custom Limit:</b>  
-• <b>/echo --set-limit=&lt;number&gt;</b> – Set character limit (default: 800).`, nil)
+• <b>/echo</b> <code>--set-limit=&lt;number&gt;</code> – Set character limit (default: 800).`, nil)
 }
+
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if ctx.EffectiveChat.Type != "supergroup" {
