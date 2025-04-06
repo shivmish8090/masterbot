@@ -17,29 +17,23 @@ func init() {
 
 <b>Command:</b> 
 <code>/echo &lt;text&gt;</code>  
-<code>/echo &lt;off|manual|automatic&gt;</code>  
+<code>/echo --set-mode=&lt;off|manual|automatic&gt;</code>  
 <code>/echo --set-limit=&lt;number&gt;</code>
 
 <b>Description:</b>
 Sends back the provided text. Also allows setting how the bot handles long messages.
 
 <b>Echo Text:</b>
-• <b>/echo &lt;text&gt;</b> - Sends the text as a message or uploads to Telegraph if too long.  
-• <b>/echo &lt;text&gt; + Reply</b> - Tags the replied user and echoes the text.
+• <code>/echo &lt;text&gt;</code> – Sends message or uploads to Telegraph if too long.  
+• <code>/echo &lt;text&gt;</code> (reply) – Tags replied user and echoes text.
 
 <b>Mode Settings:</b>
-• <b>/echo off</b> - Disables long message handling (no deletion, no Telegraph).  
-• <b>/echo manual</b> - Deletes long messages, warns user, and explains usage.  
-• <b>/echo automatic</b> - Deletes long messages and automatically uploads to Telegraph.  
+• <code>--set-mode=off</code> – No action on long messages.  
+• <code>--set-mode=manual</code> – Deletes, warns user.  
+• <code>--set-mode=automatic</code> – Deletes, sends Telegraph link.
 
-<b>Limit Configuration:</b>
-• <b>/echo --set-limit=&lt;number&gt;</b> - Sets the character limit for long messages (default is 800).
-
-<b>Note:</b>
-• In <b>manual</b> and <b>automatic</b> modes, long messages are deleted.  
-• In <b>automatic</b>, a Telegraph link is sent.  
-• In <b>manual</b>, the user is warned.  
-• Helps keep chat clean and readable.`, nil)
+<b>Limit:</b>  
+• <code>--set-limit=&lt;number&gt;</code> – Set character limit (default: 800).`, nil)
 }
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
