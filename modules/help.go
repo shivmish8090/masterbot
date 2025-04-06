@@ -65,7 +65,6 @@ func helpModuleCB(b *gotgbot.Bot, ctx *ext.Context) error {
 			InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
 				{
 					{Text: "⬅️ Back", CallbackData: "help"},
-
 				},
 			},
 		},
