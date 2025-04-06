@@ -34,7 +34,6 @@ Sends back the provided text. Also allows setting how the bot handles long messa
 • <b>/echo</b> <code>--set-limit=&lt;number&gt;</code> – Set character limit (default: 800).`, nil)
 }
 
-
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if ctx.EffectiveChat.Type != "supergroup" {
 		ctx.EffectiveMessage.Reply(
