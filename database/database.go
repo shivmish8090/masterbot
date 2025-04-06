@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"log"
+	"sync"
 	"time"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
