@@ -19,7 +19,6 @@ var (
 	chatDB     *mongo.Collection
 	editModeDB *mongo.Collection
 	echoDB     *mongo.Collection
-	cache      sync.Map
 	timeout    = 10 * time.Second
 )
 
