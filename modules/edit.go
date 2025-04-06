@@ -20,7 +20,7 @@ var deleteWarningTracker = warningTracker{
 
 func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	message := ctx.EditedMessage
-	if message == nil {
+	if message == nil || ctx.EffectiveChat.Type == "private" {
 		return nil
 	}
 
