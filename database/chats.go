@@ -1,3 +1,5 @@
+package database 
+
 func IsServedChat(chatID int64) (bool, error) {
 	key := fmt.Sprintf("chats:%d", chatID)
 	if _, ok := cache.Load(key); ok {
