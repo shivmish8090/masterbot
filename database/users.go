@@ -1,4 +1,4 @@
-package modules 
+package database 
 
 func IsServedUser(userID int64) (bool, error) {
 	key := fmt.Sprintf("users:%d", userID)
