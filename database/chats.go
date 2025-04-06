@@ -1,4 +1,11 @@
-package database 
+package database
+
+import (
+	"context"
+	"fmt"
+
+	"go.mongodb.org/mongo-driver/v2/bson"
+)
 
 func IsServedChat(chatID int64) (bool, error) {
 	key := fmt.Sprintf("chats:%d", chatID)
