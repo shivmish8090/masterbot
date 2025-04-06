@@ -21,9 +21,9 @@ func init() {
 <b>Description:</b>
 Sends back the provided text. Also allows setting how the bot handles long messages.
 
-<b>Echo Text:</b>
-• <b>/echo &lt;text&gt;</b> – Sends message or uploads to Telegraph if too long.  
-• <b>/echo &lt;text&gt;</b> (reply) – Tags replied user and echoes text.
+<b>Echo Text:</b>  
+• <b>/echo &lt;text&gt;</b> – If the message is too long, uploads it to Telegraph and sends the link.  
+• <b>/echo &lt;text&gt;</b> (with reply) – Same as above, but replies to the replied message with the Telegraph link.
 
 <b>Mode Settings:</b>
 • <b>/echo --set-mode=off</b> – No action on long messages.  
