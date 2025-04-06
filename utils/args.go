@@ -4,7 +4,7 @@ import (
 	"strings"
 )
 
-func ParseArgs(keys []string, args ...string) map[string]string {
+func ParseValues(keys []string, strict bool, args ...string) map[string]string {
 	values := make(map[string]string)
 	keySet := make(map[string]struct{})
 	unmatchedKeys := []string{}
@@ -12,6 +12,7 @@ func ParseArgs(keys []string, args ...string) map[string]string {
 	for _, k := range keys {
 		keySet[k] = struct{}{}
 		unmatchedKeys = append(unmatchedKeys, k)
+		values[k] = "" // Initialize all keys with empty string
 	}
 
 	usedKeys := make(map[string]bool)
@@ -50,6 +51,13 @@ func ParseArgs(keys []string, args ...string) map[string]string {
 			continue
 		}
 
+		// Skip positional values if strict mode is on
+		if strict {
+			i++
+			continue
+		}
+
+		// Fallback to assign to next unused key
 		for len(unmatchedKeys) > 0 {
 			k := unmatchedKeys[0]
 			if usedKeys[k] {
