@@ -14,7 +14,7 @@ var (
 	editmodeMode     = "USER"
 )
 
-//  mode for a chat ("ADMIN", "USER", "OFF").
+// mode for a chat ("ADMIN", "USER", "OFF").
 type EditModeSettings struct {
 	ChatID   int64  `bson:"chat_id"`
 	Mode     string `bson:"mode"`
