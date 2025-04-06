@@ -1,5 +1,4 @@
-#FROM golang:1.24-bullseye AS builder
-FROM golang:1.24-bullseye
+FROM golang:1.24-bullseye AS builder
 WORKDIR /app
 
 COPY go.* ./
@@ -7,19 +6,19 @@ RUN go mod tidy && go mod download
 
 COPY . .
 
+RUN apt-get update && apt-get install -y upx-ucl
+
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
-    go build -ldflags="-s -w" -o app .
+    go build -ldflags="-s -w" -o app . && \
+    upx --best --lzma -o app-upx app
 
-#FROM debian:bullseye-slim
+FROM debian:bullseye-slim
+WORKDIR /app
 
-#WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
-#RUN apt-get update && apt-get install -y --no-install-recommends \
-#    ca-certificates && \
-#    rm -rf /var/lib/apt/lists/*
+COPY --from=builder /app/app-upx .
 
-#COPY --from=builder /app/app .
-
-#ENTRYPOINT ["/app/app"]
-
-CMD ["/app"]
+ENTRYPOINT ["/app/app-upx"]
