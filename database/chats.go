@@ -2,11 +2,9 @@ package database
 
 import (
 	"context"
-	"fmt"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
-
 
 func GetServedChats() ([]int64, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
