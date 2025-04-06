@@ -1,4 +1,11 @@
-package database 
+package database
+
+import (
+	"context"
+	"fmt"
+
+	"go.mongodb.org/mongo-driver/v2/bson"
+)
 
 func IsServedUser(userID int64) (bool, error) {
 	key := fmt.Sprintf("users:%d", userID)
@@ -88,4 +95,3 @@ func DeleteServedUser(userID int64) error {
 	}()
 	return nil
 }
-
