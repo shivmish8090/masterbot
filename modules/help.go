@@ -22,7 +22,6 @@ func helpCB(b *gotgbot.Bot, ctx *ext.Context) error {
 			},
 			{
 				{Text: "⬅️ Back", CallbackData: "start_callback"},
-				{Text: "❌ Close", CallbackData: "close"},
 			},
 		},
 	}
@@ -66,7 +65,7 @@ func helpModuleCB(b *gotgbot.Bot, ctx *ext.Context) error {
 			InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
 				{
 					{Text: "⬅️ Back", CallbackData: "help"},
-					{Text: "❌ Close", CallbackData: "close"},
+
 				},
 			},
 		},
