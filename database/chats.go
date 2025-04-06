@@ -7,26 +7,6 @@ import (
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
-func IsServedChat(chatID int64) (bool, error) {
-	key := fmt.Sprintf("chats:%d", chatID)
-	if _, ok := cache.Load(key); ok {
-		return true, nil
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
-	defer cancel()
-
-	count, err := chatDB.CountDocuments(ctx, bson.M{"chat_id": chatID})
-	if err != nil {
-		return false, err
-	}
-
-	if count > 0 {
-		cache.Store(key, true)
-	}
-
-	return count > 0, nil
-}
 
 func GetServedChats() ([]int64, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
@@ -53,13 +33,40 @@ func GetServedChats() ([]int64, error) {
 	return chatIDs, nil
 }
 
-func AddServedChat(chatID int64) error {
-	key := fmt.Sprintf("chats:%d", chatID)
-	if _, ok := cache.Load(key); !ok {
-		exists, err := IsServedChat(chatID)
-		if err != nil || exists {
-			return err
+func IsServedChat(chatID int64) (bool, error) {
+	if val, ok := cache.Load("chats"); ok {
+		chats := val.([]int64)
+		for _, id := range chats {
+			if id == chatID {
+				return true, nil
+			}
 		}
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	count, err := chatDB.CountDocuments(ctx, bson.M{"chat_id": chatID})
+	if err != nil {
+		return false, err
+	}
+
+	if count > 0 {
+		if val, ok := cache.Load("chats"); ok {
+			chats := val.([]int64)
+			cache.Store("chats", append(chats, chatID))
+		} else {
+			cache.Store("chats", []int64{chatID})
+		}
+	}
+
+	return count > 0, nil
+}
+
+func AddServedChat(chatID int64) error {
+	exists, err := IsServedChat(chatID)
+	if err != nil || exists {
+		return err
 	}
 
 	go func() {
@@ -68,19 +75,22 @@ func AddServedChat(chatID int64) error {
 
 		_, err := chatDB.InsertOne(ctx, bson.M{"chat_id": chatID})
 		if err == nil {
-			cache.Store(key, true)
+			if val, ok := cache.Load("chats"); ok {
+				chats := val.([]int64)
+				cache.Store("chats", append(chats, chatID))
+			} else {
+				cache.Store("chats", []int64{chatID})
+			}
 		}
 	}()
+
 	return nil
 }
 
 func DeleteServedChat(chatID int64) error {
-	key := fmt.Sprintf("chats:%d", chatID)
-	if _, ok := cache.Load(key); !ok {
-		exists, err := IsServedChat(chatID)
-		if err != nil || !exists {
-			return err
-		}
+	exists, err := IsServedChat(chatID)
+	if err != nil || !exists {
+		return err
 	}
 
 	go func() {
@@ -89,8 +99,18 @@ func DeleteServedChat(chatID int64) error {
 
 		_, err := chatDB.DeleteOne(ctx, bson.M{"chat_id": chatID})
 		if err == nil {
-			cache.Delete(key)
+			if val, ok := cache.Load("chats"); ok {
+				chats := val.([]int64)
+				for i, id := range chats {
+					if id == chatID {
+						chats = append(chats[:i], chats[i+1:]...)
+						break
+					}
+				}
+				cache.Store("chats", chats)
+			}
 		}
 	}()
+
 	return nil
 }
