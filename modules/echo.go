@@ -50,7 +50,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 	ctx.EffectiveMessage.Delete(b, nil)
 	keys := []string{"set-mode", "set-limit"}
-	res := utils.ParseArgs(keys, true, args...)
+	res := utils.ParseFlags(keys, true, args...)
 	ctx.EffectiveMessage.Reply(b, fmt.Sprint(res), nil)
 	return nil
 	if len(ctx.EffectiveMessage.GetText()) < 800 {
