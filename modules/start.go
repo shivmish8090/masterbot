@@ -67,7 +67,7 @@ I'm <b><a href="tg://user?id=%d">%s</a></b>, your security assistant, ensuring a
 				{
 					{
 						Text: "🔄 Update Channel",
-						Url:  "https://t.me/Dns_Official_Channel",
+						Url:  "https://t.me/SanatanVibe",
 					},
 					{
 						Text: "💬 Update Group",
