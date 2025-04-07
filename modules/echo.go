@@ -67,14 +67,20 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 		if res["set-limit"] != "" {
 			limit, err := strconv.Atoi(res["set-limit"])
-			if err != nil {
-				b.SendMessage(
-					ctx.EffectiveChat.Id,
-					fmt.Sprintf("Invalid value for --set-limit\nError: %v", err),
-					nil,
-				)
-				return err
-			}
+if err != nil {
+        if numErr, ok := err.(*strconv.NumError); ok && numErr.Err == strconv.ErrSyntax {
+                err = fmt.Errorf("Oops! '%s' isn't a valid number. Please enter a proper integer like 10 or 25. 🚫🔢", res["set-limit"])
+        } else {
+                err = fmt.Errorf("Oops! Something went wrong while setting the limit. 😕\nError: %v", err)
+        }
+
+        b.SendMessage(
+                ctx.EffectiveChat.Id,
+                err.Error(),
+                nil,
+        )
+        return err
+}
 			settings.Limit = limit
 			r += "\nNew Limit = " + strconv.Itoa(settings.Limit)
 		}
