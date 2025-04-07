@@ -1,7 +1,5 @@
 package utils
 
-
-
 type Buttons struct {
 	RowWidth int
 	rows     [][]telegram.InlineKeyboardButton
