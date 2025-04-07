@@ -15,8 +15,8 @@ type EchoSettings struct {
 }
 
 const (
-	defaultLimit = 800
-	defaultMode  = "MANUAL"
+	defaultEchoLimit = 800
+	defaultEchoMode  = "MANUAL"
 )
 
 func SetEchoSettings(data *EchoSettings) error {
@@ -81,16 +81,16 @@ func GetEchoSettings(chatID int64) (*EchoSettings, error) {
 	if err != nil {
 		settings = EchoSettings{
 			ChatID: chatID,
-			Mode:   defaultMode,
-			Limit:  defaultLimit,
+			Mode:   defaultEchoMode,
+			Limit:  defaultEchoLimit,
 		}
 	}
 
 	if settings.Mode == "" {
-		settings.Mode = defaultMode
+		settings.Mode = defaultEchoMode
 	}
 	if settings.Limit == 0 {
-		settings.Limit = defaultLimit
+		settings.Limit = defaultEchoLimit
 	}
 
 	cache.Store(key, &settings)
