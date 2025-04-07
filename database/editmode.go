@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	editmodeDuration = 0
-	editmodeMode     = "USER"
+	defaultEditModeDuration = 0
+	defaultEditMode     = "USER"
 )
 
 // mode for a chat ("ADMIN", "USER", "OFF").
@@ -74,8 +74,8 @@ func GetEditMode(chatID int64) EditModeSettings {
 	if err != nil || settings.Mode == "" {
 		settings = EditModeSettings{
 			ChatID:   chatID,
-			Mode:     editmodeMode,
-			Duration: editmodeDuration,
+			Mode:     defaultEditMode,
+			Duration: defaultEditModeDuration,
 		}
 	}
 
@@ -86,8 +86,8 @@ func GetEditMode(chatID int64) EditModeSettings {
 func ResetEditMode(chatID int64) error {
 	setting := EditModeSettings{
 		ChatID:   chatID,
-		Mode:     editmodeMode,
-		Duration: editmodeDuration,
+		Mode:     defaultEditMode,
+		Duration: defaultEditModeDuration,
 	}
 	_, err := SetEditMode(setting)
 	return err
