@@ -38,9 +38,9 @@ Sends back the provided text. Also allows setting how the bot handles long messa
 }
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
-    ChatId := ctx.EffectiveChat.Id
-    User := ctx.EffectiveUser
-    Message := ctx.EffectiveMessage
+	ChatId := ctx.EffectiveChat.Id
+	User := ctx.EffectiveUser
+	Message := ctx.EffectiveMessage
 	if ctx.EffectiveChat.Type != "supergroup" {
 		Message.Reply(
 			b,
@@ -100,16 +100,16 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		b.SendMessage(ChatId, r, nil)
 		return nil
 	}
-	
-settings, err := database.GetEchoSettings(ChatId)
-if err != nil {
-    _, err = b.SendMessage(
-        ChatId,
-        fmt.Sprintf("⚠️ Something went wrong while processing the limit.\nError: %v", err),
-        nil,
-    )
-    return err
-}
+
+	settings, err := database.GetEchoSettings(ChatId)
+	if err != nil {
+		_, err = b.SendMessage(
+			ChatId,
+			fmt.Sprintf("⚠️ Something went wrong while processing the limit.\nError: %v", err),
+			nil,
+		)
+		return err
+	}
 	limit := settings.Limit
 	if len(Message.GetText()) < limit {
 		b.SendMessage(
