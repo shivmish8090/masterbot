@@ -88,7 +88,11 @@ func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
-	fmt.Println("deleteLongMessage triggered")
+m := ctx.EffectiveMessage
+
+if m.GetText() == "" || len(m.GetText()) < 800 {
+return nil
+}
 
 	done, err := ctx.EffectiveMessage.Delete(b, nil)
 	if err != nil {
