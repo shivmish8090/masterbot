@@ -1,11 +1,17 @@
-package utils
+package helper
 
+import (
+	"github.com/PaulSonOfLars/gotgbot/v2/telegram"
+)
+
+// Buttons is a smart inline button builder
 type Buttons struct {
 	RowWidth int
 	rows     [][]telegram.InlineKeyboardButton
 	tmpRow   []telegram.InlineKeyboardButton
 }
 
+// Inline creates a callback button
 func (b *Buttons) Inline(text, data string) telegram.InlineKeyboardButton {
 	return telegram.InlineKeyboardButton{
 		Text:         text,
@@ -13,6 +19,7 @@ func (b *Buttons) Inline(text, data string) telegram.InlineKeyboardButton {
 	}
 }
 
+// Url creates a url button
 func (b *Buttons) Url(text, url string) telegram.InlineKeyboardButton {
 	return telegram.InlineKeyboardButton{
 		Text: text,
@@ -20,7 +27,7 @@ func (b *Buttons) Url(text, url string) telegram.InlineKeyboardButton {
 	}
 }
 
-// Add auto arrange buttons with RowWidth logic
+// Add adds buttons automatically using RowWidth rule
 func (b *Buttons) Add(buttons ...telegram.InlineKeyboardButton) {
 	for _, btn := range buttons {
 		b.tmpRow = append(b.tmpRow, btn)
@@ -31,7 +38,7 @@ func (b *Buttons) Add(buttons ...telegram.InlineKeyboardButton) {
 	}
 }
 
-// Row forcefully adds a new row (no RowWidth limit here)
+// Row forces a new row with given buttons (ignores RowWidth)
 func (b *Buttons) Row(buttons ...telegram.InlineKeyboardButton) {
 	if len(b.tmpRow) > 0 {
 		b.rows = append(b.rows, b.tmpRow)
@@ -40,7 +47,7 @@ func (b *Buttons) Row(buttons ...telegram.InlineKeyboardButton) {
 	b.rows = append(b.rows, buttons)
 }
 
-// Build final keyboard
+// Build builds InlineKeyboardMarkup final structure
 func (b *Buttons) Build() telegram.InlineKeyboardMarkup {
 	if len(b.tmpRow) > 0 {
 		b.rows = append(b.rows, b.tmpRow)
