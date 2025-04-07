@@ -92,7 +92,7 @@ func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 
 func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	m := ctx.EffectiveMessage
-	settings, err := database.GetEchoSettings(ChatId)
+	settings, err := database.GetEchoSettings(ctx.EffectiveChat.Id)
 	if err != nil {
 		_, err = b.SendMessage(
 			config.LoggerId,
