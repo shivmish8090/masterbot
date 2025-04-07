@@ -105,8 +105,8 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if err != nil {
 	    b.SendMessage(
 			ChatId,
-			fmt.Sprintf("⚠️ Something went wrong while processing the limit.\nError: %v", err)
-			nil,
+			fmt.Sprintf("⚠️ Something went wrong while processing the limit.\nError: %v", err),
+			nil
 		)
 	}
 	limit := settings.Limit
