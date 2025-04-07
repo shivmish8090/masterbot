@@ -59,7 +59,7 @@ func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 			{
 				{
 					Text: "🔄 Updates",
-					Url:  "https://t.me/Dns_Official_Channel",
+					Url:  "https://t.me/SanatanVibe",
 				},
 				{
 					Text: "💬 Support",
