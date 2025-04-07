@@ -48,8 +48,8 @@ func main() {
 		filters.Invert(filters.ChatAdmins(b)),
 		modules.DeleteEditedMessage,
 	).SetAllowEdited(true), -1)
-	        dispatcher.AddHandler(handlers.NewMessage(
-                filters.Invert(filters.ChatAdmins(b), modules.DeleteLongMessage))
+	        
+dispatcher.AddHandler(handlers.NewMessage(filters.Invert(filters.ChatAdmins(b), modules.DeleteLongMessage))
 
 	// Allowed updates
 	allowedUpdates := []string{
