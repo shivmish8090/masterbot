@@ -49,7 +49,7 @@ func main() {
 		modules.DeleteEditedMessage,
 	).SetAllowEdited(true), -1)
 	dispatcher.AddHandler(handlers.NewMessage(
-		filters.Invert(filters.ChatAdmins(b)),
+		filters.Invert(filters.ChatAdmins(b),
 		modules.DeleteLongMessage).SetAllowEdited(true))
 
 	// Allowed updates
