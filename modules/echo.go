@@ -55,10 +55,10 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	keys := []string{"set-mode", "set-limit"}
 	_, res := utils.ParseFlags(keys, ctx.EffectiveMessage.Text)
-
+	var settings *database.EchoSettings = nil
 	if res["set-mode"] != "" || res["set-limit"] != "" {
 		r := "Your settings were successfully updated:"
-		settings := &database.EchoSettings{ChatID: ctx.EffectiveChat.Id}
+		settings = &database.EchoSettings{ChatID: ctx.EffectiveChat.Id}
 
 		if res["set-mode"] != "" {
 			settings.Mode = res["set-mode"]
@@ -99,7 +99,11 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		b.SendMessage(ctx.EffectiveChat.Id, r, nil)
 		return nil
 	}
-
+	if settings == nil {
+	    settings, err = database.GetEchoSettings()
+	    
+	}
+	}
 	if len(ctx.EffectiveMessage.GetText()) < 800 {
 		b.SendMessage(
 			ctx.EffectiveChat.Id,
