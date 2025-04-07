@@ -66,26 +66,26 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		}
 
 		if res["set-limit"] != "" {
-        limit, err := strconv.Atoi(res["set-limit"])
-        if err != nil {
-                var errMsg string
-                if numErr, ok := err.(*strconv.NumError); ok && numErr.Err == strconv.ErrSyntax {
-                        errMsg = fmt.Sprintf("Oops! '%s' isn't a valid number. Please enter a proper integer like 10 or 25. 🚫🔢", res["set-limit"])
-                } else {
-                        errMsg = fmt.Sprintf("Oops! Something went wrong while setting the limit. 😕\nError: %v", err)
-                }
+			limit, err := strconv.Atoi(res["set-limit"])
+			if err != nil {
+				var errMsg string
+				if numErr, ok := err.(*strconv.NumError); ok && numErr.Err == strconv.ErrSyntax {
+					errMsg = fmt.Sprintf("Oops! '%s' isn't a valid number. Please enter a proper integer like 10 or 25. 🚫🔢", res["set-limit"])
+				} else {
+					errMsg = fmt.Sprintf("Oops! Something went wrong while setting the limit. 😕\nError: %v", err)
+				}
 
-                b.SendMessage(
-                        ctx.EffectiveChat.Id,
-                        errMsg,
-                        nil,
-                )
-                return err
-        }
+				b.SendMessage(
+					ctx.EffectiveChat.Id,
+					errMsg,
+					nil,
+				)
+				return err
+			}
 
-        settings.Limit = limit
-        r += "\nNew Limit = " + strconv.Itoa(settings.Limit)
-}
+			settings.Limit = limit
+			r += "\nNew Limit = " + strconv.Itoa(settings.Limit)
+		}
 
 		err := database.SetEchoSettings(settings)
 		if err != nil {
