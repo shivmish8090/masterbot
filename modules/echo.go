@@ -38,27 +38,28 @@ Sends back the provided text. Also allows setting how the bot handles long messa
 }
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
+    ChatId := ctx.EffectiveChat.Id
+    User := ctx.EffectiveUser
+    Message := EffectiveMessage
 	if ctx.EffectiveChat.Type != "supergroup" {
-		ctx.EffectiveMessage.Reply(
+		Message.Reply(
 			b,
 			"This command is meant to be used in supergroups, not in private messages!",
 			nil,
 		)
 		return nil
 	}
-	args := ctx.Args()
-	if len(args) < 2 {
-		ctx.EffectiveMessage.Reply(b, "Usage: /echo <long message>", nil)
+	if len(ctx.Args()) < 2 {
+		Message.Reply(b, "Usage: /echo <long message>", nil)
 		return nil
 	}
-	ctx.EffectiveMessage.Delete(b, nil)
+	Message.Delete(b, nil)
 
 	keys := []string{"set-mode", "set-limit"}
-	_, res := utils.ParseFlags(keys, ctx.EffectiveMessage.Text)
-	var settings *database.EchoSettings = nil
+	_, res := utils.ParseFlags(keys, Message.Text)
 	if res["set-mode"] != "" || res["set-limit"] != "" {
 		r := "Your settings were successfully updated:"
-		settings = &database.EchoSettings{ChatID: ctx.EffectiveChat.Id}
+		settings := &database.EchoSettings{ChatID: ChatId}
 
 		if res["set-mode"] != "" {
 			settings.Mode = res["set-mode"]
@@ -78,7 +79,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 			}
 
 			if err != nil {
-				b.SendMessage(ctx.EffectiveChat.Id, err.Error(), nil)
+				b.SendMessage(ChatId, err.Error(), nil)
 				return err
 			}
 
@@ -89,32 +90,37 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		err := database.SetEchoSettings(settings)
 		if err != nil {
 			b.SendMessage(
-				ctx.EffectiveChat.Id,
+				ChatId,
 				fmt.Sprintf("Something went wrong while saving settings\nError: %v", err),
 				nil,
 			)
 			return err
 		}
 
-		b.SendMessage(ctx.EffectiveChat.Id, r, nil)
+		b.SendMessage(ChatId, r, nil)
 		return nil
 	}
-	if settings == nil {
-	    settings, err = database.GetEchoSettings()
-	    
+	
+	settings, err := database.GetEchoSettings(ChatId)
+	if err != nil {
+	    b.SendMessage(
+			ChatId,
+			fmt.Sprintf("⚠️ Something went wrong while processing the limit.\nError: %v", err)
+			nil,
+		)
 	}
-	}
-	if len(ctx.EffectiveMessage.GetText()) < 800 {
+	limit := settings.Limit
+	if len(Message.GetText()) < limit {
 		b.SendMessage(
-			ctx.EffectiveChat.Id,
-			"Oops! Your message is under 800 characters. You can send it without using /echo.",
+			ChatId,
+			fmt.Sprintf("Oops! Your message is under %d characters. You can send it without using /echo.", limit),
 			nil,
 		)
 		return nil
 	}
 
-	text := strings.SplitN(ctx.EffectiveMessage.GetText(), " ", 2)[1]
-	url, err := telegraph.CreatePage(text, ctx.EffectiveUser.Username)
+	text := strings.SplitN(Message.GetText(), " ", 2)[1]
+	url, err := telegraph.CreatePage(text, User.Username)
 	if err != nil {
 		return err
 	}
@@ -124,23 +130,23 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	var msg string
 
-	if ctx.EffectiveMessage.ReplyToMessage != nil {
-		rmsg := ctx.EffectiveMessage.ReplyToMessage
+	if Message.ReplyToMessage != nil {
+		rmsg := Message.ReplyToMessage
 
 		rFirst := rmsg.From.FirstName
 		if rmsg.From.LastName != "" {
 			rFirst += " " + rmsg.From.LastName
 		}
 
-		uFirst := ctx.EffectiveUser.FirstName
-		if ctx.EffectiveUser.LastName != "" {
-			uFirst += " " + ctx.EffectiveUser.LastName
+		uFirst := User.FirstName
+		if User.LastName != "" {
+			uFirst += " " + User.LastName
 		}
 
-		msg = fmt.Sprintf(msgTemplate, rmsg.From.Id, rFirst, ctx.EffectiveUser.Id, uFirst, url)
+		msg = fmt.Sprintf(msgTemplate, rmsg.From.Id, rFirst, User.Id, uFirst, url)
 
 		_, err := b.SendMessage(
-			ctx.EffectiveChat.Id,
+			ChatId,
 			msg,
 			&gotgbot.SendMessageOpts{
 				ParseMode:          "HTML",
@@ -153,15 +159,15 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 
-	uFirst := ctx.EffectiveUser.FirstName
-	if ctx.EffectiveUser.LastName != "" {
-		uFirst += " " + ctx.EffectiveUser.LastName
+	uFirst := User.FirstName
+	if User.LastName != "" {
+		uFirst += " " + User.LastName
 	}
 
-	msg = fmt.Sprintf(msgTemplate, 0, "", ctx.EffectiveUser.Id, uFirst, url)
+	msg = fmt.Sprintf(msgTemplate, 0, "", User.Id, uFirst, url)
 
 	_, err = b.SendMessage(
-		ctx.EffectiveChat.Id,
+		ChatId,
 		msg,
 		&gotgbot.SendMessageOpts{
 			ParseMode:          "HTML",
