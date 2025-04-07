@@ -11,7 +11,7 @@ import (
 
 var (
 	defaultEditModeDuration = 0
-	defaultEditMode     = "USER"
+	defaultEditMode         = "USER"
 )
 
 // mode for a chat ("ADMIN", "USER", "OFF").
