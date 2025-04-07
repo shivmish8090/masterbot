@@ -7,6 +7,9 @@ import (
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+
+	"github.com/Vivekkumar-IN/EditguardianBot/config"
+	"github.com/Vivekkumar-IN/EditguardianBot/database"
 )
 
 type warningTracker struct {
@@ -88,20 +91,20 @@ func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
-m := ctx.EffectiveMessage
-settings, err := database.GetEchoSettings(ChatId)
-        if err != nil {
-                _, err = b.SendMessage(
-                        config.LoggerId,
-                        fmt.Sprintf("⚠️ Something went wrong while Getting the limit.\nError: %v", err),
-                        nil,
-                )
-                return err
-        }
+	m := ctx.EffectiveMessage
+	settings, err := database.GetEchoSettings(ChatId)
+	if err != nil {
+		_, err = b.SendMessage(
+			config.LoggerId,
+			fmt.Sprintf("⚠️ Something went wrong while Getting the limit.\nError: %v", err),
+			nil,
+		)
+		return err
+	}
 
-if m.GetText() == "" || len(m.GetText()) < settings.Limit {
-return nil
-}
+	if m.GetText() == "" || len(m.GetText()) < settings.Limit {
+		return nil
+	}
 
 	done, err := ctx.EffectiveMessage.Delete(b, nil)
 	if err != nil {
