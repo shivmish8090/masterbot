@@ -9,9 +9,9 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 
+	"github.com/Vivekkumar-IN/EditguardianBot/database"
 	"github.com/Vivekkumar-IN/EditguardianBot/telegraph"
 	"github.com/Vivekkumar-IN/EditguardianBot/utils"
-	"github.com/Vivekkumar-IN/EditguardianBot/database"
 )
 
 func init() {
@@ -47,51 +47,51 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		return nil
 	}
 	args := ctx.Args()
-if len(args) < 2 {
-    ctx.EffectiveMessage.Reply(b, "Usage: /echo <long message>", nil)
-    return nil
-}
-ctx.EffectiveMessage.Delete(b, nil)
+	if len(args) < 2 {
+		ctx.EffectiveMessage.Reply(b, "Usage: /echo <long message>", nil)
+		return nil
+	}
+	ctx.EffectiveMessage.Delete(b, nil)
 
-keys := []string{"set-mode", "set-limit"}
-_, res := utils.ParseFlags(keys, ctx.EffectiveMessage.Text)
+	keys := []string{"set-mode", "set-limit"}
+	_, res := utils.ParseFlags(keys, ctx.EffectiveMessage.Text)
 
-if res["set-mode"] != "" || res["set-limit"] != "" {
-    r := "Your settings were successfully updated:"
-    settings := &database.EchoSettings{ChatID: ctx.EffectiveChat.Id}
+	if res["set-mode"] != "" || res["set-limit"] != "" {
+		r := "Your settings were successfully updated:"
+		settings := &database.EchoSettings{ChatID: ctx.EffectiveChat.Id}
 
-    if res["set-mode"] != "" {
-        settings.Mode = res["set-mode"]
-        r += "\nNew Mode = " + settings.Mode
-    }
+		if res["set-mode"] != "" {
+			settings.Mode = res["set-mode"]
+			r += "\nNew Mode = " + settings.Mode
+		}
 
-    if res["set-limit"] != "" {
-        limit, err := strconv.Atoi(res["set-limit"])
-        if err != nil {
-            b.SendMessage(
-                ctx.EffectiveChat.Id,
-                fmt.Sprintf("Invalid value for --set-limit\nError: %v", err),
-                nil,
-            )
-            return err
-        }
-        settings.Limit = limit
-        r += "\nNew Limit = " + strconv.Itoa(settings.Limit)
-    }
+		if res["set-limit"] != "" {
+			limit, err := strconv.Atoi(res["set-limit"])
+			if err != nil {
+				b.SendMessage(
+					ctx.EffectiveChat.Id,
+					fmt.Sprintf("Invalid value for --set-limit\nError: %v", err),
+					nil,
+				)
+				return err
+			}
+			settings.Limit = limit
+			r += "\nNew Limit = " + strconv.Itoa(settings.Limit)
+		}
 
-    err := database.SetEchoSettings(settings)
-    if err != nil {
-        b.SendMessage(
-            ctx.EffectiveChat.Id,
-            fmt.Sprintf("Something went wrong while saving settings\nError: %v", err),
-            nil,
-        )
-        return err
-    }
+		err := database.SetEchoSettings(settings)
+		if err != nil {
+			b.SendMessage(
+				ctx.EffectiveChat.Id,
+				fmt.Sprintf("Something went wrong while saving settings\nError: %v", err),
+				nil,
+			)
+			return err
+		}
 
-    b.SendMessage(ctx.EffectiveChat.Id, r, nil)
-    return nil
-}
+		b.SendMessage(ctx.EffectiveChat.Id, r, nil)
+		return nil
+	}
 
 	if len(ctx.EffectiveMessage.GetText()) < 800 {
 		b.SendMessage(
