@@ -2,6 +2,7 @@ package modules
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/Vivekkumar-IN/EditguardianBot/telegraph"
 	"github.com/Vivekkumar-IN/EditguardianBot/utils"
+	"github.com/Vivekkumar-IN/EditguardianBot/database"
 )
 
 func init() {
@@ -52,10 +54,51 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	ctx.EffectiveMessage.Delete(b, nil)
 	keys := []string{"set-mode", "set-limit"}
 	_, res := utils.ParseFlags(keys, ctx.EffectiveMessage.Text)
-	mssg := fmt.Sprintf("set-mode: %s\nset-limit: %s", res["set-mode"], res["set-limit"])
-	_, err := b.SendMessage(
-		ctx.EffectiveChat.Id, mssg, nil)
-	return err
+	if res["set-mode"] != "" ||res["set-limit"] != "" {
+	    r := "Your Settings sucessfully Upadted:"
+	    settings:= &database.EchoSettings{ChatID: ctx.EffectiveChat.Id}
+	    if res["set-mode"] != "" {
+	        settings.Mode = res["set-limit"]
+	        r += "\nNew Mode = " + settings.Mode
+	    }
+	    
+	    if res["set-limit"]  != "" {
+	       limit, err := strconv.Atoi(res["set-limit"])
+	        if err != nil {
+	            b.SendMessage(
+			        ctx.EffectiveChat.Id,
+			        fmt.Sprintf("Oops! looks like you are provided incorrect value for --set-limit\nError: %v", err),
+		        	nil,
+	        	)
+	        	return err
+	        }
+	        settings.Limit = limit
+	        r+= "\nNew Limit = " + settings.Limit
+	        }
+	        err := database.SetEchoSettings(settings)
+	        if err != nil {
+	            b.SendMessage(
+			        ctx.EffectiveChat.Id,
+			        fmt.Sprintf("Something Went wrong while saving settings\nError: %v", err),
+		        	nil,
+	        	)
+	        	return err
+	        	
+	        b.SendMessage(
+			        ctx.EffectiveChat.Id,
+			        r,
+		        	nil,
+	        	)
+	        
+	        }
+	        }
+	    }
+	    
+	}
+	    }
+	    
+	}
+	}
 
 	if len(ctx.EffectiveMessage.GetText()) < 800 {
 		b.SendMessage(
