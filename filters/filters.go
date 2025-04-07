@@ -86,14 +86,3 @@ func Command(bot *gotgbot.Bot, cmd string) func(m *gotgbot.Message) bool {
 		return split[0][1:] == cmd
 	}
 }
-
-func LongMessage(m *gotgbot.Message) bool {
-	if m != nil {
-		text := m.GetText()
-		if text == "" {
-			return false
-		}
-		return len(text) > 800
-	}
-	return false
-}
