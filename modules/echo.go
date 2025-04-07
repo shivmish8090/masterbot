@@ -66,26 +66,26 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		}
 
 		if res["set-limit"] != "" {
-			limit, err := strconv.Atoi(res["set-limit"])
-			if err != nil {
-				var errMsg string
-				if numErr, ok := err.(*strconv.NumError); ok && numErr.Err == strconv.ErrSyntax {
-					errMsg = fmt.Sprintf("Oops! '%s' isn't a valid number. Please enter a proper integer like 10 or 25. 🚫🔢", res["set-limit"])
-				} else {
-					errMsg = fmt.Sprintf("Oops! Something went wrong while setting the limit. 😕\nError: %v", err)
-				}
+        var prettyErr error
+        limit, err := strconv.Atoi(res["set-limit"])
+        if err != nil {
+                if numErr, ok := err.(*strconv.NumError); ok && numErr.Err == strconv.ErrSyntax {
+                        prettyErr = fmt.Errorf("🚫 Oops! '%s' isn't a valid number.\nPlease provide a number between 200 and 4000. 🔢", res["set-limit"])
+                } else {
+                        prettyErr = fmt.Errorf("⚠️ Something went wrong while processing the limit.\nError: %v", err)
+                }
+        } else if limit < 200 || limit > 4000 {
+                prettyErr = fmt.Errorf("⚠️ The number %d is out of range!\nPlease provide a number between 200 and 4000. 📏", limit)
+        }
 
-				b.SendMessage(
-					ctx.EffectiveChat.Id,
-					errMsg,
-					nil,
-				)
-				return err
-			}
+        if prettyErr != nil {
+                b.SendMessage(ctx.EffectiveChat.Id, prettyErr, nil)
+                return err
+        }
 
-			settings.Limit = limit
-			r += "\nNew Limit = " + strconv.Itoa(settings.Limit)
-		}
+        settings.Limit = limit
+        r += "\nNew Limit = " + strconv.Itoa(settings.Limit)
+}
 
 		err := database.SetEchoSettings(settings)
 		if err != nil {
