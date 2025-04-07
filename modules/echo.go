@@ -79,7 +79,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 			}
 
 			if prettyErr != nil {
-				b.SendMessage(ctx.EffectiveChat.Id, prettyErr, nil)
+				b.SendMessage(ctx.EffectiveChat.Id, prettyErr.Error(), nil)
 				return err
 			}
 
