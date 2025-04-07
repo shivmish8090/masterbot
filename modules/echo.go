@@ -40,7 +40,7 @@ Sends back the provided text. Also allows setting how the bot handles long messa
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
     ChatId := ctx.EffectiveChat.Id
     User := ctx.EffectiveUser
-    Message := EffectiveMessage
+    Message := ctx.EffectiveMessage
 	if ctx.EffectiveChat.Type != "supergroup" {
 		Message.Reply(
 			b,
