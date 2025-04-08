@@ -19,7 +19,7 @@ func init() {
 	Register(handlers.NewCommand("start", start))
 
 	Register(handlers.NewCallback(callbackquery.Equal("start_callback"), start))
-	StartButton = utils.Button{RowWidth}
+	StartButton = utils.Button{RowWidth: 2}
 }
 
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
