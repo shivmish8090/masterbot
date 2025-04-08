@@ -73,36 +73,21 @@ Message.Reply(
 	if res["set-mode"] != "" || res["set-limit"] != "" {
 
 user, err := b.GetChatMember(ChatId, User.Id, nil)
-
 if err != nil {
-
-
-return err
-
-
-status:= user.GetStatus()
-
-if status != "creator" &&  status != "administrator" {
-
-b.SendMessage(ChatId, "You are not an admin", nil)
-				return nil
-
+    return err
 }
 
-if status != "creator" &&  status != "administrator" {
+status := user.GetStatus()
 
-b.SendMessage(ChatId, "You are not an admin", nil)
-				return nil
-
+if status != "creator" && status != "administrator" {
+    b.SendMessage(ChatId, "You are not an admin", nil)
+    return nil
 }
 
-if status== "administrator" && !user.can_delete_messages {
-
-
-b.SendMessage(ChatId, "Oops! you are missing permission 'can_delete_messages' to perform this action", nil)
-				return nil
+if status == "administrator" && !user.CanDeleteMessages {
+    b.SendMessage(ChatId, "Oops! You are missing the permission 'can_delete_messages' to perform this action", nil)
+    return nil
 }
-
 		r := "Your settings were successfully updated:"
 		settings := &database.EchoSettings{ChatID: ChatId}
 
