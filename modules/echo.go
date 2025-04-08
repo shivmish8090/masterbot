@@ -73,7 +73,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	var err error
 
 	if res["set-mode"] != "" || res["set-limit"] != "" {
-		member, err := b.GetChatMember(ChatId, User.Id, nil)
+		member, err := chat.GetMember(User.Id, nil)
 		if err != nil {
 			return err
 		}
