@@ -63,7 +63,7 @@ I'm <b><a href="tg://user?id=%d">%s</a></b>, your security assistant, ensuring a
 			b.User.FirstName,
 		)
 
-		keyboard := buttons.Start(b)
+		keyboard := buttons.StartPanel(b)
 		if isCallback {
 			_, _, err := ctx.CallbackQuery.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{
 				Caption:     caption,
