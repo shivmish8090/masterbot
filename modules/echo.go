@@ -38,153 +38,153 @@ Sends back the provided text. Also allows setting how the bot handles long messa
 }
 
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
-    ChatId := ctx.EffectiveChat.Id
-    User := ctx.EffectiveUser
-    Message := ctx.EffectiveMessage
+	ChatId := ctx.EffectiveChat.Id
+	User := ctx.EffectiveUser
+	Message := ctx.EffectiveMessage
 
-    if ctx.EffectiveChat.Type != "supergroup" {
-        Message.Reply(
-            b,
-            "This command is meant to be used in supergroups, not in private messages!",
-            nil,
-        )
-        return nil
-    }
+	if ctx.EffectiveChat.Type != "supergroup" {
+		Message.Reply(
+			b,
+			"This command is meant to be used in supergroups, not in private messages!",
+			nil,
+		)
+		return nil
+	}
 
-    if len(ctx.Args()) < 2 {
-        Message.Reply(b, "Usage: /echo <long message>", nil)
-        return nil
-    }
+	if len(ctx.Args()) < 2 {
+		Message.Reply(b, "Usage: /echo <long message>", nil)
+		return nil
+	}
 
-    Message.Delete(b, nil)
+	Message.Delete(b, nil)
 
-    keys := []string{"set-mode", "set-limit"}
-    _, res := config.ParseFlags(keys, Message.Text)
+	keys := []string{"set-mode", "set-limit"}
+	_, res := config.ParseFlags(keys, Message.Text)
 
-    if res["set-mode"] != "" || res["set-limit"] != "" {
-        r := "Your settings were successfully updated:"
-        settings := &database.EchoSettings{ChatID: ChatId}
+	if res["set-mode"] != "" || res["set-limit"] != "" {
+		r := "Your settings were successfully updated:"
+		settings := &database.EchoSettings{ChatID: ChatId}
 
-        if res["set-mode"] != "" {
-            mode := strings.ToLower(res["set-mode"])
-            if mode == "off" || mode == "manual" || mode == "automatic" {
-                settings.Mode = mode
-                r += "\nNew Mode = " + settings.Mode
-            } else {
-                b.SendMessage(ChatId, fmt.Sprintf("🚫 Invalid mode: '%s'. Valid options are <off|manual|automatic>.", res["set-mode"]), nil)
-                return nil
-            }
-        }
+		if res["set-mode"] != "" {
+			mode := strings.ToLower(res["set-mode"])
+			if mode == "off" || mode == "manual" || mode == "automatic" {
+				settings.Mode = mode
+				r += "\nNew Mode = " + settings.Mode
+			} else {
+				b.SendMessage(ChatId, fmt.Sprintf("🚫 Invalid mode: '%s'. Valid options are <off|manual|automatic>.", res["set-mode"]), nil)
+				return nil
+			}
+		}
 
-        if res["set-limit"] != "" {
-            limit, err := strconv.Atoi(res["set-limit"])
-            if err != nil {
-                if numErr, ok := err.(*strconv.NumError); ok && numErr.Err == strconv.ErrSyntax {
-                    err = fmt.Errorf("🚫 Oops! '%s' isn't a valid number.\nPlease provide a number between 200 and 4000. 🔢", res["set-limit"])
-                } else {
-                    err = fmt.Errorf("⚠️ Something went wrong while processing the limit.\nError: %v", err)
-                }
-            } else if limit < 200 || limit > 4000 {
-                err = fmt.Errorf("⚠️ The number %d is out of range!\nPlease provide a number between 200 and 4000. 📏", limit)
-            }
+		if res["set-limit"] != "" {
+			limit, err := strconv.Atoi(res["set-limit"])
+			if err != nil {
+				if numErr, ok := err.(*strconv.NumError); ok && numErr.Err == strconv.ErrSyntax {
+					err = fmt.Errorf("🚫 Oops! '%s' isn't a valid number.\nPlease provide a number between 200 and 4000. 🔢", res["set-limit"])
+				} else {
+					err = fmt.Errorf("⚠️ Something went wrong while processing the limit.\nError: %v", err)
+				}
+			} else if limit < 200 || limit > 4000 {
+				err = fmt.Errorf("⚠️ The number %d is out of range!\nPlease provide a number between 200 and 4000. 📏", limit)
+			}
 
-            if err != nil {
-                b.SendMessage(ChatId, err.Error(), nil)
-                return err
-            }
+			if err != nil {
+				b.SendMessage(ChatId, err.Error(), nil)
+				return err
+			}
 
-            settings.Limit = limit
-            r += "\nNew Limit = " + strconv.Itoa(settings.Limit)
-        }
+			settings.Limit = limit
+			r += "\nNew Limit = " + strconv.Itoa(settings.Limit)
+		}
 
-        err := database.SetEchoSettings(settings)
-        if err != nil {
-            b.SendMessage(
-                ChatId,
-                fmt.Sprintf("Something went wrong while saving settings\nError: %v", err),
-                nil,
-            )
-            return err
-        }
+		err := database.SetEchoSettings(settings)
+		if err != nil {
+			b.SendMessage(
+				ChatId,
+				fmt.Sprintf("Something went wrong while saving settings\nError: %v", err),
+				nil,
+			)
+			return err
+		}
 
-        b.SendMessage(ChatId, r, nil)
-        return nil
-    }
+		b.SendMessage(ChatId, r, nil)
+		return nil
+	}
 
-    settings, err := database.GetEchoSettings(ChatId)
-    if err != nil {
-        _, err = b.SendMessage(
-            ChatId,
-            fmt.Sprintf("⚠️ Something went wrong while processing the limit.\nError: %v", err),
-            nil,
-        )
-        return err
-    }
+	settings, err := database.GetEchoSettings(ChatId)
+	if err != nil {
+		_, err = b.SendMessage(
+			ChatId,
+			fmt.Sprintf("⚠️ Something went wrong while processing the limit.\nError: %v", err),
+			nil,
+		)
+		return err
+	}
 
-    limit := settings.Limit
-    if len(Message.GetText()) < limit {
-        b.SendMessage(
-            ChatId,
-            fmt.Sprintf("Oops! Your message is under %d characters. You can send it without using /echo.", limit),
-            nil,
-        )
-        return nil
-    }
+	limit := settings.Limit
+	if len(Message.GetText()) < limit {
+		b.SendMessage(
+			ChatId,
+			fmt.Sprintf("Oops! Your message is under %d characters. You can send it without using /echo.", limit),
+			nil,
+		)
+		return nil
+	}
 
-    text := strings.SplitN(Message.GetText(), " ", 2)[1]
-    url, err := telegraph.CreatePage(text, User.Username)
-    if err != nil {
-        return err
-    }
+	text := strings.SplitN(Message.GetText(), " ", 2)[1]
+	url, err := telegraph.CreatePage(text, User.Username)
+	if err != nil {
+		return err
+	}
 
-    msgTemplate := `<b>Hello <a href="tg://user?id=%d">%s</a></b>, <b><a href="tg://user?id=%d">%s</a></b> wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <b><a href="%s">Telegraph 📝</a></b>`
-    linkPreviewOpts := &gotgbot.LinkPreviewOptions{IsDisabled: true}
+	msgTemplate := `<b>Hello <a href="tg://user?id=%d">%s</a></b>, <b><a href="tg://user?id=%d">%s</a></b> wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <b><a href="%s">Telegraph 📝</a></b>`
+	linkPreviewOpts := &gotgbot.LinkPreviewOptions{IsDisabled: true}
 
-    var msg string
+	var msg string
 
-    if Message.ReplyToMessage != nil {
-        rmsg := Message.ReplyToMessage
+	if Message.ReplyToMessage != nil {
+		rmsg := Message.ReplyToMessage
 
-        rFirst := rmsg.From.FirstName
-        if rmsg.From.LastName != "" {
-            rFirst += " " + rmsg.From.LastName
-        }
+		rFirst := rmsg.From.FirstName
+		if rmsg.From.LastName != "" {
+			rFirst += " " + rmsg.From.LastName
+		}
 
-        uFirst := User.FirstName
-        if User.LastName != "" {
-            uFirst += " " + User.LastName
-        }
+		uFirst := User.FirstName
+		if User.LastName != "" {
+			uFirst += " " + User.LastName
+		}
 
-        msg = fmt.Sprintf(msgTemplate, rmsg.From.Id, rFirst, User.Id, uFirst, url)
+		msg = fmt.Sprintf(msgTemplate, rmsg.From.Id, rFirst, User.Id, uFirst, url)
 
-        _, err := b.SendMessage(
-            ChatId,
-            msg,
-            &gotgbot.SendMessageOpts{
-                ParseMode:          "HTML",
-                LinkPreviewOptions: linkPreviewOpts,
-                ReplyParameters: &gotgbot.ReplyParameters{
-                    MessageId: rmsg.MessageId,
-                },
-            },
-        )
-        return err
-    }
+		_, err := b.SendMessage(
+			ChatId,
+			msg,
+			&gotgbot.SendMessageOpts{
+				ParseMode:          "HTML",
+				LinkPreviewOptions: linkPreviewOpts,
+				ReplyParameters: &gotgbot.ReplyParameters{
+					MessageId: rmsg.MessageId,
+				},
+			},
+		)
+		return err
+	}
 
-    uFirst := User.FirstName
-    if User.LastName != "" {
-        uFirst += " " + User.LastName
-    }
+	uFirst := User.FirstName
+	if User.LastName != "" {
+		uFirst += " " + User.LastName
+	}
 
-    msg = fmt.Sprintf(msgTemplate, 0, "", User.Id, uFirst, url)
+	msg = fmt.Sprintf(msgTemplate, 0, "", User.Id, uFirst, url)
 
-    _, err = b.SendMessage(
-        ChatId,
-        msg,
-        &gotgbot.SendMessageOpts{
-            ParseMode:          "HTML",
-            LinkPreviewOptions: linkPreviewOpts,
-        },
-    )
-    return err
+	_, err = b.SendMessage(
+		ChatId,
+		msg,
+		&gotgbot.SendMessageOpts{
+			ParseMode:          "HTML",
+			LinkPreviewOptions: linkPreviewOpts,
+		},
+	)
+	return err
 }
