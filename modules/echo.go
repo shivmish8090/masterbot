@@ -11,7 +11,6 @@ import (
 
 	"github.com/Vivekkumar-IN/EditguardianBot/database"
 	"github.com/Vivekkumar-IN/EditguardianBot/telegraph"
-	"github.com/Vivekkumar-IN/EditguardianBot/utils"
 )
 
 func init() {
