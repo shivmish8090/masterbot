@@ -10,7 +10,6 @@ import (
 
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 	"github.com/Vivekkumar-IN/EditguardianBot/database"
-	"github.com/Vivekkumar-IN/EditguardianBot/utils"
 )
 
 func init() {
