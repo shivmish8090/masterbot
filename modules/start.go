@@ -13,13 +13,10 @@ import (
 	"github.com/Vivekkumar-IN/EditguardianBot/utils"
 )
 
-var StartButton utils.Button
-
 func init() {
 	Register(handlers.NewCommand("start", start))
 
 	Register(handlers.NewCallback(callbackquery.Equal("start_callback"), start))
-	StartButton = utils.Button{RowWidth: 2}
 }
 
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
