@@ -73,21 +73,21 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if res["set-mode"] != "" || res["set-limit"] != "" {
 
 		user, err := b.GetChatMember(ChatId, User.Id, nil)
-		if err != nil {
-			return err
-		}
+if err != nil {
+    return err
+}
 
-		status := user.GetStatus()
+status := user.GetStatus()
 
-		if status != "creator" && status != "administrator" {
-			b.SendMessage(ChatId, "You are not an admin", nil)
-			return nil
-		}
+if status != "creator" && status != "administrator" {
+    b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
+    return nil
+}
 
-		if status == "administrator" && !user.CanDeleteMessages {
-			b.SendMessage(ChatId, "Oops! You are missing the permission 'can_delete_messages' to perform this action", nil)
-			return nil
-		}
+if status == "administrator" && !user.CanDeleteMessages {
+    b.SendMessage(ChatId, "Insufficient permissions: You need the 'Delete Messages' permission to perform this action.", nil)
+    return nil
+}
 		r := "Your settings were successfully updated:"
 		settings := &database.EchoSettings{ChatID: ChatId}
 
