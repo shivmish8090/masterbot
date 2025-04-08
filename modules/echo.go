@@ -73,19 +73,19 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	var err error
 
 	if res["set-mode"] != "" || res["set-limit"] != "" {
-		user, err := b.GetChatMember(ChatId, User.Id, nil)
+		member, err := b.GetChatMember(ChatId, User.Id, nil)
 		if err != nil {
 			return err
 		}
 
-		status := user.GetStatus()
-		user = user.MergedChatMember()
+		status := member.GetStatus()
+		member = member.MergedChatMember()
 		if status != "creator" && status != "administrator" {
 			b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
 			return nil
 		}
 
-		if status == "administrator" && !user.CanDeleteMessages {
+		if status == "administrator" && !member.CanDeleteMessages {
 			b.SendMessage(ChatId, "Insufficient permissions: You need the 'Delete Messages' permission to perform this action.", nil)
 			return nil
 		}
