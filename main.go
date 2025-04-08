@@ -38,12 +38,6 @@ func main() {
 	for _, h := range modules.Handlers {
 		dispatcher.AddHandler(h)
 	}
-
-	dispatcher.AddHandler(handlers.NewMessage(
-		filters.AndFilter(filters.Owner, filters.Command(b, "eval")),
-		modules.EvalHandler,
-	).SetAllowEdited(true))
-
 	dispatcher.AddHandlerToGroup(handlers.NewMessage(
 		filters.Invert(filters.ChatAdmins(b)),
 		modules.DeleteEditedMessage,
