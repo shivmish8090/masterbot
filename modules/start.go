@@ -10,7 +10,6 @@ import (
 
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 	"github.com/Vivekkumar-IN/EditguardianBot/database"
-
 )
 
 var StartButton utils.Button
@@ -19,7 +18,7 @@ func init() {
 	Register(handlers.NewCommand("start", start))
 
 	Register(handlers.NewCallback(callbackquery.Equal("start_callback"), start))
-        StartButton = utils.Button{RowWidth}
+	StartButton = utils.Button{RowWidth}
 }
 
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
