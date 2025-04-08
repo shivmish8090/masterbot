@@ -49,8 +49,8 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 			nil,
 		)
 		return nil
-
 	}
+
 	if ctx.EffectiveChat.Type != "supergroup" {
 		Message.Reply(
 			b,
@@ -70,8 +70,9 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	keys := []string{"set-mode", "set-limit"}
 	_, res := config.ParseFlags(keys, Message.Text)
 
-	if res["set-mode"] != "" || res["set-limit"] != "" {
+	var err error
 
+	if res["set-mode"] != "" || res["set-limit"] != "" {
 		user, err := b.GetChatMember(ChatId, User.Id, nil)
 		if err != nil {
 			return err
@@ -88,6 +89,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 			b.SendMessage(ChatId, "Insufficient permissions: You need the 'Delete Messages' permission to perform this action.", nil)
 			return nil
 		}
+
 		r := "Your settings were successfully updated:"
 		settings := &database.EchoSettings{ChatID: ChatId}
 
@@ -103,12 +105,12 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		}
 
 		if res["set-limit"] != "" {
-			limit, err := strconv.Atoi(res["set-limit"])
-			if err != nil {
-				if numErr, ok := err.(*strconv.NumError); ok && numErr.Err == strconv.ErrSyntax {
+			limit, convErr := strconv.Atoi(res["set-limit"])
+			if convErr != nil {
+				if numErr, ok := convErr.(*strconv.NumError); ok && numErr.Err == strconv.ErrSyntax {
 					err = fmt.Errorf("🚫 Oops! '%s' isn't a valid number.\nPlease provide a number between 200 and 4000. 🔢", res["set-limit"])
 				} else {
-					err = fmt.Errorf("⚠️ Something went wrong while processing the limit.\nError: %v", err)
+					err = fmt.Errorf("⚠️ Something went wrong while processing the limit.\nError: %v", convErr)
 				}
 			} else if limit < 200 || limit > 4000 {
 				err = fmt.Errorf("⚠️ The number %d is out of range!\nPlease provide a number between 200 and 4000. 📏", limit)
@@ -123,7 +125,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 			r += "\nNew Limit = " + strconv.Itoa(settings.Limit)
 		}
 
-		err := database.SetEchoSettings(settings)
+		err = database.SetEchoSettings(settings)
 		if err != nil {
 			b.SendMessage(
 				ChatId,
@@ -137,7 +139,8 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		return nil
 	}
 
-	settings, err := database.GetEchoSettings(ChatId)
+	var settings *database.EchoSettings
+	settings, err = database.GetEchoSettings(ChatId)
 	if err != nil {
 		_, err = b.SendMessage(
 			ChatId,
