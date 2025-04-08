@@ -8,6 +8,7 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers/filters/callbackquery"
 
+	"github.com/Vivekkumar-IN/EditguardianBot/buttons"
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 	"github.com/Vivekkumar-IN/EditguardianBot/database"
 )
@@ -62,8 +63,7 @@ I'm <b><a href="tg://user?id=%d">%s</a></b>, your security assistant, ensuring a
 			b.User.FirstName,
 		)
 
-		
-   keyboard := buttons.Start(b)
+		keyboard := buttons.Start(b)
 		if isCallback {
 			_, _, err := ctx.CallbackQuery.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{
 				Caption:     caption,
