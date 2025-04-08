@@ -95,6 +95,7 @@ I'm <b><a href="tg://user?id=%d">%s</a></b>, your security assistant, ensuring a
 		if isCallback {
 			_, _, err := ctx.CallbackQuery.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{
 				Caption:     caption,
+                                        ProtectContent: true,
 				ParseMode:   "HTML",
 				ReplyMarkup: keyboard,
 			})
