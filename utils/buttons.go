@@ -1,5 +1,7 @@
 package utils
 
+import "github.com/PaulSonOfLars/gotgbot/v2"
+
 // Buttons is a smart inline button builder
 type Buttons struct {
 	RowWidth int
