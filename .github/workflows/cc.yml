@@ -27,6 +27,7 @@ jobs:
 
       - name: Format Codes
         run: |
+          go get -u ./...
           go mod tidy
           gofmt -w .
           goimports -w .
