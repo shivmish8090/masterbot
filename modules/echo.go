@@ -79,7 +79,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		}
 
 		status := user.GetStatus()
-   user = user.MergedChatMember()
+		user = user.MergedChatMember()
 		if status != "creator" && status != "administrator" {
 			b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
 			return nil
