@@ -56,7 +56,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	Message.Delete(b, nil)
 
 	keys := []string{"set-mode", "set-limit"}
-	_, res := utils.ParseFlags(keys, Message.Text)
+	_, res := config.ParseFlags(keys, Message.Text)
 	if res["set-mode"] != "" || res["set-limit"] != "" {
 		r := "Your settings were successfully updated:"
 		settings := &database.EchoSettings{ChatID: ChatId}
