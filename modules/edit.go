@@ -27,6 +27,17 @@ func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 		return nil
 	}
 
+Chat := b.GetChat(ctx.EffectiveChat.Id)
+
+if message.SenderChat != nil {
+
+if message.Chat.Id == message.SenderChat.Id || Chat.LinkedChatId == message.SenderChat.Id{
+
+return nil 
+
+}
+
+}
 	if _, err := ctx.EffectiveMessage.Delete(b, nil); err != nil {
 		return err
 	}
