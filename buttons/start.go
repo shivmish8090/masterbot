@@ -6,7 +6,7 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
 )
 
-func Start(b *gotgbot.Bot) gotgbot.InlineKeyboardMarkup {
+func StartPanel(b *gotgbot.Bot) gotgbot.InlineKeyboardMarkup {
 	btn := &Button{RowWidth: 2}
 
 	btn.Add(
