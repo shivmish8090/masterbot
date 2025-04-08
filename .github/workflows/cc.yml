@@ -27,7 +27,7 @@ jobs:
 
       - name: Format Codes
         run: |
-          go get -u ./...
+          go get -u=patch ./...
           go mod tidy
           gofmt -w .
           goimports -w .
