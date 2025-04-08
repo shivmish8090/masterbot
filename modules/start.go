@@ -62,36 +62,8 @@ I'm <b><a href="tg://user?id=%d">%s</a></b>, your security assistant, ensuring a
 			b.User.FirstName,
 		)
 
-		keyboard := gotgbot.InlineKeyboardMarkup{
-			InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
-				{
-					{
-						Text: "🔄 Update Channel",
-						Url:  "https://t.me/SanatanVibe",
-					},
-					{
-						Text: "💬 Update Group",
-						Url:  "https://t.me/dns_support_group",
-					},
-				},
-				{
-					{
-						Text:         "❓ Help & Commands",
-						CallbackData: "help",
-					},
-				},
-				{
-					{
-						Text: "➕ Add me to Your Group",
-						Url: fmt.Sprintf(
-							"https://t.me/%s?startgroup=s&admin=delete_messages+invite_users",
-							b.User.Username,
-						),
-					},
-				},
-			},
-		}
-
+		
+   keyboard := buttons.Start(b)
 		if isCallback {
 			_, _, err := ctx.CallbackQuery.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{
 				Caption:     caption,
