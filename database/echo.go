@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
@@ -45,7 +46,7 @@ func SetEchoSettings(data *EchoSettings) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
-        data.Mode = strings.ToUpper(data.Mode)
+	data.Mode = strings.ToUpper(data.Mode)
 
 	update := bson.M{
 		"$set": bson.M{
