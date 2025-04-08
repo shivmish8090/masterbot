@@ -1,4 +1,4 @@
-package utils
+package buttons
 
 import "github.com/PaulSonOfLars/gotgbot/v2"
 
