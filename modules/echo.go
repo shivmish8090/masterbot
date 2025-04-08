@@ -42,15 +42,15 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	User := ctx.EffectiveUser
 	Message := ctx.EffectiveMessage
 
-if Message.SenderChat != nil {
-Message.Reply(
+	if Message.SenderChat != nil {
+		Message.Reply(
 			b,
 			"You are anonymous Admin you can't use this command.",
 			nil,
 		)
 		return nil
 
-}
+	}
 	if ctx.EffectiveChat.Type != "supergroup" {
 		Message.Reply(
 			b,
@@ -72,22 +72,22 @@ Message.Reply(
 
 	if res["set-mode"] != "" || res["set-limit"] != "" {
 
-user, err := b.GetChatMember(ChatId, User.Id, nil)
-if err != nil {
-    return err
-}
+		user, err := b.GetChatMember(ChatId, User.Id, nil)
+		if err != nil {
+			return err
+		}
 
-status := user.GetStatus()
+		status := user.GetStatus()
 
-if status != "creator" && status != "administrator" {
-    b.SendMessage(ChatId, "You are not an admin", nil)
-    return nil
-}
+		if status != "creator" && status != "administrator" {
+			b.SendMessage(ChatId, "You are not an admin", nil)
+			return nil
+		}
 
-if status == "administrator" && !user.CanDeleteMessages {
-    b.SendMessage(ChatId, "Oops! You are missing the permission 'can_delete_messages' to perform this action", nil)
-    return nil
-}
+		if status == "administrator" && !user.CanDeleteMessages {
+			b.SendMessage(ChatId, "Oops! You are missing the permission 'can_delete_messages' to perform this action", nil)
+			return nil
+		}
 		r := "Your settings were successfully updated:"
 		settings := &database.EchoSettings{ChatID: ChatId}
 
