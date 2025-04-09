@@ -1,8 +1,5 @@
 package config
 
-
-package main
-
 import "fmt"
 
 func Contains[T comparable](slice []T, item T) bool {
