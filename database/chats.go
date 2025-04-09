@@ -56,7 +56,7 @@ func IsServedChat(chatID int64) (bool, error) {
 			chats := val.([]int64)
 			config.Cache.Store("chats", append(chats, chatID))
 		} else {
-			cache.Store("chats", []int64{chatID})
+			config.Cache.Store("chats", []int64{chatID})
 		}
 	}
 
