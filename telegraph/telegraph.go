@@ -123,7 +123,7 @@ func extractFloodWait(errorMsg string) int64 {
 }
 
 // CreatePage creates a Telegraph page while handling flood wait errors
-func CreatePage(content, firstName string) (string, error) {
+func CreatePage(content, firstName, author_url string) (string, error) {
 	for {
 		accessToken, err := getAvailableToken()
 		if err != nil {
@@ -140,7 +140,7 @@ func CreatePage(content, firstName string) (string, error) {
 			"access_token": accessToken,
 			"title":        "Eco Message",
 			"author_name":  firstName,
-			"author_url":   "https://t.me/ViyomBot",
+			"author_url":   author_url,
 			"content":      telegraphContent,
 		}
 
