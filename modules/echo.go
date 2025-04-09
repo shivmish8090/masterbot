@@ -79,10 +79,10 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		
 	            return nil
 	        }
-	    } else {
+	    } /* else {
 	            
 	            
-	     }
+	     }*/
 	     
 	}
 		member, err := ctx.EffectiveChat.GetMember(b, User.Id, nil)
