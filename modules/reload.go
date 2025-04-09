@@ -39,7 +39,7 @@ func ReloadHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		}
 	}
 
-	config.Cache.Store(cacheKey, admins)
+	config.Cache.Store(fmt.Sprintf("admins:%d", chatId), admins)
 
 	var text string
 	if config.Contains(admins, ctx.EffectiveUser.Id) {
