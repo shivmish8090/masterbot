@@ -79,7 +79,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 				return nil
 			}
 		} else {
-			chatmembers, e := b.GetChatAdministrators(ChatId)
+			chatmembers, e := b.GetChatAdministrators(ChatId, nil)
 			if e != nil {
 				return e
 			}
