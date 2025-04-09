@@ -2,4 +2,4 @@ package config
 
 import "sync"
 
-var Cache sync.Map
+var Cache &sync.Map{}
