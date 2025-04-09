@@ -1,4 +1,4 @@
 package config
 
 
-var cache sync.Map
+var Cache sync.Map
