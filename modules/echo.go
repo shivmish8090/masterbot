@@ -171,10 +171,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 
 	text := strings.SplitN(Message.GetText(), " ", 2)[1]
-	url, err := telegraph.CreatePage(text, User.Username)
-	if err != nil {
-		return err
-	}
+	
 
 	msgTemplate := `<b>Hello <a href="tg://user?id=%d">%s</a></b>, <b><a href="tg://user?id=%d">%s</a></b> wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <b><a href="%s">Telegraph 📝</a></b>`
 	linkPreviewOpts := &gotgbot.LinkPreviewOptions{IsDisabled: true}
@@ -191,6 +188,18 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		if User.LastName != "" {
 			uFirst += " " + User.LastName
 		}
+var author_url string
+if User.Username != "" {
+author_url = fmt.Sprintf("https://t.me/%s", User.Username)
+
+} else {
+
+author_url = fmt.Sprintf("tg://user?id=%d", User.Id)
+}
+  url, err := telegraph.CreatePage(text, uFirst, author_url)
+	if err != nil {
+		return err
+	}
 
 		msg = fmt.Sprintf(msgTemplate, rmsg.From.Id, rFirst, User.Id, uFirst, url)
 
