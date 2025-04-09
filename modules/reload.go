@@ -1,9 +1,13 @@
 package modules
 
 import (
+	"fmt"
+
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
+
+	"github.com/Vivekkumar-IN/EditguardianBot/config"
 )
 
 func init() {
@@ -16,38 +20,33 @@ func ReloadHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	msg.Delete(b, nil)
 	x, err := b.SendMessage(ChatId, "Refreshing Cache of chat admins...", nil)
-if err != nil {
+	if err != nil {
+		return err
+	}
 
-return err
-}
+	chatmembers, e := b.GetChatAdministrators(ChatId, nil)
+	if e != nil {
 
-                        chatmembers, e := b.GetChatAdministrators(ChatId, nil)
-                        if e != nil {
+		x.EditTexg(b, fmt.Sprintf("Oops! Cache refresh failed — %v", e), nil)
+		return e
+	}
 
+	var admins []int64
+	for _, m := range chatmembers {
+		status := m.GetStatus()
+		if status == "administrator" || status == "creator" {
+			admins = append(admins, m.GetUser().Id)
+		}
+	}
 
-x.EditTexg(b, fmt.Sprintf("Oops! Cache refresh failed — %v", e), nil)
-                                return e
-                        }
+	config.Cache.Store(cacheKey, admins)
 
-                        var admins []int64
-                        for _, m := range chatmembers {
-                                status := m.GetStatus()
-                                if status == "administrator" || status == "creator" {
-                                        admins = append(admins, m.GetUser().Id)
-                                }
-                        }
+	var text string
+	if !config.Contains(admins, ctx.EffectiveUser.Id) {
+		text = "✅ Successfully refreshed the cache of chat admins!"
+	} else {
+		text = "⚠️ Tried refreshing the admin cache... but oops! You're not an admin."
+	}
 
-                        config.Cache.Store(cacheKey, admins)
-
-var text string
-                        if !config.Contains(admins, ctx.EffectiveUser.Id) {
-
-text = "✅ Successfully refreshed the cache of chat admins!"
-
-} else {
-
-text = "⚠️ Tried refreshing the admin cache... but oops! You're not an admin."
-}
-
-	x.EditTexg(b, text , nil)
+	x.EditTexg(b, text, nil)
 }
