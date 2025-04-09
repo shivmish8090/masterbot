@@ -176,11 +176,11 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	msgTemplate := `<b>Hello <a href="tg://user?id=%d">%s</a></b>, <b><a href="tg://user?id=%d">%s</a></b> wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <b><a href="%s">Telegraph 📝</a></b>`
 	linkPreviewOpts := &gotgbot.LinkPreviewOptions{IsDisabled: true}
 	var author_url string
-		if User.Username != "" {
-			author_url = fmt.Sprintf("https://t.me/%s", User.Username)
-		} else {
-			author_url = fmt.Sprintf("tg://user?id=%d", User.Id)
-		}
+	if User.Username != "" {
+		author_url = fmt.Sprintf("https://t.me/%s", User.Username)
+	} else {
+		author_url = fmt.Sprintf("tg://user?id=%d", User.Id)
+	}
 	url, err := telegraph.CreatePage(text, userFullName, author_url)
 	if err != nil {
 		return err
