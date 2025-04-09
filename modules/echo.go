@@ -200,7 +200,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 		msg = fmt.Sprintf(msgTemplate, rmsg.From.Id, rFirst, User.Id, uFirst, url)
 
-		_, err := b.SendMessage(ChatId, msg, &gotgbot.SendMessageOpts{
+		_, err = b.SendMessage(ChatId, msg, &gotgbot.SendMessageOpts{
 			ParseMode:          "HTML",
 			LinkPreviewOptions: linkPreviewOpts,
 			ReplyParameters: &gotgbot.ReplyParameters{
