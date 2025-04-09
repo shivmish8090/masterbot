@@ -2,14 +2,9 @@ package modules
 
 import (
 	"fmt"
-	"sync"
-	"time"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
-
-	"github.com/Vivekkumar-IN/EditguardianBot/config"
-	"github.com/Vivekkumar-IN/EditguardianBot/database"
 )
 
 func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
