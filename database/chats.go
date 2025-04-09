@@ -32,7 +32,7 @@ func GetServedChats() ([]int64, error) {
 }
 
 func IsServedChat(chatID int64) (bool, error) {
-	if val, ok := cache.Load("chats"); ok {
+	if val, ok := config.Cache.Load("chats"); ok {
 		chats := val.([]int64)
 		for _, id := range chats {
 			if id == chatID {
@@ -50,9 +50,9 @@ func IsServedChat(chatID int64) (bool, error) {
 	}
 
 	if count > 0 {
-		if val, ok := cache.Load("chats"); ok {
+		if val, ok := config.Cache.Load("chats"); ok {
 			chats := val.([]int64)
-			cache.Store("chats", append(chats, chatID))
+			config.Cache.Store("chats", append(chats, chatID))
 		} else {
 			cache.Store("chats", []int64{chatID})
 		}
@@ -73,11 +73,11 @@ func AddServedChat(chatID int64) error {
 
 		_, err := chatDB.InsertOne(ctx, bson.M{"chat_id": chatID})
 		if err == nil {
-			if val, ok := cache.Load("chats"); ok {
+			if val, ok := config.Cache.Load("chats"); ok {
 				chats := val.([]int64)
-				cache.Store("chats", append(chats, chatID))
+				config.Cache.Store("chats", append(chats, chatID))
 			} else {
-				cache.Store("chats", []int64{chatID})
+				config.Cache.Store("chats", []int64{chatID})
 			}
 		}
 	}()
@@ -97,7 +97,7 @@ func DeleteServedChat(chatID int64) error {
 
 		_, err := chatDB.DeleteOne(ctx, bson.M{"chat_id": chatID})
 		if err == nil {
-			if val, ok := cache.Load("chats"); ok {
+			if val, ok := config.Cache.Load("chats"); ok {
 				chats := val.([]int64)
 				for i, id := range chats {
 					if id == chatID {
@@ -105,7 +105,7 @@ func DeleteServedChat(chatID int64) error {
 						break
 					}
 				}
-				cache.Store("chats", chats)
+				config.Cache.Store("chats", chats)
 			}
 		}
 	}()
