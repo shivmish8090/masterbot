@@ -79,30 +79,31 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		
 	            return nil
 	        }
-	    } /* else {
+	    } else {
+	            chatmembers, e := b.GetAdminstrators(ChatId, nil)
+	            if e != nil {
+	                
+	                return e
+	            }
+	            var admins []int
+	            for _, m := range chatmembers {
+	                if status:= m.GetStatus; status == "administrator" || status == "creator" {
+	                    
+	                    admins = append(admins, m.GetUser().Id)
+	                    
+	                }
+	                
+	            }
+	             config.Cache.Load(fmt.Sprintf("admins:%d", ChatId), admins)
+	             if !config.Contains(admins, User.Id) {
+	            b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
+		
+	            return nil
+	        }
 	            
-	            
-	     }*/
+	     }
 	     
-	}
-		member, err := ctx.EffectiveChat.GetMember(b, User.Id, nil)
-		if err != nil {
-			return err
-		}
-
-		status := member.GetStatus()
-		member = member.MergedChatMember()
-		if status != "creator" && status != "administrator" {
-			b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
-			return nil
-		}
-
-		if status == "administrator" && !member.CanDeleteMessages {
-			b.SendMessage(ChatId, "Insufficient permissions: You need the 'Delete Messages' permission to perform this action.", nil)
-			return nil
-		}
-
-		r := "Your settings were successfully updated:"
+	}	r := "Your settings were successfully updated:"
 		settings := &database.EchoSettings{ChatID: ChatId}
 
 		if res["set-mode"] != "" {
