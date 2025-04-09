@@ -24,7 +24,7 @@ type EditModeSettings struct {
 func SetEditMode(setting EditModeSettings) (bool, error) {
 	key := fmt.Sprintf("editmode:%d", setting.ChatID)
 
-	if cachedVal, ok := cache.Load(key); ok {
+	if cachedVal, ok := config.Cache.Load(key); ok {
 		if cachedSetting, valid := cachedVal.(EditModeSettings); valid {
 			if cachedSetting.Mode == setting.Mode && cachedSetting.Duration == setting.Duration {
 				return true, nil
@@ -53,14 +53,14 @@ func SetEditMode(setting EditModeSettings) (bool, error) {
 		return false, err
 	}
 
-	cache.Store(key, setting)
+	config.Cache.Store(key, setting)
 	return result.ModifiedCount > 0 || result.UpsertedCount > 0, nil
 }
 
 func GetEditMode(chatID int64) EditModeSettings {
 	key := fmt.Sprintf("editmode:%d", chatID)
 
-	if cachedVal, ok := cache.Load(key); ok {
+	if cachedVal, ok := config.Cache.Load(key); ok {
 		if settings, valid := cachedVal.(EditModeSettings); valid {
 			return settings
 		}
@@ -79,7 +79,7 @@ func GetEditMode(chatID int64) EditModeSettings {
 		}
 	}
 
-	cache.Store(key, settings)
+	config.Cache.Store(key, settings)
 	return settings
 }
 
