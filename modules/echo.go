@@ -73,6 +73,20 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	var err error
 
 	if res["set-mode"] != "" || res["set-limit"] != "" {
+	    if admins, ok := config.Cache.Load(fmt.Sprintf("admins:%d", ChatId)); ok {
+	        if !Contains(admins, User.Id) {
+	            b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
+		
+	            return nil
+	        }
+	        } else {
+	            
+	            
+	        }
+	        }
+	        
+	    }
+	    }
 		member, err := ctx.EffectiveChat.GetMember(b, User.Id, nil)
 		if err != nil {
 			return err
