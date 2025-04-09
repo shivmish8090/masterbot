@@ -33,7 +33,7 @@ func GetServedUsers() ([]int64, error) {
 }
 
 func IsServedUser(userID int64) (bool, error) {
-	v, ok := cache.Load("users")
+	v, ok := config.Cache.Load("users")
 	if ok {
 		users := v.([]int64)
 		for _, id := range users {
@@ -52,10 +52,10 @@ func IsServedUser(userID int64) (bool, error) {
 	}
 	if count > 0 {
 		go func() {
-			val, _ := cache.LoadOrStore("users", []int64{})
+			val, _ := config.Cache.LoadOrStore("users", []int64{})
 			users := val.([]int64)
 			users = append(users, userID)
-			cache.Store("users", users)
+			config.Cache.Store("users", users)
 		}()
 	}
 	return count > 0, nil
@@ -72,10 +72,10 @@ func AddServedUser(userID int64) error {
 
 		_, err := userDB.InsertOne(ctx, bson.M{"user_id": userID})
 		if err == nil {
-			val, _ := cache.LoadOrStore("users", []int64{})
+			val, _ := config.Cache.LoadOrStore("users", []int64{})
 			users := val.([]int64)
 			users = append(users, userID)
-			cache.Store("users", users)
+			config.Cache.Store("users", users)
 		}
 	}()
 	return nil
@@ -93,7 +93,7 @@ func DeleteServedUser(userID int64) error {
 
 		_, err := userDB.DeleteOne(ctx, bson.M{"user_id": userID})
 		if err == nil {
-			if val, ok := cache.Load("users"); ok {
+			if val, ok := config.Cache.Load("users"); ok {
 				users := val.([]int64)
 				for i, id := range users {
 					if id == userID {
@@ -101,7 +101,7 @@ func DeleteServedUser(userID int64) error {
 						break
 					}
 				}
-				cache.Store("users", users)
+				config.Cache.Store("users", users)
 			}
 		}
 	}()
