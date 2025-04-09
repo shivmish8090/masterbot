@@ -77,8 +77,8 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 		if admins, ok := config.LoadTyped[[]int64](config.Cache, cacheKey); ok {
 			if !config.Contains(admins, User.Id) {
-				b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
-				return nil
+			        b.SendMessage(ChatId, "Access denied: Only group admins can use this command.\n\nIf you are an admin, please use /reload to refresh the admin list.", nil)
+			        return nil
 			}
 		} else {
 			chatmembers, e := b.GetChatAdministrators(ChatId, nil)
