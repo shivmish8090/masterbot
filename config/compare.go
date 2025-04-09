@@ -8,3 +8,14 @@ func Contains[T comparable](slice []T, item T) bool {
 	}
 	return false
 }
+
+
+func LoadTyped[T any](cache *sync.Map, key string) (T, bool) {
+	var zero T
+	if val, ok := cache.Load(key); ok {
+		if typed, ok := val.(T); ok {
+			return typed, true
+		}
+	}
+	return zero, false
+}
