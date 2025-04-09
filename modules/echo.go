@@ -73,33 +73,34 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	var err error
 
 	if res["set-mode"] != "" || res["set-limit"] != "" {
-		if admins, ok := config.Cache.Load(fmt.Sprintf("admins:%d", ChatId)); ok {
-			if !config.Contains(admins, User.Id) {
-				b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
-				return nil
-			}
-		} else {
-			chatmembers, e := b.GetChatAdministrators(ChatId, nil)
-			if e != nil {
-				return e
-			}
+		cacheKey := fmt.Sprintf("admins:%d", ChatId)
 
-			var admins []int64
-			for _, m := range chatmembers {
-				status := m.GetStatus()
-				if status == "administrator" || status == "creator" {
-					admins = append(admins, m.GetUser().Id)
-				}
-			}
+if admins, ok := config.LoadTyped[[]int64](config.Cache, cacheKey); ok {
+        if !config.Contains(admins, User.Id) {
+                b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
+                return nil
+        }
+} else {
+        chatmembers, e := b.GetChatAdministrators(ChatId, nil)
+        if e != nil {
+                return e
+        }
 
-			config.Cache.Store(fmt.Sprintf("admins:%d", ChatId), admins)
+        var admins []int64
+        for _, m := range chatmembers {
+                status := m.GetStatus()
+                if status == "administrator" || status == "creator" {
+                        admins = append(admins, m.GetUser().Id)
+                }
+        }
 
-			if !config.Contains(admins, User.Id) {
-				b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
-				return nil
-			}
-		}
+        config.Cache.Store(cacheKey, admins)
 
+        if !config.Contains(admins, User.Id) {
+                b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
+                return nil
+        }
+}
 		r := "Your settings were successfully updated:"
 		settings := &database.EchoSettings{ChatID: ChatId}
 
