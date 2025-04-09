@@ -75,32 +75,32 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if res["set-mode"] != "" || res["set-limit"] != "" {
 		cacheKey := fmt.Sprintf("admins:%d", ChatId)
 
-if admins, ok := config.LoadTyped[[]int64](config.Cache, cacheKey); ok {
-        if !config.Contains(admins, User.Id) {
-                b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
-                return nil
-        }
-} else {
-        chatmembers, e := b.GetChatAdministrators(ChatId, nil)
-        if e != nil {
-                return e
-        }
+		if admins, ok := config.LoadTyped[[]int64](config.Cache, cacheKey); ok {
+			if !config.Contains(admins, User.Id) {
+				b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
+				return nil
+			}
+		} else {
+			chatmembers, e := b.GetChatAdministrators(ChatId, nil)
+			if e != nil {
+				return e
+			}
 
-        var admins []int64
-        for _, m := range chatmembers {
-                status := m.GetStatus()
-                if status == "administrator" || status == "creator" {
-                        admins = append(admins, m.GetUser().Id)
-                }
-        }
+			var admins []int64
+			for _, m := range chatmembers {
+				status := m.GetStatus()
+				if status == "administrator" || status == "creator" {
+					admins = append(admins, m.GetUser().Id)
+				}
+			}
 
-        config.Cache.Store(cacheKey, admins)
+			config.Cache.Store(cacheKey, admins)
 
-        if !config.Contains(admins, User.Id) {
-                b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
-                return nil
-        }
-}
+			if !config.Contains(admins, User.Id) {
+				b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
+				return nil
+			}
+		}
 		r := "Your settings were successfully updated:"
 		settings := &database.EchoSettings{ChatID: ChatId}
 
