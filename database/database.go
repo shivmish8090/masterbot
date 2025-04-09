@@ -21,7 +21,6 @@ var (
 	echoDB     *mongo.Collection
 	timeout    = 10 * time.Second
 )
-var cache sync.Map
 
 func init() {
 	if config.MongoUri == "" {
