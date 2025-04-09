@@ -37,6 +37,15 @@ Sends back the provided text. Also allows setting how the bot handles long messa
 • <b>/echo</b> <code>--set-limit=&lt;number&gt;</code> – Set character limit (default: 800).`, nil)
 }
 
+type warningTracker struct {
+        sync.Mutex
+        chats map[int64]time.Time
+}
+
+var deleteWarningTracker = warningTracker{
+        chats: make(map[int64]time.Time),
+}
+
 func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	ChatId := ctx.EffectiveChat.Id
 	User := ctx.EffectiveUser
@@ -204,4 +213,57 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		LinkPreviewOptions: linkPreviewOpts,
 	})
 	return err
+}
+
+
+
+
+func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
+        m := ctx.EffectiveMessage
+        settings, err := database.GetEchoSettings(ctx.EffectiveChat.Id)
+        if err != nil {
+                _, err = b.SendMessage(
+                        config.LoggerId,
+                        fmt.Sprintf("⚠️ Something went wrong while Getting the limit.\nError: %v", err),
+                        nil,
+                )
+                return err
+        }
+
+        if m.GetText() == "" || len(m.GetText()) < settings.Limit {
+                return nil
+        }
+
+        done, err := ctx.EffectiveMessage.Delete(b, nil)
+        if err != nil {
+                fmt.Println("Delete error:", err)
+                return err
+        }
+
+        if done {
+                deleteWarningTracker.Lock()
+                defer deleteWarningTracker.Unlock()
+
+                lastWarning, exists := deleteWarningTracker.chats[ctx.EffectiveChat.Id]
+                if !exists || time.Since(lastWarning) > time.Second {
+                        text := fmt.Sprintf(`
+⚠️ <a href="tg://user?id=%d">%s</a>, your message exceeds the %d-character limit! 🚫  
+Please shorten it before sending. ✂️  
+
+Alternatively, use /echo for sending longer messages. 📜
+`, ctx.EffectiveUser.Id, ctx.EffectiveUser.FirstName, settings.Limit)
+
+                        _, err := b.SendMessage(
+                                ctx.EffectiveChat.Id,
+                                text,
+                                &gotgbot.SendMessageOpts{ParseMode: "HTML"},
+                        )
+                        if err != nil {
+                                fmt.Println("SendMessage error:", err)
+                                return err
+                        }
+                        deleteWarningTracker.chats[ctx.EffectiveChat.Id] = time.Now()
+                }
+        }
+        return nil
 }
