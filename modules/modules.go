@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	MaxHandlers    = 10 // <- Change this to increase/decrease handler limit
+	MaxHandlers    = 15 // <- Change this to increase/decrease handler limit
 	MaxHelpModules = 10 // <- Change this to increase/decrease help module limit
 )
 
