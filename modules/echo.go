@@ -216,6 +216,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	m := ctx.EffectiveMessage
 	settings, err := database.GetEchoSettings(ctx.EffectiveChat.Id)
+	var isAutomatic bool
 	if err != nil {
 		_, err = b.SendMessage(
 			config.LoggerId,
@@ -228,14 +229,20 @@ func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	if m.GetText() == "" || len(m.GetText()) < settings.Limit {
 		return nil
 	}
-
+	if settings.Mode == "OFF" {
+	    return nil
+	    
+	}
+	if settings.Mode == "automatic" {
+	    isAutomatic = true
+	}
 	done, err := ctx.EffectiveMessage.Delete(b, nil)
 	if err != nil {
 		fmt.Println("Delete error:", err)
 		return err
 	}
 
-	if done {
+	if done && !isAutomatic{
 		deleteWarningTracker.Lock()
 		defer deleteWarningTracker.Unlock()
 
@@ -259,6 +266,12 @@ Alternatively, use /echo for sending longer messages. 📜
 			}
 			deleteWarningTracker.chats[ctx.EffectiveChat.Id] = time.Now()
 		}
+	} else if done && isAutomatic {
+	    
+	    
+	    
+	    
+	}
 	}
 	return nil
 }
