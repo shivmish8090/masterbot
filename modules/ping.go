@@ -9,7 +9,7 @@ import (
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 )
 
-func UptimeHandler(b *gotgbot.Bot, ctx *ext.Context) error {
+func PingHandle(b *gotgbot.Bot, ctx *ext.Context) error {
 	uptime := time.Since(config.StartTime)
 	uptimeStr := config.FormatUptime(uptime)
 	ctx.EffectiveMessage.Delete(b, nil)
