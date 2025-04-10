@@ -164,53 +164,15 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 
-	limit := settings.Limit
-	userFullName := strings.TrimSpace(User.FirstName + " " + User.LastName)
-	if len(Message.GetText()) < limit {
+	if len(Message.GetText()) < settings.Limit {
 		b.SendMessage(ChatId, fmt.Sprintf("Oops! Your message is under %d characters. You can send it without using /echo.", limit), nil)
 		return nil
 	}
 
 	text := strings.SplitN(Message.GetText(), " ", 2)[1]
 
-	msgTemplate := `<b>Hello <a href="tg://user?id=%d">%s</a></b>, <b><a href="tg://user?id=%d">%s</a></b> wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <b><a href="%s">Telegraph 📝</a></b>`
-	linkPreviewOpts := &gotgbot.LinkPreviewOptions{IsDisabled: true}
-	var author_url string
-	if User.Username != "" {
-		author_url = fmt.Sprintf("https://t.me/%s", User.Username)
-	} else {
-		author_url = fmt.Sprintf("tg://user?id=%d", User.Id)
-	}
-	url, err := telegraph.CreatePage(text, userFullName, author_url)
-	if err != nil {
-		return err
-	}
-	var msg string
-	if Message.ReplyToMessage != nil {
-		rmsg := Message.ReplyToMessage
-		rFirst := rmsg.From.FirstName
-		if rmsg.From.LastName != "" {
-			rFirst += " " + rmsg.From.LastName
-		}
-
-		msg = fmt.Sprintf(msgTemplate, rmsg.From.Id, rFirst, User.Id, userFullName, url)
-
-		_, err = b.SendMessage(ChatId, msg, &gotgbot.SendMessageOpts{
-			ParseMode:          "HTML",
-			LinkPreviewOptions: linkPreviewOpts,
-			ReplyParameters: &gotgbot.ReplyParameters{
-				MessageId: rmsg.MessageId,
-			},
-		})
-		return err
-	}
-
-	msg = fmt.Sprintf(msgTemplate, 0, "", User.Id, userFullName, url)
-	_, err = b.SendMessage(ChatId, msg, &gotgbot.SendMessageOpts{
-		ParseMode:          "HTML",
-		LinkPreviewOptions: linkPreviewOpts,
-	})
-	return err
+	err = sendEchoMessage(ctx, text)
+	
 }
 
 func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
@@ -268,10 +230,52 @@ Alternatively, use /echo for sending longer messages. 📜
 		}
 	} else if done && isAutomatic {
 	    
-	    
+	    sendEchoMessage(ctx, m.GetText())
 	    
 	    
 	}
 	}
 	return nil
+}
+
+func sendEchoMessage(ctx *ext.Context, Text string) err {
+    User := ctx.EffectiveUser
+    
+    userFullName := strings.TrimSpace(User.FirstName + " " + User.LastName)
+    msgTemplate := `<b>Hello <a href="tg://user?id=%d">%s</a></b>, <b><a href="tg://user?id=%d">%s</a></b> wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <b><a href="%s">Telegraph 📝</a></b>`
+	linkPreviewOpts := &gotgbot.LinkPreviewOptions{IsDisabled: true}
+	
+	var author_url string
+	if User.Username != "" {
+		author_url = fmt.Sprintf("https://t.me/%s", User.Username)
+	} else {
+		author_url = fmt.Sprintf("tg://user?id=%d", User.Id)
+	}
+	url, err := telegraph.CreatePage(Text, userFullName, author_url)
+	if err != nil {
+		return err
+	}
+	var msg string
+	if ctx.EffectiveMessage.ReplyToMessage != nil {
+		rmsg := ctx.EffectiveMessage.ReplyToMessage
+		rFirst := strings.TrimSpace(rmsg.From.FirstName + " " + rmsg.From.LastName)
+		msg = fmt.Sprintf(msgTemplate, rmsg.From.Id, rFirst, User.Id, userFullName, url)
+
+		_, err = b.SendMessage(ctx.EffectiveChat.Id, msg, &gotgbot.SendMessageOpts{
+			ParseMode:          "HTML",
+			LinkPreviewOptions: linkPreviewOpts,
+			ReplyParameters: &gotgbot.ReplyParameters{
+				MessageId: rmsg.MessageId,
+			},
+		})
+		return err
+	}
+		
+		msg = fmt.Sprintf(msgTemplate, 0, "", User.Id, userFullName, url)
+	_, err = b.SendMessage(ctx.EffectiveChat.Id, msg, &gotgbot.SendMessageOpts{
+		ParseMode:          "HTML",
+		LinkPreviewOptions: linkPreviewOpts,
+	})
+	return err
+    
 }
