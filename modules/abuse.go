@@ -4,7 +4,7 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
-"github.com/TwiN/go-away"
+	goaway "github.com/TwiN/go-away"
 )
 
 func init() {
