@@ -1,5 +1,9 @@
 package config
 
+import (
+	"fmt"
+	"time"
+)
 
 func FormatUptime(d time.Duration) string {
 	seconds := int(d.Seconds()) % 60
