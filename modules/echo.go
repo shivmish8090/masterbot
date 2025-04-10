@@ -172,6 +172,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	text := strings.SplitN(Message.GetText(), " ", 2)[1]
 
 	err = sendEchoMessage(b, ctx, text)
+return err
 }
 
 func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
@@ -227,7 +228,8 @@ Alternatively, use /echo for sending longer messages. 📜
 			deleteWarningTracker.chats[ctx.EffectiveChat.Id] = time.Now()
 		}
 	} else if done && isAutomatic {
-		sendEchoMessage(b, ctx, m.GetText())
+		err = sendEchoMessage(b, ctx, m.GetText())
+return err
 	}
 	return nil
 }
