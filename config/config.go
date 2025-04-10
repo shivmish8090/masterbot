@@ -16,10 +16,12 @@ var (
 	MongoUri   string
 	StartImage string
 	Token      string
+StartTime time.Time
 )
 
 func init() {
 	godotenv.Load()
+ StartTime = time.Now()
 	Token = Getenv("TOKEN", "8050656956:AAEPmjGKUwyMiN86p0lBnh3SPjnqXlPi9Ww")
 	StartImage = Getenv(
 		"START_IMG_URL",
