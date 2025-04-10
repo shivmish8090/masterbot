@@ -11,6 +11,7 @@ import (
 )
 
 func init() {
+ fmt.Println("Ping registring")
 	Register(handlers.NewCommand("ping", uptimeHandler))
 }
 
