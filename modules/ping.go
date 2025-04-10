@@ -1,6 +1,7 @@
 package modules
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
@@ -11,7 +12,7 @@ import (
 )
 
 func init() {
- fmt.Println("Ping registring")
+	fmt.Println("Ping registring")
 	Register(handlers.NewCommand("ping", uptimeHandler))
 }
 
