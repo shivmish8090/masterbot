@@ -231,8 +231,7 @@ Alternatively, use /echo for sending longer messages. 📜
 	}
 	return nil
 }
-
-func sendEchoMessage(b *gotgbot, ctx *ext.Context, text string) error {
+func sendEchoMessage(b *gotgbot.Bot, ctx *ext.Context, text string) error {
 	User := ctx.EffectiveUser
 	userFullName := strings.TrimSpace(User.FirstName + " " + User.LastName)
 
@@ -252,23 +251,21 @@ func sendEchoMessage(b *gotgbot, ctx *ext.Context, text string) error {
 	var msg string
 
 	opts := &gotgbot.SendMessageOpts{
-			ParseMode:          "HTML",
-			LinkPreviewOptions: &gotgbot.LinkPreviewOptions{IsDisabled: true},
+		ParseMode:          "HTML",
+		LinkPreviewOptions: &gotgbot.LinkPreviewOptions{IsDisabled: true},
+	}
+
+	if rmsg := ctx.EffectiveMessage.ReplyToMessage; rmsg != nil && rmsg.From != nil {
+		replyUserFullName := strings.TrimSpace(rmsg.From.FirstName + " " + rmsg.From.LastName)
+		msg = fmt.Sprintf(msgTemplate, rmsg.From.Id, replyUserFullName, User.Id, userFullName, url)
+
+		opts.ReplyParameters = &gotgbot.ReplyParameters{
+			MessageId: rmsg.MessageId,
 		}
-
-	if rmsg := ctx.EffectiveMessage.ReplyToMessage; rmsg != nil {
-	    msg = fmt.Sprintf(msgTemplate, rmsg.From.Id, strings.TrimSpace(rmsg.From.FirstName + " " + rmsg.From.LastName), User.Id, userFullName, url)
-	    
-	    
-	    opts.ReplyParameters =  &gotgbot.ReplyParameters{
-				MessageId: ctx.EffectiveMessage.ReplyToMessage.MessageId,
-			},
 	} else {
-	    msg = fmt.Sprintf(msgTemplate, 0, "", User.Id, userFullName, url)
-	    
+		msg = fmt.Sprintf(msgTemplate, 0, "", User.Id, userFullName, url)
 	}
-	}
-	_, err = b.SendMessage(ctx.EffectiveChat.Id, msg, opts)
 
+	_, err = b.SendMessage(ctx.EffectiveChat.Id, msg, opts)
 	return err
 }
