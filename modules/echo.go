@@ -237,45 +237,36 @@ Alternatively, use /echo for sending longer messages. 📜
 	}
 	return nil
 }
+func sendEchoMessage(ctx *ext.Context, text string) error {
+	User := ctx.EffectiveUser
+	userFullName := strings.TrimSpace(User.FirstName + " " + User.LastName)
 
-func sendEchoMessage(ctx *ext.Context, Text string) err {
-    User := ctx.EffectiveUser
-    
-    userFullName := strings.TrimSpace(User.FirstName + " " + User.LastName)
-    msgTemplate := `<b>Hello <a href="tg://user?id=%d">%s</a></b>, <b><a href="tg://user?id=%d">%s</a></b> wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <b><a href="%s">Telegraph 📝</a></b>`
-	linkPreviewOpts := &gotgbot.LinkPreviewOptions{IsDisabled: true}
-	
-	var author_url string
+	var authorURL string
 	if User.Username != "" {
-		author_url = fmt.Sprintf("https://t.me/%s", User.Username)
+		authorURL = fmt.Sprintf("https://t.me/%s", User.Username)
 	} else {
-		author_url = fmt.Sprintf("tg://user?id=%d", User.Id)
+		authorURL = fmt.Sprintf("tg://user?id=%d", User.Id)
 	}
-	url, err := telegraph.CreatePage(Text, userFullName, author_url)
+
+	url, err := telegraph.CreatePage(text, userFullName, authorURL)
 	if err != nil {
 		return err
 	}
-	var msg string
-	if ctx.EffectiveMessage.ReplyToMessage != nil {
-		rmsg := ctx.EffectiveMessage.ReplyToMessage
-		rFirst := strings.TrimSpace(rmsg.From.FirstName + " " + rmsg.From.LastName)
-		msg = fmt.Sprintf(msgTemplate, rmsg.From.Id, rFirst, User.Id, userFullName, url)
 
-		_, err = b.SendMessage(ctx.EffectiveChat.Id, msg, &gotgbot.SendMessageOpts{
-			ParseMode:          "HTML",
-			LinkPreviewOptions: linkPreviewOpts,
-			ReplyParameters: &gotgbot.ReplyParameters{
-				MessageId: rmsg.MessageId,
-			},
-		})
-		return err
+	msg := fmt.Sprintf(`<b>Hello <a href="tg://user?id=%d">%s</a></b>, <b><a href="tg://user?id=%d">%s</a></b> wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <b><a href="%s">Telegraph 📝</a></b>`,
+		User.Id, User.FirstName, User.Id, User.FirstName, url,
+	)
+
+	opts := &gotgbot.SendMessageOpts{
+		ParseMode: "HTML",
+		DisableWebPagePreview: true,
 	}
-		
-		msg = fmt.Sprintf(msgTemplate, 0, "", User.Id, userFullName, url)
-	_, err = b.SendMessage(ctx.EffectiveChat.Id, msg, &gotgbot.SendMessageOpts{
-		ParseMode:          "HTML",
-		LinkPreviewOptions: linkPreviewOpts,
-	})
+
+	if ctx.EffectiveMessage.ReplyToMessage != nil {
+		_, err = ctx.EffectiveMessage.ReplyToMessage.Reply(ctx.Bot, msg, opts)
+	} else {
+		_, err = ctx.EffectiveMessage.Reply(ctx.Bot, msg, opts)
+	}
+
 	return err
-    
 }
