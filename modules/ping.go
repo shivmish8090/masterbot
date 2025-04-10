@@ -1,16 +1,13 @@
 package modules
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
-	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 )
-
 
 func UptimeHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	uptime := time.Since(config.StartTime)
