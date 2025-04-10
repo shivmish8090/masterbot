@@ -44,6 +44,11 @@ func main() {
 
 	dispatcher.AddHandler(handlers.NewMessage(filters.Invert(filters.ChatAdmins(b)), modules.DeleteLongMessage))
 
+
+dispatcher.AddHandler(handlers.NewMessage(filters.Command(b, "ping"), modules.UptimeHandler))
+
+
+
 	// Allowed updates
 	allowedUpdates := []string{
 		"message",
