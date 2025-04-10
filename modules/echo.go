@@ -172,7 +172,6 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	text := strings.SplitN(Message.GetText(), " ", 2)[1]
 
 	err = sendEchoMessage(ctx, text)
-	
 }
 
 func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
@@ -192,11 +191,10 @@ func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 		return nil
 	}
 	if settings.Mode == "OFF" {
-	    return nil
-	    
+		return nil
 	}
 	if settings.Mode == "AUTOMATIC" {
-	    isAutomatic = true
+		isAutomatic = true
 	}
 	done, err := ctx.EffectiveMessage.Delete(b, nil)
 	if err != nil {
@@ -204,7 +202,7 @@ func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 
-	if done && !isAutomatic{
+	if done && !isAutomatic {
 		deleteWarningTracker.Lock()
 		defer deleteWarningTracker.Unlock()
 
@@ -229,13 +227,11 @@ Alternatively, use /echo for sending longer messages. 📜
 			deleteWarningTracker.chats[ctx.EffectiveChat.Id] = time.Now()
 		}
 	} else if done && isAutomatic {
-	    
-	    sendEchoMessage(ctx, m.GetText())
-	    
-	    
+		sendEchoMessage(ctx, m.GetText())
 	}
 	return nil
 }
+
 func sendEchoMessage(ctx *ext.Context, text string) error {
 	User := ctx.EffectiveUser
 	userFullName := strings.TrimSpace(User.FirstName + " " + User.LastName)
@@ -257,7 +253,7 @@ func sendEchoMessage(ctx *ext.Context, text string) error {
 	)
 
 	opts := &gotgbot.SendMessageOpts{
-		ParseMode: "HTML",
+		ParseMode:             "HTML",
 		DisableWebPagePreview: true,
 	}
 
