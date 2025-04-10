@@ -8,25 +8,25 @@ import (
 )
 
 func init() {
-	Register(handlers.NewMessage(DeleteAbuseHandler))
+	Register(handlers.NewMessage(nil, DeleteAbuseHandler))
 }
 
 func DeleteAbuseHandler(bot *gotgbot.Bot, ctx *ext.Context) error {
-	if ctx.Message == nil || ctx.Message.Text == "" {
+message:= ctx.EffectiveMessage
+	if message == nil || message.Text == "" {
 		return nil
 	}
 
-	msg := ctx.Message.Text
-
-	if goaway.IsProfane(msg) {
-		_, err := bot.DeleteMessage(ctx.Message.Chat.Id, ctx.Message.MessageId)
+	if goaway.IsProfane(message.Text) {
+		_, err := message.Delete(bot, nil)
 		if err != nil {
 			return nil
 		}
 
-		censored := goaway.Censor(msg)
-		warning := "⚠️ *Watch your language!*\nYour message was removed:\n\n`" + censored + "`"
-		_, _ = ctx.EffectiveChat.SendMessage(bot, warning, &gotgbot.SendMessageOpts{ParseMode: "Markdown"})
+		censored := goaway.Censor(message.Text)
+		warning := "⚠️ <b>Watch your language!</b>\nYour message was removed:\n\n`" + censored + "`"
+
+ctx.EffectiveChat.SendMessage(bot, warning, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
 	}
 
 	return nil
