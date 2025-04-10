@@ -171,7 +171,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	text := strings.SplitN(Message.GetText(), " ", 2)[1]
 
-	err = sendEchoMessage(ctx, text)
+	err = sendEchoMessage(b, ctx, text)
 }
 
 func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
@@ -227,12 +227,12 @@ Alternatively, use /echo for sending longer messages. 📜
 			deleteWarningTracker.chats[ctx.EffectiveChat.Id] = time.Now()
 		}
 	} else if done && isAutomatic {
-		sendEchoMessage(ctx, m.GetText())
+		sendEchoMessage(b, ctx, m.GetText())
 	}
 	return nil
 }
 
-func sendEchoMessage(ctx *ext.Context, text string) error {
+func sendEchoMessage(b *gotgbot, ctx *ext.Context, text string) error {
 	User := ctx.EffectiveUser
 	userFullName := strings.TrimSpace(User.FirstName + " " + User.LastName)
 
@@ -248,20 +248,27 @@ func sendEchoMessage(ctx *ext.Context, text string) error {
 		return err
 	}
 
-	msg := fmt.Sprintf(`<b>Hello <a href="tg://user?id=%d">%s</a></b>, <b><a href="tg://user?id=%d">%s</a></b> wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <b><a href="%s">Telegraph 📝</a></b>`,
-		User.Id, User.FirstName, User.Id, User.FirstName, url,
-	)
+	msgTemplate := `<b>Hello <a href="tg://user?id=%d">%s</a></b>, <b><a href="tg://user?id=%d">%s</a></b> wanted to share a message ✉️, but it was too long to send here 📄. You can view the full message on <b><a href="%s">Telegraph 📝</a></b>`
+	var msg string
 
 	opts := &gotgbot.SendMessageOpts{
-		ParseMode:             "HTML",
-		DisableWebPagePreview: true,
-	}
+			ParseMode:          "HTML",
+			LinkPreviewOptions: &gotgbot.LinkPreviewOptions{IsDisabled: true},
+		}
 
-	if ctx.EffectiveMessage.ReplyToMessage != nil {
-		_, err = ctx.EffectiveMessage.ReplyToMessage.Reply(ctx.Bot, msg, opts)
+	if rmsg := ctx.EffectiveMessage.ReplyToMessage; rmsg != nil {
+	    msg = fmt.Sprintf(msgTemplate, rmsg.From.Id, strings.TrimSpace(rmsg.From.FirstName + " " + rmsg.From.LastName), User.Id, userFullName, url)
+	    
+	    
+	    opts.ReplyParameters =  &gotgbot.ReplyParameters{
+				MessageId: ctx.EffectiveMessage.ReplyToMessage.MessageId,
+			},
 	} else {
-		_, err = ctx.EffectiveMessage.Reply(ctx.Bot, msg, opts)
+	    msg = fmt.Sprintf(msgTemplate, 0, "", User.Id, userFullName, url)
+	    
 	}
+	}
+	_, err = b.SendMessage(ctx.EffectiveChat.Id, msg, opts)
 
 	return err
 }
