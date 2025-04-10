@@ -45,7 +45,7 @@ func ReloadHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	if config.Contains(admins, ctx.EffectiveUser.Id) {
 		text = "✅ Successfully refreshed the cache of chat admins!"
 	} else {
-		text = "⚠️ Tried refreshing the admin cache... but oops! You're not an admin."
+		text = "⚠️ Tried refreshing the admin cache... but You're not an admin!"
 	}
 
 	_, ok, e := x.EditText(b, text, nil)
