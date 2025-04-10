@@ -233,7 +233,7 @@ func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	    return nil
 	    
 	}
-	if settings.Mode == "automatic" {
+	if settings.Mode == "AUTOMATIC" {
 	    isAutomatic = true
 	}
 	done, err := ctx.EffectiveMessage.Delete(b, nil)
