@@ -12,7 +12,7 @@ func init() {
 }
 
 func DeleteAbuseHandler(bot *gotgbot.Bot, ctx *ext.Context) error {
-message:= ctx.EffectiveMessage
+	message := ctx.EffectiveMessage
 	if message == nil || message.Text == "" {
 		return nil
 	}
@@ -26,7 +26,7 @@ message:= ctx.EffectiveMessage
 		censored := goaway.Censor(message.Text)
 		warning := "⚠️ <b>Watch your language!</b>\nYour message was removed:\n\n`" + censored + "`"
 
-ctx.EffectiveChat.SendMessage(bot, warning, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
+		ctx.EffectiveChat.SendMessage(bot, warning, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
 	}
 
 	return nil
