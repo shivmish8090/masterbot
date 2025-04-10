@@ -234,7 +234,6 @@ Alternatively, use /echo for sending longer messages. 📜
 	    
 	    
 	}
-	}
 	return nil
 }
 func sendEchoMessage(ctx *ext.Context, text string) error {
