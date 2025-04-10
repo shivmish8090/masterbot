@@ -165,7 +165,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 
 	if len(Message.GetText()) < settings.Limit {
-		b.SendMessage(ChatId, fmt.Sprintf("Oops! Your message is under %d characters. You can send it without using /echo.",  settings.Limit), nil)
+		b.SendMessage(ChatId, fmt.Sprintf("Oops! Your message is under %d characters. You can send it without using /echo.", settings.Limit), nil)
 		return nil
 	}
 
