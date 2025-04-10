@@ -44,7 +44,7 @@ func main() {
 
 	dispatcher.AddHandler(handlers.NewMessage(filters.Invert(filters.ChatAdmins(b)), modules.DeleteLongMessage))
 
-	dispatcher.AddHandler(handlers.NewMessage(filters.Command(b, "ping"), modules.PingHandle))
+	dispatcher.AddHandlerToGroup(handlers.NewMessage(filters.Command(b, "ping"), modules.PingHandle), 1)
 
 	// Allowed updates
 	allowedUpdates := []string{
