@@ -231,6 +231,7 @@ Alternatively, use /echo for sending longer messages. 📜
 	}
 	return nil
 }
+
 func sendEchoMessage(b *gotgbot.Bot, ctx *ext.Context, text string) error {
 	User := ctx.EffectiveUser
 	userFullName := strings.TrimSpace(User.FirstName + " " + User.LastName)
