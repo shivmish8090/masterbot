@@ -172,7 +172,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	text := strings.SplitN(Message.GetText(), " ", 2)[1]
 
 	err = sendEchoMessage(b, ctx, text)
-return err
+	return err
 }
 
 func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
@@ -229,7 +229,7 @@ Alternatively, use /echo for sending longer messages. 📜
 		}
 	} else if done && isAutomatic {
 		err = sendEchoMessage(b, ctx, m.GetText())
-return err
+		return err
 	}
 	return nil
 }
