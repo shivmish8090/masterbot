@@ -11,12 +11,8 @@ import (
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 )
 
-func init() {
-	fmt.Println("Ping registring")
-	Register(handlers.NewCommand("ping", uptimeHandler))
-}
 
-func uptimeHandler(b *gotgbot.Bot, ctx *ext.Context) error {
+func UptimeHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	uptime := time.Since(config.StartTime)
 	uptimeStr := config.FormatUptime(uptime)
 	ctx.EffectiveMessage.Delete(b, nil)
