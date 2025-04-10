@@ -15,7 +15,7 @@ func init() {
 }
 
 func uptimeHandler(b *gotgbot.Bot, ctx *ext.Context) error {
-	uptime := time.Since(startTime)
+	uptime := time.Since(config.StartTime)
 	uptimeStr := config.FormatUptime(uptime)
 	ctx.EffectiveMessage.Delete(b, nil)
 
