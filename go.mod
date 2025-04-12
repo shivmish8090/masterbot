@@ -3,7 +3,7 @@ module github.com/Vivekkumar-IN/EditguardianBot
 go 1.24.2
 
 require (
-	github.com/PaulSonOfLars/gotgbot/v2 v2.0.0-rc.31
+	github.com/PaulSonOfLars/gotgbot/v2 v2.0.0-rc.32
 	github.com/TwiN/go-away v1.6.15
 	github.com/joho/godotenv v1.5.1
 	github.com/valyala/fasthttp v1.60.0

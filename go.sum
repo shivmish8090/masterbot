@@ -1,5 +1,5 @@
-github.com/PaulSonOfLars/gotgbot/v2 v2.0.0-rc.31 h1:SIkzqC6Nv+znY4NGbWlJceWdns8QVmf9cwAYXd7Cg8k=
-github.com/PaulSonOfLars/gotgbot/v2 v2.0.0-rc.31/go.mod h1:kL1v4iIjlalwm3gCYGvF4NLa3hs+aKEfRkNJvj4aoDU=
+github.com/PaulSonOfLars/gotgbot/v2 v2.0.0-rc.32 h1:+YzI72wzNTcaPUDVcSxeYQdHfvEk8mPGZh/yTk5kkRg=
+github.com/PaulSonOfLars/gotgbot/v2 v2.0.0-rc.32/go.mod h1:BSzsfjlE0wakLw2/U1FtO8rdVt+Z+4VyoGo/YcGD9QQ=
 github.com/TwiN/go-away v1.6.15 h1:pm1UvsteYNnOWl4bcbhAXQnebR5UcqfcuCi3kl6LJhE=
 github.com/TwiN/go-away v1.6.15/go.mod h1:cgCIChHZZU7u9QjVuGAf3X95MPoMPuceCwnvj8+JDB0=
 github.com/andybalholm/brotli v1.1.1 h1:PR2pgnyFznKEugtsUo0xLdDop5SKXd5Qf5ysW+7XdTA=
