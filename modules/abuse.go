@@ -1,5 +1,5 @@
 package modules
-
+/*
 import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
@@ -7,7 +7,7 @@ import (
 	goaway "github.com/TwiN/go-away"
 )
 
-/*
+
 func init() {
 	Register(handlers.NewMessage(nil, DeleteAbuseHandler))
 }
