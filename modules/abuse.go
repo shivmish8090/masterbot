@@ -1,4 +1,4 @@
-package modules
+/*package modules
 
 import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
@@ -29,5 +29,6 @@ func DeleteAbuseHandler(bot *gotgbot.Bot, ctx *ext.Context) error {
 		ctx.EffectiveChat.SendMessage(bot, warning, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
 	}
 
-	return ext.ContinueGroups
+	return Continue
 }
+/*
