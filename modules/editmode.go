@@ -7,7 +7,6 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 
-	"github.com/Vivekkumar-IN/EditguardianBot/config"
 	"github.com/Vivekkumar-IN/EditguardianBot/config/helpers"
 )
 
