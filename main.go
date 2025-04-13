@@ -26,7 +26,7 @@ func main() {
 	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
 		Error: func(b *gotgbot.Bot, ctx *ext.Context, err error) ext.DispatcherAction {
 			msg := fmt.Sprintf(
-				"❗ <b>Error occurred</b>\n\n<b>Error:</b> <code>%vscode>\n<b>From User:</b> %vsn<b>Chat:</b> %v\n<b>Data:</b> <pre>%v</pre>",
+				"❗ <b>Error occurred</b>\n\n<b>Error:</b> <code>%s</code>\n<b>From User:</b> %s<b>Chat:</b> %s",
 				err,
 				ctx.EffectiveUser.FirstName,
 				ctx.EffectiveChat.Title,
