@@ -8,10 +8,10 @@ import (
 
 type AdminData struct {
 	Status string
-	Member *bot.ChatMember
+	Member *gotgbot.ChatMember
 }
 
-func FetchAdminsMap(b bot.Bot, ChatId int64) (map[int64]AdminData, error) {
+func FetchAdminsMap(b gotgbot.Bot, ChatId int64) (map[int64]AdminData, error) {
 	cacheKey := fmt.Sprintf("admins:%d", ChatId)
 
 	if admins, ok := config.LoadTyped[map[int64]AdminData](config.Cache, cacheKey); ok {
@@ -38,7 +38,7 @@ func FetchAdminsMap(b bot.Bot, ChatId int64) (map[int64]AdminData, error) {
 	return adminMap, nil
 }
 
-func GetAdmins(b bot.Bot, ChatId int64) ([]int64, error) {
+func GetAdmins(b gotgbot.Bot, ChatId int64) ([]int64, error) {
 	adminMap, err := FetchAdminsMap(b, ChatId)
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func GetAdmins(b bot.Bot, ChatId int64) ([]int64, error) {
 	return ids, nil
 }
 
-func GetOwner(b bot.Bot, ChatId int64) (int64, error) {
+func GetOwner(b gotgbot.Bot, ChatId int64) (int64, error) {
 	adminMap, err := FetchAdminsMap(b, ChatId)
 	if err != nil {
 		return 0, err
