@@ -22,7 +22,7 @@ var (
 	}, MaxHelpModules)
 )
 
-func orCont(err error) any {
+func orCont(err error) error {
 	if err != nil {
 		return err
 	}
