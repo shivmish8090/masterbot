@@ -9,7 +9,7 @@ import (
 )
 
 type AdminData struct {
-	Status string
+	Status      string
 	Permissions *gotgbot.ChatMember
 }
 
@@ -30,7 +30,7 @@ func FetchAdmins(b gotgbot.Bot, ChatId int64) (map[int64]AdminData, error) {
 		status := m.GetStatus()
 		if status == "administrator" || status == "creator" {
 			adminMap[m.GetUser().Id] = AdminData{
-				Status: status,
+				Status:      status,
 				Permissions: m.MergedChatMember(),
 			}
 		}
