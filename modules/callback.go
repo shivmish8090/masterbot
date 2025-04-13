@@ -13,5 +13,5 @@ func init() {
 
 func close(b *gotgbot.Bot, ctx *ext.Context) error {
 	_, err := ctx.CallbackQuery.Message.Delete(b, nil)
-	return err
+	return orCont(err)
 }
