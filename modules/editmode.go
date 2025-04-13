@@ -43,7 +43,7 @@ func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 				fmt.Sprintf("https://t.me/%s?start=editmode", b.User.Username)),
 			&gotgbot.SendMessageOpts{ParseMode: "HTML"})
 		ctx.EffectiveMessage.Delete(b, nil)
-		return nil
+		return Continue
 	}
 
 	y := strings.ToLower(args[1])
@@ -54,10 +54,10 @@ func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 				fmt.Sprintf("https://t.me/%s?start=editmode", b.User.Username)),
 			&gotgbot.SendMessageOpts{ParseMode: "HTML"})
 		ctx.EffectiveMessage.Delete(b, nil)
-		return nil
+		return Continue
 	}
 
 	ctx.EffectiveMessage.Reply(b, "This command will be available soon..", nil)
 	ctx.EffectiveMessage.Delete(b, nil)
-	return nil
+	return Continue
 }
