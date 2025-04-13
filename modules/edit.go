@@ -10,7 +10,7 @@ import (
 func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	message := ctx.EditedMessage
 	if message == nil || ctx.EffectiveChat.Type == "private" {
-		return nil
+		return Continue
 	}
 
 	Chat, err := b.GetChat(ctx.EffectiveChat.Id, nil)
@@ -20,12 +20,12 @@ func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	if message.SenderChat != nil {
 		if message.Chat.Id == message.SenderChat.Id || Chat.LinkedChatId == message.SenderChat.Id {
-			return nil
+			return Continue
 		}
 	}
 
 	if _, err = ctx.EffectiveMessage.Delete(b, nil); err != nil {
-		return err
+		return orCont(err)
 	}
 
 	reason := "<b>🚫 Editing messages is prohibited in this chat.</b> Please refrain from modifying your messages to maintain the integrity of the conversation."
@@ -53,29 +53,7 @@ func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 		reason = "<b>🖼️ Replacing a sticker is not permitted.</b> Stickers cannot be edited after posting to maintain their original meaning."
 	}
 
-	keyboard := gotgbot.InlineKeyboardMarkup{
-		InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
-			{
-				{
-					Text: "🔄 Updates",
-					Url:  "https://t.me/SanatanVibe",
-				},
-				{
-					Text: "💬 Support",
-					Url:  "https://t.me/dns_support_group",
-				},
-			},
-			{
-				{
-					Text: "➕ Add me to Your Group",
-					Url: fmt.Sprintf(
-						"https://t.me/%s?startgroup=s&admin=delete_messages+invite_users",
-						b.User.Username,
-					),
-				},
-			},
-		},
-	}
+	keyboard := buttons.EditedMessagePanel(b)
 
 	_, err = b.SendMessage(
 		ctx.EffectiveChat.Id,
@@ -86,5 +64,5 @@ func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 
-	return nil
+	return Continue
 }
