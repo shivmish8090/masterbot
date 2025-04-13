@@ -2,11 +2,13 @@ package modules
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
+
+	"github.com/Vivekkumar-IN/EditguardianBot/config"
+	"github.com/Vivekkumar-IN/EditguardianBot/config/helpers"
 )
 
 func init() {
@@ -64,7 +66,7 @@ func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 		ctx.EffectiveMessage.Delete(b, nil)
 		return Continue
 	}
-admins, err := helpers.GetAdmins(b, ctx.EffectiveChat.Id)
+	admins, err := helpers.GetAdmins(b, ctx.EffectiveChat.Id)
 	if err != nil {
 		return err
 	}
@@ -73,8 +75,8 @@ admins, err := helpers.GetAdmins(b, ctx.EffectiveChat.Id)
 		b.SendMessage(ChatId, "Access denied: Only group admins can use this command.\n\nIf you are an admin, please use /reload to refresh the admin list.", nil)
 		return Continue
 	}
-        keys := []string{"set-mode", "set-duration"}
-        _, res := config.ParseFlags(keys, Message.Text)
+	keys := []string{"set-mode", "set-duration"}
+	_, res := config.ParseFlags(keys, Message.Text)
 
 	if y != "off" && y != "user" && y != "admin" {
 		ctx.EffectiveMessage.Reply(b,
