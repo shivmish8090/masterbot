@@ -49,7 +49,7 @@ func ReloadHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		text = "⚠️ Tried refreshing the admin cache... but You're not an admin!"
 	}
 
-	_, _, err := x.EditText(b, text, nil)
+	_, _, err = x.EditText(b, text, nil)
 
 	return orCont(err)
 }
