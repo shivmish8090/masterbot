@@ -37,7 +37,7 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 				if err != nil {
 					return err
 				}
-				return nil
+				return Continue
 			}
 		}
 		file := gotgbot.InputFileByURL(config.StartImage)
@@ -108,7 +108,7 @@ I'm <b><a href="tg://user?id=%d">%s</a></b>, your security assistant, ensuring a
 
 	} else if chat == "group" {
 		if isCallback {
-			return nil
+			return Continue
 		}
 
 		message := `⚠️ Warning: I can't function in a basic group!
@@ -125,11 +125,11 @@ To use my features, please upgrade this group to a supergroup.
 
 	} else if chat == "supergroup" {
 		if isCallback {
-			return nil
+			return Continue
 		}
 		database.AddServedChat(ctx.EffectiveChat.Id)
 		ctx.EffectiveMessage.Reply(b, "✅ I am active and ready to protect this supergroup!", nil)
 	}
 
-	return nil
+	return Continue
 }
