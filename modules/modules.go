@@ -14,13 +14,20 @@ const (
 )
 
 var (
+    Continue = ext.ContinueGroups
 	Handlers    = make([]ext.Handler, 0, MaxHandlers)
 	ModulesHelp = make(map[string]struct {
 		Callback string
 		Help     string
 	}, MaxHelpModules)
-	Continue = ext.ContinueGroups
 )
+
+func orCont(err error) any {
+	if err != nil {
+		return err
+	}
+	return Continue
+}
 
 func Register(h ext.Handler) {
 	if len(Handlers) >= MaxHandlers {
@@ -53,11 +60,4 @@ func GetHelp(callback string) string {
 		}
 	}
 	return ""
-}
-
-func orCont(err error) any {
-	if err != nil {
-		return err
-	}
-	return Continue
 }
