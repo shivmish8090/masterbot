@@ -50,5 +50,5 @@ func ReloadHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	_, _, e := x.EditText(b, text, nil)
 
- return orCont(e)
+	return orCont(e)
 }
