@@ -70,11 +70,7 @@ Let me know if you need any help.`,
 		logStr,
 		&gotgbot.SendMessageOpts{ParseMode: "HTML"},
 	)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return orCont(err)
 }
 
 func ExtractJoinLeftStatusChange(u *gotgbot.ChatMemberUpdated) (bool, bool) {
