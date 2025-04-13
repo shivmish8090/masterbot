@@ -172,7 +172,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	text := strings.SplitN(Message.GetText(), " ", 2)[1]
 
 	err = sendEchoMessage(b, ctx, text)
-	return err
+	return orCont(err)
 }
 
 func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
@@ -180,7 +180,7 @@ func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	settings, err := database.GetEchoSettings(ctx.EffectiveChat.Id)
 	var isAutomatic bool
 	if err != nil {
-		_, err = b.SendMessage(
+		b.SendMessage(
 			config.LoggerId,
 			fmt.Sprintf("⚠️ Something went wrong while Getting the limit.\nError: %v", err),
 			nil,
@@ -229,7 +229,7 @@ Alternatively, use /echo for sending longer messages. 📜
 		}
 	} else if done && isAutomatic {
 		err = sendEchoMessage(b, ctx, m.GetText())
-		return err
+		orCont(err)
 	}
 	return ext.ContinueGroups
 }
@@ -270,5 +270,5 @@ func sendEchoMessage(b *gotgbot.Bot, ctx *ext.Context, text string) error {
 	}
 
 	_, err = b.SendMessage(ctx.EffectiveChat.Id, msg, opts)
-	return err
+	return orCont(err)
 }
