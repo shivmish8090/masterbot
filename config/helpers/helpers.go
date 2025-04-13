@@ -31,7 +31,7 @@ func FetchAdmins(b gotgbot.Bot, ChatId int64) (map[int64]AdminData, error) {
 		if status == "administrator" || status == "creator" {
 			adminMap[m.GetUser().Id] = AdminData{
 				Status:      status,
-				Permissions: m.MergedChatMember(),
+				Permissions: m.MergeChatMember(),
 			}
 		}
 	}
