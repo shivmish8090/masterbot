@@ -19,7 +19,7 @@ var (
 		Callback string
 		Help     string
 	}, MaxHelpModules)
-Continue = ext.ContinueGroups
+	Continue = ext.ContinueGroups
 )
 
 func Register(h ext.Handler) {
