@@ -107,7 +107,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 			}
 		}
 
-		//var err error
+		// var err error
 		if res["set-limit"] != "" {
 			limit, convErr := strconv.Atoi(res["set-limit"])
 			if convErr != nil {
