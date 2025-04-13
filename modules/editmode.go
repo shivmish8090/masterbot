@@ -76,7 +76,7 @@ func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 		return Continue
 	}
 	keys := []string{"set-mode", "set-duration"}
-	_, res := config.ParseFlags(keys, Message.Text)
+	_, res := helpers.ParseFlags(keys, Message.Text)
 
 	if res["set-mode"] != "off" && res["set-mode"] != "user" && res["set-mode"] != "admin" {
 		ctx.EffectiveMessage.Reply(b,
