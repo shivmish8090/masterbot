@@ -35,24 +35,24 @@ Controls how the bot deletes <b>edited messages</b>.
 }
 
 func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
-Message := ctx.EffectiveMessage
-        if Message.SenderChat != nil {
-                Message.Reply(
-                        b,
-                        "You are anonymous Admin you can't use this command.",
-                        nil,
-                )
-                return Continue
-        }
+	Message := ctx.EffectiveMessage
+	if Message.SenderChat != nil {
+		Message.Reply(
+			b,
+			"You are anonymous Admin you can't use this command.",
+			nil,
+		)
+		return Continue
+	}
 
-        if ctx.EffectiveChat.Type != "supergroup" {
-                Message.Reply(
-                        b,
-                        "This command is meant to be used in supergroups, not in private messages!",
-                        nil,
-                )
-                return Continue
-        }
+	if ctx.EffectiveChat.Type != "supergroup" {
+		Message.Reply(
+			b,
+			"This command is meant to be used in supergroups, not in private messages!",
+			nil,
+		)
+		return Continue
+	}
 
 	args := ctx.Args()
 
