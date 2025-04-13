@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
-	//"github.com/PaulSonOfLars/gotgbot/v2/bot"
 )
 
 type AdminData struct {
