@@ -78,7 +78,7 @@ func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 	keys := []string{"set-mode", "set-duration"}
 	_, res := config.ParseFlags(keys, Message.Text)
 
-	if y != "off" && y != "user" && y != "admin" {
+	if res["set-mode"] != "off" && res["set-mode"] != "user" && res["set-mode"] != "admin" {
 		ctx.EffectiveMessage.Reply(b,
 			fmt.Sprintf("Usage: <code>/editmod &lt;off|admin|user&gt;</code>\n<b>For more help, check out:</b> <a href=\"%s\">Edit Mode Help</a>",
 				fmt.Sprintf("https://t.me/%s?start=editmode", b.User.Username)),
