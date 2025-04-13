@@ -16,7 +16,7 @@ type AdminData struct {
 func FetchAdmins(b gotgbot.Bot, ChatId int64) (map[int64]AdminData, error) {
 	cacheKey := fmt.Sprintf("admins:%d", ChatId)
 
-	if admins, ok := config.LoadTyped[map[int64]AdminData](config.Cache, cacheKey); ok {
+	if admins, ok := helpers.LoadTyped[map[int64]AdminData](config.Cache, cacheKey); ok {
 		return admins, nil
 	}
 
