@@ -53,3 +53,10 @@ func GetHelp(callback string) string {
 	}
 	return ""
 }
+
+func orCont(err error) any {
+	if err != nil {
+		return err
+	}
+	return ext.ContinueGroups
+}
