@@ -59,7 +59,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 			"You are anonymous Admin you can't use this command.",
 			nil,
 		)
-		return nil
+		return ext.ContinueGroups
 	}
 
 	if ctx.EffectiveChat.Type != "supergroup" {
@@ -68,12 +68,12 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 			"This command is meant to be used in supergroups, not in private messages!",
 			nil,
 		)
-		return nil
+		return ext.ContinueGroups
 	}
 
 	if len(ctx.Args()) < 2 {
 		Message.Reply(b, "Usage: /echo <long message>", nil)
-		return nil
+		return ext.ContinueGroups
 	}
 
 	Message.Delete(b, nil)
@@ -89,7 +89,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		if admins, ok := config.LoadTyped[[]int64](config.Cache, cacheKey); ok {
 			if !config.Contains(admins, User.Id) {
 				b.SendMessage(ChatId, "Access denied: Only group admins can use this command.\n\nIf you are an admin, please use /reload to refresh the admin list.", nil)
-				return nil
+				return ext.ContinueGroups
 			}
 		} else {
 			chatmembers, e := b.GetChatAdministrators(ChatId, nil)
@@ -109,7 +109,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 			if !config.Contains(admins, User.Id) {
 				b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
-				return nil
+				return ext.ContinueGroups
 			}
 		}
 		r := "Your settings were successfully updated:"
@@ -122,7 +122,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 				r += "\nNew Mode = " + settings.Mode
 			} else {
 				b.SendMessage(ChatId, fmt.Sprintf("🚫 Invalid mode: '%s'. Valid options are <off|manual|automatic>.", res["set-mode"]), nil)
-				return nil
+				return ext.ContinueGroups
 			}
 		}
 
@@ -154,7 +154,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		}
 
 		b.SendMessage(ChatId, r, nil)
-		return nil
+		return ext.ContinueGroups
 	}
 
 	var settings *database.EchoSettings
@@ -166,7 +166,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	if len(Message.GetText()) < settings.Limit {
 		b.SendMessage(ChatId, fmt.Sprintf("Oops! Your message is under %d characters. You can send it without using /echo.", settings.Limit), nil)
-		return nil
+		return ext.ContinueGroups
 	}
 
 	text := strings.SplitN(Message.GetText(), " ", 2)[1]
@@ -189,10 +189,10 @@ func DeleteLongMessage(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 
 	if m.GetText() == "" || len(m.GetText()) < settings.Limit {
-		return nil
+		return ext.ContinueGroups
 	}
 	if settings.Mode == "OFF" {
-		return nil
+		return ext.ContinueGroups
 	}
 	if settings.Mode == "AUTOMATIC" {
 		isAutomatic = true
@@ -231,7 +231,7 @@ Alternatively, use /echo for sending longer messages. 📜
 		err = sendEchoMessage(b, ctx, m.GetText())
 		return err
 	}
-	return nil
+	return ext.ContinueGroups
 }
 
 func sendEchoMessage(b *gotgbot.Bot, ctx *ext.Context, text string) error {
