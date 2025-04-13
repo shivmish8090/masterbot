@@ -13,7 +13,7 @@ type AdminData struct {
 	Permissions gotgbot.MergedChatMember
 }
 
-func FetchAdmins(b gotgbot.Bot, ChatId int64) (map[int64]AdminData, error) {
+func FetchAdmins(b *gotgbot.Bot, ChatId int64) (map[int64]AdminData, error) {
 	cacheKey := fmt.Sprintf("admins:%d", ChatId)
 
 	if admins, ok := LoadTyped[map[int64]AdminData](config.Cache, cacheKey); ok {
@@ -40,7 +40,7 @@ func FetchAdmins(b gotgbot.Bot, ChatId int64) (map[int64]AdminData, error) {
 	return adminMap, nil
 }
 
-func GetAdmins(b gotgbot.Bot, ChatId int64) ([]int64, error) {
+func GetAdmins(b *gotgbot.Bot, ChatId int64) ([]int64, error) {
 	adminMap, err := FetchAdmins(b, ChatId)
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func GetAdmins(b gotgbot.Bot, ChatId int64) ([]int64, error) {
 	return ids, nil
 }
 
-func GetOwner(b gotgbot.Bot, ChatId int64) (int64, error) {
+func GetOwner(b *gotgbot.Bot, ChatId int64) (int64, error) {
 	adminMap, err := FetchAdmins(b, ChatId)
 	if err != nil {
 		return 0, err
