@@ -229,7 +229,7 @@ Alternatively, use /echo for sending longer messages. 📜
 		}
 	} else if done && isAutomatic {
 		err = sendEchoMessage(b, ctx, m.GetText())
-		orCont(err)
+		return orCont(err)
 	}
 	return ext.ContinueGroups
 }
