@@ -24,12 +24,24 @@ func main() {
 	defer database.Disconnect()
 
 	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
-		Error: func(_ *gotgbot.Bot, _ *ext.Context, err error) ext.DispatcherAction {
-			log.Println("An error occurred while handling update:", err.Error())
-			return ext.DispatcherActionNoop
-		},
-		MaxRoutines: 500,
-	})
+    Error: func(b *gotgbot.Bot, ctx *ext.Context, err error) ext.DispatcherAction {
+        msg := fmt.Sprintf(
+            "❗ <b>Error occurred</b>\n\n<b>Error:</b> <code>%v</code>\n<b>From User:</b> %v\n<b>Chat:</b> %v\n<b>Data:</b> <pre>%v</pre>",
+            err,
+            ctx.EffectiveUser,
+            ctx.EffectiveChat,
+            ctx.Update,
+        )
+
+        b.SendMessage(config.LoggerId, msg, &gotgbot.SendMessageOpts{
+            ParseMode: "HTML",
+        })
+
+        return ext.DispatcherActionContinueGroups
+    },
+    MaxRoutines: 500,
+})
+
 	updater := ext.NewUpdater(dispatcher, nil)
 
 	// Handlers
