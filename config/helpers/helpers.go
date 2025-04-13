@@ -10,7 +10,7 @@ import (
 
 type AdminData struct {
 	Status      string
-	Permissions *gotgbot.MergedChatMember
+	Permissions gotgbot.MergedChatMember
 }
 
 func FetchAdmins(b gotgbot.Bot, ChatId int64) (map[int64]AdminData, error) {
