@@ -108,7 +108,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 			config.Cache.Store(cacheKey, admins)
 
 			if !config.Contains(admins, User.Id) {
-				b.SendMessage(ChatId, "Access denied: Only group admins can use this command.", nil)
+				b.SendMessage(ChatId, "Access denied: Only group admins can use this command.\n\nIf you are an admin, please use /reload to refresh the admin list.", nil)
 				return Continue
 			}
 		}
