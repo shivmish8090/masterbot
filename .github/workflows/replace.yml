@@ -17,7 +17,7 @@ jobs:
         run: |
           declare -A replacements=(
             ["config.Contains"]="helpers.Contains"
-            ["COMMAND_USAGE_ERROR"]="general_2"
+            ["config.LoadTyped"]="helpers.LoadTyped"
             ["ERROR_OCCURRED_MSG"]="general_3"
             ["ANONYMOUS_ADMIN"]="general_4"
             ["PERMISSION_REQUIRED"]="general_5"
