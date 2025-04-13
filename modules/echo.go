@@ -150,7 +150,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		return Continue
 	}
 
-	parts := strings.SplitN(Message.GetText(), " ", 2)[1]
+	text := strings.SplitN(Message.GetText(), " ", 2)[1]
 
 	err = sendEchoMessage(b, ctx, text)
 	return orCont(err)
