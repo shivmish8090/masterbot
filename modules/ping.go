@@ -15,5 +15,5 @@ func PingHandle(b *gotgbot.Bot, ctx *ext.Context) error {
 	ctx.EffectiveMessage.Delete(b, nil)
 
 	_, err := ctx.EffectiveChat.SendMessage(b, "Bot has been running for: "+uptimeStr, nil)
-	return err
+	return orCont(err)
 }
