@@ -10,10 +10,10 @@ import (
 
 type AdminData struct {
 	Status string
-	Member *gotgbot.ChatMember
+	Permissions *gotgbot.ChatMember
 }
 
-func FetchAdminsMap(b gotgbot.Bot, ChatId int64) (map[int64]AdminData, error) {
+func FetchAdmins(b gotgbot.Bot, ChatId int64) (map[int64]AdminData, error) {
 	cacheKey := fmt.Sprintf("admins:%d", ChatId)
 
 	if admins, ok := config.LoadTyped[map[int64]AdminData](config.Cache, cacheKey); ok {
@@ -31,7 +31,7 @@ func FetchAdminsMap(b gotgbot.Bot, ChatId int64) (map[int64]AdminData, error) {
 		if status == "administrator" || status == "creator" {
 			adminMap[m.GetUser().Id] = AdminData{
 				Status: status,
-				Member: m,
+				Permissions: m.MergedChatMember(),
 			}
 		}
 	}
@@ -41,7 +41,7 @@ func FetchAdminsMap(b gotgbot.Bot, ChatId int64) (map[int64]AdminData, error) {
 }
 
 func GetAdmins(b gotgbot.Bot, ChatId int64) ([]int64, error) {
-	adminMap, err := FetchAdminsMap(b, ChatId)
+	adminMap, err := FetchAdmins(b, ChatId)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func GetAdmins(b gotgbot.Bot, ChatId int64) ([]int64, error) {
 }
 
 func GetOwner(b gotgbot.Bot, ChatId int64) (int64, error) {
-	adminMap, err := FetchAdminsMap(b, ChatId)
+	adminMap, err := FetchAdmins(b, ChatId)
 	if err != nil {
 		return 0, err
 	}
