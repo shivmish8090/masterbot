@@ -14,7 +14,7 @@ const (
 )
 
 var (
-    Continue = ext.ContinueGroups
+	Continue    = ext.ContinueGroups
 	Handlers    = make([]ext.Handler, 0, MaxHandlers)
 	ModulesHelp = make(map[string]struct {
 		Callback string
