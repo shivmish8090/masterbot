@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	MaxHandlers    = 20 // <- Change this to increase/decrease handler limit
-	MaxHelpModules = 10 // <- Change this to increase/decrease help module limit
+	MaxHandlers    = 20
+	MaxHelpModules = 10
 )
 
 var (
@@ -19,6 +19,7 @@ var (
 		Callback string
 		Help     string
 	}, MaxHelpModules)
+Continue = ext.ContinueGroups
 )
 
 func Register(h ext.Handler) {
