@@ -84,34 +84,16 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	var err error
 
 	if res["set-mode"] != "" || res["set-limit"] != "" {
-		cacheKey := fmt.Sprintf("admins:%d", ChatId)
+	admins, err := helpers.GetAdmins(b, ChatId)
+	if err != nil {
+		return err
+	}
 
-		if admins, ok := config.LoadTyped[[]int64](config.Cache, cacheKey); ok {
-			if !config.Contains(admins, User.Id) {
-				b.SendMessage(ChatId, "Access denied: Only group admins can use this command.\n\nIf you are an admin, please use /reload to refresh the admin list.", nil)
-				return Continue
-			}
-		} else {
-			chatmembers, e := b.GetChatAdministrators(ChatId, nil)
-			if e != nil {
-				return e
-			}
-
-			var admins []int64
-			for _, m := range chatmembers {
-				status := m.GetStatus()
-				if status == "administrator" || status == "creator" {
-					admins = append(admins, m.GetUser().Id)
-				}
-			}
-
-			config.Cache.Store(cacheKey, admins)
-
-			if !config.Contains(admins, User.Id) {
-				b.SendMessage(ChatId, "Access denied: Only group admins can use this command.\n\nIf you are an admin, please use /reload to refresh the admin list.", nil)
-				return Continue
-			}
-		}
+	if !config.Contains(admins, User.Id) {
+		b.SendMessage(ChatId, "Access denied: Only group admins can use this command.\n\nIf you are an admin, please use /reload to refresh the admin list.", nil)
+		return Continue
+	}
+}
 		r := "Your settings were successfully updated:"
 		settings := &database.EchoSettings{ChatID: ChatId}
 
