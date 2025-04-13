@@ -14,7 +14,7 @@ func init() {
 	AddHelp("✍️ Edit Mode", "editmode", `<b>Command:</b>
 <blockquote><b>/editmode</b> – Show current settings  
 <b>/editmode --set-mode=&lt;off|user|admin&gt;</b>  
-<b>/editmode --setduration=&lt;0-10&gt;</b></blockquote>
+<b>/editmode --set-duration=&lt;0-10&gt;</b></blockquote>
 
 <b>Description:</b>  
 Controls how the bot deletes <b>edited messages</b>.
@@ -31,7 +31,7 @@ Controls how the bot deletes <b>edited messages</b>.
 
 <b>Example:</b>  
 <blockquote><code>/editmode --set-mode=user</code>  
-<code>/editmode --setduration=5</code></blockquote>`, nil)
+<code>/editmode --set-duration=5</code></blockquote>`, nil)
 }
 
 func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
@@ -64,8 +64,17 @@ func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 		ctx.EffectiveMessage.Delete(b, nil)
 		return Continue
 	}
+admins, err := helpers.GetAdmins(b, ctx.EffectiveChat.Id)
+	if err != nil {
+		return err
+	}
 
-	y := strings.ToLower(args[1])
+	if !config.Contains(admins, ctx.EffectiveUser.Id) {
+		b.SendMessage(ChatId, "Access denied: Only group admins can use this command.\n\nIf you are an admin, please use /reload to refresh the admin list.", nil)
+		return Continue
+	}
+        keys := []string{"set-mode", "set-duration"}
+        _, res := config.ParseFlags(keys, Message.Text)
 
 	if y != "off" && y != "user" && y != "admin" {
 		ctx.EffectiveMessage.Reply(b,
