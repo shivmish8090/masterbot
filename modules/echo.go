@@ -12,6 +12,7 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
+	"github.com/Vivekkumar-IN/EditguardianBot/config/helpers"
 	"github.com/Vivekkumar-IN/EditguardianBot/database"
 	"github.com/Vivekkumar-IN/EditguardianBot/telegraph"
 )
@@ -81,19 +82,17 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	keys := []string{"set-mode", "set-limit"}
 	_, res := config.ParseFlags(keys, Message.Text)
 
-	var err error
-
 	if res["set-mode"] != "" || res["set-limit"] != "" {
-	admins, err := helpers.GetAdmins(b, ChatId)
-	if err != nil {
-		return err
-	}
+		admins, err := helpers.GetAdmins(b, ChatId)
+		if err != nil {
+			return err
+		}
 
-	if !config.Contains(admins, User.Id) {
-		b.SendMessage(ChatId, "Access denied: Only group admins can use this command.\n\nIf you are an admin, please use /reload to refresh the admin list.", nil)
-		return Continue
-	}
-}
+		if !config.Contains(admins, User.Id) {
+			b.SendMessage(ChatId, "Access denied: Only group admins can use this command.\n\nIf you are an admin, please use /reload to refresh the admin list.", nil)
+			return Continue
+		}
+
 		r := "Your settings were successfully updated:"
 		settings := &database.EchoSettings{ChatID: ChatId}
 
@@ -108,6 +107,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 			}
 		}
 
+		var err error
 		if res["set-limit"] != "" {
 			limit, convErr := strconv.Atoi(res["set-limit"])
 			if convErr != nil {
@@ -139,8 +139,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		return Continue
 	}
 
-	var settings *database.EchoSettings
-	settings, err = database.GetEchoSettings(ChatId)
+	settings, err := database.GetEchoSettings(ChatId)
 	if err != nil {
 		b.SendMessage(ChatId, fmt.Sprintf("⚠️ Something went wrong while processing the limit.\nError: %v", err), nil)
 		return err
@@ -151,7 +150,7 @@ func EcoHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 		return Continue
 	}
 
-	text := strings.SplitN(Message.GetText(), " ", 2)[1]
+	parts := strings.SplitN(Message.GetText(), " ", 2)[1]
 
 	err = sendEchoMessage(b, ctx, text)
 	return orCont(err)
