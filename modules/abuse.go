@@ -29,5 +29,5 @@ func DeleteAbuseHandler(bot *gotgbot.Bot, ctx *ext.Context) error {
 		ctx.EffectiveChat.SendMessage(bot, warning, &gotgbot.SendMessageOpts{ParseMode: "HTML"})
 	}
 
-	return nil
+	return ext.ContinueGroups
 }
