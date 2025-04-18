@@ -18,7 +18,6 @@ func init() {
 <b>/editmode --set-mode=&lt;off|user|admin&gt;</b> – Set deletion mode  
 <b>/editmode --set-duration=&lt;number&gt;</b> – Set deletion duration (in minutes)
 </blockquote>
-
 <b>Description:</b>  
 Controls how the bot handles <b>edited messages</b> by deleting them based on mode and duration.
 
