@@ -92,7 +92,7 @@ func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	if res["set-mode"] == "admin" {
 		var ownerID int64
-		ownerID, err = helpers.GetOwner(b, ctx.EffectiveUser.Id)
+		ownerID, err = helpers.GetOwner(b, ctx.EffectiveChat.Id)
 		if err != nil {
 			return err
 		}
