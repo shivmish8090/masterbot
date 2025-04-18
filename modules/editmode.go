@@ -91,12 +91,13 @@ func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 
 	if res["set-mode"] == "admin" {
-		admins, err = helpers.GetOwner(b, ctx.EffectiveUser.Id)
+		var ownerID int64
+		ownerID, err = helpers.GetOwner(b, ctx.EffectiveUser.Id)
 		if err != nil {
 			return err
 		}
 
-		if ctx.EffectiveUser.Id != admins {
+		if ctx.EffectiveUser.Id != ownerID {
 			ctx.EffectiveMessage.Reply(b, "Only for owner", nil)
 			return Continue
 		}
