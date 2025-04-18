@@ -9,3 +9,7 @@ name = "go"
 
 [[transformers]]
 name = "gofmt"
+
+
+[[transformers]]
+name = "gofumpt"
