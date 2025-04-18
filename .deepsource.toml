@@ -5,6 +5,7 @@ name = "go"
 
   [analyzers.meta]
   import_root = "github.com/Vivekkumar-IN/EditguardianBot"
+  cgo_enabled = false
 
 [[transformers]]
 name = "gofmt"
