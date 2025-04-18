@@ -21,7 +21,6 @@ func main() {
 		panic("failed to create new bot: " + err.Error())
 	}
 
-
 	defer database.Disconnect()
 
 	dispatcher := ext.NewDispatcher(&ext.DispatcherOpts{
