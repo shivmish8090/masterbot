@@ -11,29 +11,35 @@ import (
 )
 
 func init() {
-	Register(handlers.NewCommand("editmode", EditMode))
-	AddHelp("✍️ Edit Mode", "editmode", `<b>Command:</b>
-<blockquote><b>/editmode</b> – Show current settings  
-<b>/editmode --set-mode=&lt;off|user|admin&gt;</b>  
-<b>/editmode --set-duration=&lt;0-10&gt;</b></blockquote>
+    Register(handlers.NewCommand("editmode", EditMode))
+    AddHelp("✍️ Edit Mode", "editmode", `<b>Command:</b>
+<blockquote>
+<b>/editmode</b> – Show current settings  
+<b>/editmode --set-mode=&lt;off|user|admin&gt;</b> – Set deletion mode  
+<b>/editmode --set-duration=&lt;number&gt;</b> – Set deletion duration (in minutes)
+</blockquote>
 
 <b>Description:</b>  
-Controls how the bot deletes <b>edited messages</b>.
+Controls how the bot handles <b>edited messages</b> by deleting them based on mode and duration.
 
 <b>Modes:</b>  
 • <b>/editmode</b> <code>--set-mode=off</code> – No deletion  
 • <b>/editmode</b> <code>--set-mode=user</code> – Delete edits from users (default)  
 • <b>/editmode</b> <code>--set-mode=admin</code> – Delete edits from users & admins <i>(owner only)</i>
 
-<b>Duration:</b>  
-• <b>0</b> – Deletes immediately <i>(default)</i> & warns users  
-• <b>1-10</b> – Deletes if edited after set minutes (no warning)  
-• <b>&gt;10</b> – Disables deletion
+<b>Duration (via --set-duration):</b>  
+• <b>0</b> – Deletes immediately <i>(default)</i> and warns users  
+• <b>1-10</b> – Deletes if edited after the set number of minutes (no warning)  
+• <b>&gt;10</b> – Disables deletion of edits entirely
 
-<b>Example:</b>  
-<blockquote><code>/editmode --set-mode=user</code>  
-<code>/editmode --set-duration=5</code></blockquote>`, nil)
+<b>Examples:</b>  
+<blockquote>
+<code>/editmode --set-mode=user</code>  
+<code>/editmode --set-duration=5</code>  
+<code>/editmode --set-mode=admin --set-duration=2</code>
+</blockquote>`, nil)
 }
+
 
 func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 	Message := ctx.EffectiveMessage
