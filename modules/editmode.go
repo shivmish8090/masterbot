@@ -90,6 +90,18 @@ func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 		return Continue
 	}
 
+if res["set-mode"] == "admin" {
+admins, err = helpers.GetOwner(b, ctx.EffectiveUser.Id)
+if err != nil {
+    return err
+}
+
+if ctx.EffectiveUser.Id != admins {
+    ctx.EffectiveMessage.Reply(b, "Only for owner")
+    return Continue
+}
+
+}
 	ctx.EffectiveMessage.Reply(b, "This command will be available soon..", nil)
 	ctx.EffectiveMessage.Delete(b, nil)
 	return Continue
