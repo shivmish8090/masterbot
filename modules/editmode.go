@@ -97,7 +97,7 @@ func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 		}
 
 		if ctx.EffectiveUser.Id != admins {
-			ctx.EffectiveMessage.Reply(b, "Only for owner")
+			ctx.EffectiveMessage.Reply(b, "Only for owner", nil)
 			return Continue
 		}
 
