@@ -1,22 +1,20 @@
 package telegraph
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
+	"io"
+	"net/http"
 	"regexp"
 	"strconv"
 	"time"
-
-	"github.com/valyala/fasthttp"
 )
 
-// Telegraph API Base URL
 const TelegraphApi = "https://api.telegra.ph/"
 
-// AccountMap stores access tokens with their flood-wait expiration times (default: 0, means available)
 var AccountMap map[string]int64
 
-// TelegraphAccountResponse represents the response from the Telegraph createAccount API
 type TelegraphAccountResponse struct {
 	OK     bool `json:"ok"`
 	Result struct {
@@ -24,7 +22,6 @@ type TelegraphAccountResponse struct {
 	} `json:"result"`
 }
 
-// TelegraphResponse represents the response from the Telegraph createPage API
 type TelegraphResponse struct {
 	OK     bool   `json:"ok"`
 	Error  string `json:"error,omitempty"`
@@ -33,7 +30,6 @@ type TelegraphResponse struct {
 	} `json:"result"`
 }
 
-// createAccount creates a new Telegraph account and returns an access token
 func createAccount(shortName string) (string, error) {
 	payload := map[string]string{
 		"short_name":  shortName,
@@ -46,23 +42,27 @@ func createAccount(shortName string) (string, error) {
 		return "", err
 	}
 
-	req := fasthttp.AcquireRequest()
-	defer fasthttp.ReleaseRequest(req)
-	req.SetRequestURI(TelegraphApi + "createAccount")
-	req.Header.SetMethod("POST")
-	req.Header.SetContentType("application/json")
-	req.SetBody(jsonData)
+	req, err := http.NewRequest("POST", TelegraphApi+"createAccount", bytes.NewReader(jsonData))
+	if err != nil {
+		return "", err
+	}
 
-	resp := fasthttp.AcquireResponse()
-	defer fasthttp.ReleaseResponse(resp)
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{Timeout: 10 * time.Second}
 
-	client := fasthttp.Client{}
-	if err := client.Do(req, resp); err != nil {
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
 		return "", err
 	}
 
 	var result TelegraphAccountResponse
-	if err := json.Unmarshal(resp.Body(), &result); err != nil {
+	if err := json.Unmarshal(bodyBytes, &result); err != nil {
 		return "", err
 	}
 
@@ -73,43 +73,34 @@ func createAccount(shortName string) (string, error) {
 	return result.Result.AccessToken, nil
 }
 
-// init initializes 10 Telegraph accounts
 func init() {
 	AccountMap = make(map[string]int64)
 	for i := 0; i < 10; i++ {
 		token, err := createAccount("EcoBot" + strconv.Itoa(i+1))
 		if err == nil {
-			AccountMap[token] = 0 // No flood wait initially
+			AccountMap[token] = 0
 		}
 	}
 }
 
-// getAvailableToken returns an access token that is not under a flood wait
-// If no available token is found, it creates a new one.
 func getAvailableToken() (string, error) {
 	now := time.Now().Unix()
 
-	// Check for an available token
 	for token, waitTime := range AccountMap {
 		if waitTime == 0 || waitTime <= now {
 			return token, nil
 		}
 	}
 
-	// If no available token, create a new account
 	newToken, err := createAccount("EcoBot" + strconv.Itoa(len(AccountMap)+1))
 	if err != nil {
-		return "", errors.New(
-			"no available accounts and failed to create new account",
-		)
+		return "", errors.New("no available accounts and failed to create new account")
 	}
 
-	// Store the new token with no flood wait time
 	AccountMap[newToken] = 0
 	return newToken, nil
 }
 
-// extractFloodWait extracts flood wait time from error message
 func extractFloodWait(errorMsg string) int64 {
 	re := regexp.MustCompile(`FLOOD_WAIT_(\d+)`)
 	matches := re.FindStringSubmatch(errorMsg)
@@ -122,25 +113,22 @@ func extractFloodWait(errorMsg string) int64 {
 	return 0
 }
 
-// CreatePage creates a Telegraph page while handling flood wait errors
-func CreatePage(content, firstName, author_url string) (string, error) {
+func CreatePage(content, firstName, authorURL string) (string, error) {
 	for {
 		accessToken, err := getAvailableToken()
 		if err != nil {
 			return "", err
 		}
 
-		// Convert content to Telegraph node format
 		telegraphContent := []map[string]interface{}{
 			{"tag": "p", "children": []string{content}},
 		}
 
-		// Prepare request payload
 		payload := map[string]interface{}{
 			"access_token": accessToken,
 			"title":        "Eco Message",
 			"author_name":  firstName,
-			"author_url":   author_url,
+			"author_url":   authorURL,
 			"content":      telegraphContent,
 		}
 
@@ -149,23 +137,26 @@ func CreatePage(content, firstName, author_url string) (string, error) {
 			return "", err
 		}
 
-		req := fasthttp.AcquireRequest()
-		defer fasthttp.ReleaseRequest(req)
-		req.SetRequestURI(TelegraphApi + "createPage")
-		req.Header.SetMethod("POST")
-		req.Header.SetContentType("application/json")
-		req.SetBody(jsonData)
+		req, err := http.NewRequest("POST", TelegraphApi+"createPage", bytes.NewReader(jsonData))
+		if err != nil {
+			return "", err
+		}
+		req.Header.Set("Content-Type", "application/json")
+		client := &http.Client{Timeout: 10 * time.Second}
 
-		resp := fasthttp.AcquireResponse()
-		defer fasthttp.ReleaseResponse(resp)
+		resp, err := client.Do(req)
+		if err != nil {
+			return "", err
+		}
+		defer resp.Body.Close()
 
-		client := fasthttp.Client{}
-		if err := client.Do(req, resp); err != nil {
+		bodyBytes, err := io.ReadAll(resp.Body)
+		if err != nil {
 			return "", err
 		}
 
 		var result TelegraphResponse
-		if err := json.Unmarshal(resp.Body(), &result); err != nil {
+		if err := json.Unmarshal(bodyBytes, &result); err != nil {
 			return "", err
 		}
 
@@ -173,16 +164,12 @@ func CreatePage(content, firstName, author_url string) (string, error) {
 			return result.Result.URL, nil
 		}
 
-		// Check for flood wait error
 		floodWaitTime := extractFloodWait(result.Error)
 		if floodWaitTime > 0 {
-			AccountMap[accessToken] = time.Now().
-				Unix() +
-				floodWaitTime // Store expiration time
-			continue // Try another account
+			AccountMap[accessToken] = time.Now().Unix() + floodWaitTime
+			continue
 		}
 
-		// Other errors, return immediately
 		return "", errors.New(result.Error)
 	}
 }
