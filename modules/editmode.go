@@ -11,8 +11,8 @@ import (
 )
 
 func init() {
-    Register(handlers.NewCommand("editmode", EditMode))
-    AddHelp("✍️ Edit Mode", "editmode", `<b>Command:</b>
+	Register(handlers.NewCommand("editmode", EditMode))
+	AddHelp("✍️ Edit Mode", "editmode", `<b>Command:</b>
 <blockquote>
 <b>/editmode</b> – Show current settings  
 <b>/editmode --set-mode=&lt;off|user|admin&gt;</b> – Set deletion mode  
@@ -39,7 +39,6 @@ Controls how the bot handles <b>edited messages</b> by deleting them based on mo
 <code>/editmode --set-mode=admin --set-duration=2</code>
 </blockquote>`, nil)
 }
-
 
 func EditMode(b *gotgbot.Bot, ctx *ext.Context) error {
 	Message := ctx.EffectiveMessage
