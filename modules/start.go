@@ -55,9 +55,7 @@ Link: <a href="tg://user?id=%d">Link 1</a> <a href="tg://openmessage?user_id=%d"
 				_, err = b.SendMessage(ctx.EffectiveChat.Id, info, &gotgbot.SendMessageOpts{
 					ParseMode: "HTML",
 				})
-				if err != nil {
-					return err
-				}
+				return orCont(err)
 			}
 
 			modHelp := GetHelp(modName)
