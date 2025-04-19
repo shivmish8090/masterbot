@@ -2,6 +2,8 @@ package modules
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
