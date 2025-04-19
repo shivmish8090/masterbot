@@ -217,13 +217,15 @@ Alternatively, use /echo for sending longer messages. 📜
 
 func sendEchoMessage(b *gotgbot.Bot, ctx *ext.Context, text string) error {
 	User := ctx.EffectiveUser
-	userFullName := strings.TrimSpace(User.FirstName + " " + User.LastName)
 
 	var authorURL string
+	var userFullName string
 	if User.Username != "" {
 		authorURL = fmt.Sprintf("https://t.me/%s", User.Username)
+		userFullName = strings.TrimSpace(User.FirstName + " " + User.LastName)
 	} else {
-		authorURL = fmt.Sprintf("tg://user?id=%d", User.Id)
+		authorURL = fmt.Sprintf("https://t.me/%s?start=info_%d", b.User.Username, User.Id)
+		userFullName = User.Id
 	}
 
 	url, err := telegraph.CreatePage(text, userFullName, authorURL)
