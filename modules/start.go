@@ -38,8 +38,20 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 				if e != nil {
 					return e
 				}
+userInfo, er := b.GetChat(userID, nil)
+if er != nil {
+return er
 
-				b.SendMessage(ctx.EffectiveChat.Id, userID, nil)
+}
+info := fmt.Sprintf(`
+Name: %s
+Id: %d
+Link: <a href="tg://user?id=%d">Link 1</a> <a href="tg://openmessage?user_id=%d">Link 2</a>
+`, strings.TrimSpace(userInfo.FirstName+" "+userInfo.LastName), userInfo.Id, userInfo.Id, userInfo.Id)
+
+				b.SendMessage(ctx.EffectiveChat.Id, info, &gotgbot.SendMessageOpts{
+					ParseMode: "HTML",
+				})
 
 			}
 			helpString := GetHelp(modName)
