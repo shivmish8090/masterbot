@@ -29,21 +29,19 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 		}
 		if len(ctx.Args()) >= 2 {
 			modName := ctx.Args()[1]
-if strings.HasPrefix(modName, "info_"){
+			if strings.HasPrefix(modName, "info_") {
 
-userId := strings.Split(modName, "_")[1]
-var e error
+				userId := strings.Split(modName, "_")[1]
+				var e error
 
-userId, e = strconv.ParseInt(userId,10,64)
-if e != nil {
-return e
+				userId, e = strconv.ParseInt(userId, 10, 64)
+				if e != nil {
+					return e
+				}
 
-}
+				b.SendMessage(ctx.EffectiveChat.Id, userId, nil)
 
-b.SendMessage(ctx.EffectiveChat.Id, userId, nil)
-
-
-}
+			}
 			helpString := GetHelp(modName)
 			if helpString != "" {
 				_, err := b.SendMessage(ctx.EffectiveChat.Id, helpString, &gotgbot.SendMessageOpts{
