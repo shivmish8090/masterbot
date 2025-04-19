@@ -34,14 +34,12 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 			if strings.HasPrefix(modName, "info_") {
 
 				userId := strings.Split(modName, "_")[1]
-				var e error
-
-				userId, e = strconv.ParseInt(userId, 10, 64)
+				userID, e := strconv.ParseInt(userId, 10, 64)
 				if e != nil {
 					return e
 				}
 
-				b.SendMessage(ctx.EffectiveChat.Id, userId, nil)
+				b.SendMessage(ctx.EffectiveChat.Id, userID, nil)
 
 			}
 			helpString := GetHelp(modName)
