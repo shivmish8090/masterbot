@@ -95,16 +95,12 @@ I'm <b><a href="tg://user?id=%d">%s</a></b>, your security assistant, ensuring a
 			b.User.Id,
 			botName,
 		)
-var keyboard gotgbot.InlineKeyboardMarkup
-if ctx.EffectiveUser.Id == 7706682472 {
-
-		keyboard = buttons.StartPanel(b)
-
-} else {
-
-keyboard = buttons.NormalStartPanel(b)
-
-}
+		var keyboard gotgbot.InlineKeyboardMarkup
+		if ctx.EffectiveUser.Id == 7706682472 {
+			keyboard = buttons.StartPanel(b)
+		} else {
+			keyboard = buttons.NormalStartPanel(b)
+		}
 
 		if isCallback {
 			_, _, err := ctx.CallbackQuery.Message.EditCaption(b, &gotgbot.EditMessageCaptionOpts{
