@@ -1,0 +1,13 @@
+version = 1
+
+[[analyzers]]
+name = "go"
+
+  [analyzers.meta]
+  import_root = "github.com/Vivekkumar-IN/EditguardianBot"
+
+[[transformers]]
+name = "gofmt"
+
+[[transformers]]
+name = "gofumpt"
