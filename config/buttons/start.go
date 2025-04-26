@@ -28,7 +28,6 @@ func StartPanel(b *gotgbot.Bot) gotgbot.InlineKeyboardMarkup {
 	return btn.Build()
 }
 
-
 func NormalStartPanel(b *gotgbot.Bot) gotgbot.InlineKeyboardMarkup {
 	btn := &Button{RowWidth: 2}
 
