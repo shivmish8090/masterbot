@@ -89,7 +89,6 @@ func init() {
 	}
 }
 
-
 func Disconnect() {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
