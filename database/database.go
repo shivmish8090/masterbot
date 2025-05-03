@@ -19,7 +19,7 @@ var (
 	editModeDB *mongo.Collection
 	echoDB     *mongo.Collection
 	loggerDB   *mongo.Collection
-	timeout    = 10 * time.Second
+	timeout    = 5 * time.Second
 )
 
 func init() {
