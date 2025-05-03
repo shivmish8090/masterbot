@@ -1,6 +1,12 @@
 package database
 
+import (
+	"context"
 
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
+)
 
 func IsLoggerEnabled() (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
@@ -20,7 +26,6 @@ func IsLoggerEnabled() (bool, error) {
 
 	return result.Enabled, nil
 }
-
 
 func SetLogger(enabled bool) error {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
