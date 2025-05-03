@@ -78,15 +78,6 @@ func init() {
 	if err != nil {
 		log.Printf("Failed to create unique index on echos: %v", err)
 	}
-
-	// Unique index on logger.chat_id
-	_, err = loggerDB.Indexes().CreateOne(ctx, mongo.IndexModel{
-		Keys:    bson.M{"chat_id": 1},
-		Options: options.Index().SetName("unique_logger_chat_id").SetUnique(true),
-	})
-	if err != nil {
-		log.Printf("Failed to create unique index on logger: %v", err)
-	}
 }
 
 func Disconnect() {
