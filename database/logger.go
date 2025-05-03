@@ -11,7 +11,7 @@ import (
 )
 
 func IsLoggerEnabled() (bool, error) {
-	const key = "logger:enabled"
+	const key = "logger"
 
 	if val, ok := config.Cache.Load(key); ok {
 		if enabled, valid := val.(bool); valid {
@@ -40,7 +40,7 @@ func IsLoggerEnabled() (bool, error) {
 }
 
 func SetLogger(enabled bool) error {
-	const key = "logger:enabled"
+	const key = "logger"
 
 	if val, ok := config.Cache.Load(key); ok {
 		if cached, valid := val.(bool); valid && cached == enabled {
@@ -52,7 +52,7 @@ func SetLogger(enabled bool) error {
 	defer cancel()
 
 	update := bson.M{"$set": bson.M{"enabled": enabled}}
-	opts := options.Update().SetUpsert(true)
+	opts := options.UpdateOne().SetUpsert(true)
 
 	_, err := loggerDB.UpdateOne(ctx, bson.M{}, update, opts)
 	if err == nil {
