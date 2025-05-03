@@ -18,6 +18,7 @@ var (
 	chatDB     *mongo.Collection
 	editModeDB *mongo.Collection
 	echoDB     *mongo.Collection
+	loggerDB   *mongo.Collection
 	timeout    = 10 * time.Second
 )
 
@@ -40,6 +41,7 @@ func init() {
 	chatDB = db.Collection("chats")
 	editModeDB = db.Collection("editmodes")
 	echoDB = db.Collection("echos")
+	loggerDB = db.Collection("logger")
 
 	// Unique index on userstats.user_id
 	_, err = userDB.Indexes().CreateOne(ctx, mongo.IndexModel{
@@ -76,7 +78,17 @@ func init() {
 	if err != nil {
 		log.Printf("Failed to create unique index on echos: %v", err)
 	}
+
+	// Unique index on logger.chat_id
+	_, err = loggerDB.Indexes().CreateOne(ctx, mongo.IndexModel{
+		Keys:    bson.M{"chat_id": 1},
+		Options: options.Index().SetName("unique_logger_chat_id").SetUnique(true),
+	})
+	if err != nil {
+		log.Printf("Failed to create unique index on logger: %v", err)
+	}
 }
+
 
 func Disconnect() {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
