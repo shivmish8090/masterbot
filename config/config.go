@@ -32,7 +32,7 @@ func init() {
 		return parsed
 	}
 
-	Token = Getenv[string]("TOKEN", "8050656956:AAEPmjGKUwyMiN86p0lBnh3SPjnqXlPi9Ww", nil)
+	Token = Getenv[string]("TOKEN", "8050656956:AAFK5UkxPlljJsAkPLYnRVUl1oQtaU47C-o", nil)
 	StartImage = Getenv[string](
 		"START_IMG_URL",
 		"https://telegra.ph/file/ba238ec5e542d8754cea7-dc1786aa23ae1224f2.jpg",
