@@ -1,4 +1,4 @@
-pacakge database
+package database
 
 
 
@@ -27,7 +27,7 @@ func SetLogger(enabled bool) error {
 	defer cancel()
 
 	update := bson.M{"$set": bson.M{"enabled": enabled}}
-	opts := options.Update().SetUpsert(true)
+	opts := options.UpdateOne().SetUpsert(true)
 
 	_, err := loggerDB.UpdateOne(ctx, bson.M{}, update, opts)
 	return err
