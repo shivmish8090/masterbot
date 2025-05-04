@@ -9,6 +9,7 @@ require (
 )
 
 require (
+	github.com/Vivekkumar-IN/profanity-check v0.0.0-20250504035916-b76e6079b282 // indirect
 	github.com/golang/snappy v1.0.0 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
