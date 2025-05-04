@@ -13,46 +13,23 @@ func FormatUptime(d time.Duration) string {
 
 	var result string
 	if days > 0 {
-		result += fmt.Sprintf("%d Day", days)
-		if days > 1 {
-			result += "s"
-		}
-		result += " "
+		result += fmt.Sprintf("%dd:", days)
+	}
 
-		if hours > 0 {
-			result += fmt.Sprintf("%d Hour", hours)
-			if hours > 1 {
-				result += "s"
-			}
-			result += " "
-		}
-		if minutes > 0 {
-			result += fmt.Sprintf("%d Minute", minutes)
-			if minutes > 1 {
-				result += "s"
-			}
-		}
-	} else {
-		if hours > 0 {
-			result += fmt.Sprintf("%d Hour", hours)
-			if hours > 1 {
-				result += "s"
-			}
-			result += " "
-		}
-		if minutes > 0 {
-			result += fmt.Sprintf("%d Minute", minutes)
-			if minutes > 1 {
-				result += "s"
-			}
-			result += " "
-		}
-		if seconds > 0 || result == "" {
-			result += fmt.Sprintf("%d Second", seconds)
-			if seconds != 1 {
-				result += "s"
-			}
-		}
+	if hours > 0 {
+		result += fmt.Sprintf("%dh:", hours)
+			
+	}
+	if minutes > 0 {
+		result += fmt.Sprintf("%dm:", minutes)
+			
+	}
+	if contains:= strings.Contains(result, "d:") !contains {
+	    
+	    result += fmt.Sprintf("%ds", seconds)
+			
+	    
+	}
 	}
 
 	return result
