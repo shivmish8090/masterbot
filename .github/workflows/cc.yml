@@ -24,6 +24,7 @@ jobs:
           go install mvdan.cc/gofumpt@latest
           go install github.com/segmentio/golines@latest
           go install github.com/daixiang0/gci@latest
+          go get github.com/Vivekkumar-IN/profanity-check
 
       - name: Format Codes
         run: |
