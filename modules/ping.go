@@ -5,15 +5,14 @@ import (
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 	"github.com/Vivekkumar-IN/EditguardianBot/config/helpers"
 )
 
 func init() {
-        Register(handlers.NewCommand("ping", modules.PingHandle))
-
-               
+	Register(handlers.NewCommand("ping", modules.PingHandle))
 }
 
 func PingHandle(b *gotgbot.Bot, ctx *ext.Context) error {
