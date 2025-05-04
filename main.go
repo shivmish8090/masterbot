@@ -13,6 +13,7 @@ import (
 	"github.com/Vivekkumar-IN/EditguardianBot/database"
 	"github.com/Vivekkumar-IN/EditguardianBot/filters"
 	"github.com/Vivekkumar-IN/EditguardianBot/modules"
+       _ "github.com/Vivekkumar-IN/profanity-check"
 )
 
 func main() {
