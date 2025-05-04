@@ -30,7 +30,6 @@ func FormatUptime(d time.Duration) string {
 			
 	    
 	}
-	}
 
 	return result
 }
