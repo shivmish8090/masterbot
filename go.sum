@@ -1,7 +1,5 @@
 github.com/PaulSonOfLars/gotgbot/v2 v2.0.0-rc.32 h1:+YzI72wzNTcaPUDVcSxeYQdHfvEk8mPGZh/yTk5kkRg=
 github.com/PaulSonOfLars/gotgbot/v2 v2.0.0-rc.32/go.mod h1:BSzsfjlE0wakLw2/U1FtO8rdVt+Z+4VyoGo/YcGD9QQ=
-github.com/Vivekkumar-IN/profanity-check v0.0.0-20250504035916-b76e6079b282 h1:nPTElmy8I5kESyH6HL/tqi74zHFexSIajomuoF04qBM=
-github.com/Vivekkumar-IN/profanity-check v0.0.0-20250504035916-b76e6079b282/go.mod h1:rOOWj/VL2oWYP2mrIH/TlkV+/jRvGzYbJuYcXjVtTgc=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/golang/snappy v1.0.0 h1:Oy607GVXHs7RtbggtPBnr2RmDArIsAefDwvrdWvRhGs=

@@ -4,7 +4,6 @@ go 1.24.2
 
 require (
 	github.com/PaulSonOfLars/gotgbot/v2 v2.0.0-rc.32
-	github.com/Vivekkumar-IN/profanity-check v0.0.0-20250504035916-b76e6079b282
 	github.com/joho/godotenv v1.5.1
 	go.mongodb.org/mongo-driver/v2 v2.2.0
 )
