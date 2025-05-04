@@ -24,7 +24,7 @@ func FormatUptime(d time.Duration) string {
 		result += fmt.Sprintf("%dm:", minutes)
 			
 	}
-	if contains:= strings.Contains(result, "d:") !contains {
+	if contains:= strings.Contains(result, "d:"); !contains {
 	    
 	    result += fmt.Sprintf("%ds", seconds)
 			
