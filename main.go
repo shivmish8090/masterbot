@@ -55,7 +55,6 @@ func main() {
 
 	dispatcher.AddHandler(handlers.NewMessage(filters.Invert(filters.ChatAdmins(b)), modules.DeleteLongMessage))
 
-	dispatcher.AddHandlerToGroup(handlers.NewMessage(filters.Command(b, "ping"), modules.PingHandle), 1)
 
 	// Allowed updates
 	allowedUpdates := []string{
@@ -81,11 +80,11 @@ func main() {
 	}
 
 	log.Printf("%s has been started...\n", b.User.Username)
-	_, _ = b.SendMessage(
+	/*_, _ = b.SendMessage(
 		config.LoggerId,
 		fmt.Sprintf("%s has started\n", b.User.Username),
 		nil,
-	)
+	)*/
 
 	updater.Idle()
 }
