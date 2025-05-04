@@ -10,6 +10,12 @@ import (
 	"github.com/Vivekkumar-IN/EditguardianBot/config/helpers"
 )
 
+func init() {
+        Register(handlers.NewCommand("ping", modules.PingHandle))
+
+               
+}
+
 func PingHandle(b *gotgbot.Bot, ctx *ext.Context) error {
 	uptime := time.Since(config.StartTime)
 	uptimeStr := helpers.FormatUptime(uptime)
