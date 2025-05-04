@@ -33,7 +33,6 @@ jobs:
           gci write . -s standard -s default -s "prefix(github.com/Vivekkumar-IN/EditguardianBot)"
           gofumpt -w -extra .
           golines --max-len=80 .
-          go get github.com/Vivekkumar-IN/profanity-check
 
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
