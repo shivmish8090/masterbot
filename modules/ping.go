@@ -12,10 +12,10 @@ import (
 )
 
 func init() {
-	Register(handlers.NewCommand("ping", modules.PingHandle))
+	Register(handlers.NewCommand("ping", pingHandler))
 }
 
-func PingHandle(b *gotgbot.Bot, ctx *ext.Context) error {
+func pingHandler(b *gotgbot.Bot, ctx *ext.Context) error {
 	uptime := time.Since(config.StartTime)
 	uptimeStr := helpers.FormatUptime(uptime)
 	ctx.EffectiveMessage.Delete(b, nil)
