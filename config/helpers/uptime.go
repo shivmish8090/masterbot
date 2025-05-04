@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -18,17 +19,12 @@ func FormatUptime(d time.Duration) string {
 
 	if hours > 0 {
 		result += fmt.Sprintf("%dh:", hours)
-			
 	}
 	if minutes > 0 {
 		result += fmt.Sprintf("%dm:", minutes)
-			
 	}
-	if contains:= strings.Contains(result, "d:"); !contains {
-	    
-	    result += fmt.Sprintf("%ds", seconds)
-			
-	    
+	if contains := strings.Contains(result, "d:"); !contains {
+		result += fmt.Sprintf("%ds", seconds)
 	}
 
 	return result
