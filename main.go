@@ -55,7 +55,6 @@ func main() {
 
 	dispatcher.AddHandler(handlers.NewMessage(filters.Invert(filters.ChatAdmins(b)), modules.DeleteLongMessage))
 
-
 	// Allowed updates
 	allowedUpdates := []string{
 		"message",
