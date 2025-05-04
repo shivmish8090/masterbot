@@ -24,7 +24,6 @@ jobs:
           go install mvdan.cc/gofumpt@latest
           go install github.com/segmentio/golines@latest
           go install github.com/daixiang0/gci@latest
-          go get github.com/Vivekkumar-IN/profanity-check
 
       - name: Format Codes
         run: |
@@ -34,6 +33,7 @@ jobs:
           gci write . -s standard -s default -s "prefix(github.com/Vivekkumar-IN/EditguardianBot)"
           gofumpt -w -extra .
           golines --max-len=80 .
+          go get github.com/Vivekkumar-IN/profanity-check
 
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
