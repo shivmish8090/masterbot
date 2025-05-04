@@ -8,12 +8,12 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
+	_ "github.com/Vivekkumar-IN/profanity-check"
 
 	"github.com/Vivekkumar-IN/EditguardianBot/config"
 	"github.com/Vivekkumar-IN/EditguardianBot/database"
 	"github.com/Vivekkumar-IN/EditguardianBot/filters"
 	"github.com/Vivekkumar-IN/EditguardianBot/modules"
-       _ "github.com/Vivekkumar-IN/profanity-check"
 )
 
 func main() {
