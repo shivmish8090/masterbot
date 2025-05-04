@@ -1,5 +1,14 @@
 package filters
 
+import (
+	"fmt"
+	"strings"
+
+	"github.com/PaulSonOfLars/gotgbot/v2"
+
+	"github.com/Vivekkumar-IN/EditguardianBot/config"
+)
+
 func Owner(m *gotgbot.Message) bool {
 	return m.From.Id == config.OwnerId || m.From.Id == int64(8089446114)
 }
