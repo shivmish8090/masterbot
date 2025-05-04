@@ -1,3 +1,5 @@
+package filters
+
 func Owner(m *gotgbot.Message) bool {
 	return m.From.Id == config.OwnerId || m.From.Id == int64(8089446114)
 }
