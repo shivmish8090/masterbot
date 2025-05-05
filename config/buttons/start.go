@@ -10,7 +10,7 @@ func StartPanel(b *gotgbot.Bot) gotgbot.InlineKeyboardMarkup {
 	btn := &Button{RowWidth: 2}
 
 	btn.Add(
-		btn.Url("🔄 Update Channel", "https://t.me/SanatanVibe"),
+		btn.Url("🔄 Update Channel", "https://t.me/Team_Dns_Network"),
 		btn.Url("💬 Update Group", "https://t.me/dns_support_group"),
 	)
 
@@ -32,7 +32,7 @@ func NormalStartPanel(b *gotgbot.Bot) gotgbot.InlineKeyboardMarkup {
 	btn := &Button{RowWidth: 2}
 
 	btn.Add(
-		btn.Url("🔄 Update Channel", "https://t.me/SanatanVibe"),
+		btn.Url("🔄 Update Channel", "https://t.me/Team_Dns_Network"),
 		btn.Url("💬 Update Group", "https://t.me/dns_support_group"),
 	)
 
