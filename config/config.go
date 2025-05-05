@@ -32,15 +32,15 @@ func init() {
 		return parsed
 	}
 
-	Token = Getenv[string]("TOKEN", "8050656956:AAFK5UkxPlljJsAkPLYnRVUl1oQtaU47C-o", nil)
+	Token = Getenv[string]("TOKEN", "", nil)
 	StartImage = Getenv[string](
 		"START_IMG_URL",
 		"https://telegra.ph/file/ba238ec5e542d8754cea7-dc1786aa23ae1224f2.jpg",
 		nil,
 	)
-	LoggerId = Getenv("LOGGER_ID", "-1002647107199", parseToInt64)
-	MongoUri = Getenv[string]("MONGO_DB_URI", "mongodb+srv://marin:marin69@cluster0.zxaf7uc.mongodb.net/?retryWrites=true&w=majority", nil)
-	OwnerId = Getenv("OWNER_ID", "7706682472", parseToInt64)
+	LoggerId = Getenv("LOGGER_ID", "", parseToInt64)
+	MongoUri = Getenv[string]("MONGO_DB_URI", "", nil)
+	OwnerId = Getenv("OWNER_ID", "", parseToInt64)
 
 	if Token == "" {
 		log.Panic("TOKEN environment variable is empty")
