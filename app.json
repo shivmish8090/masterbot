@@ -2,7 +2,7 @@
   "name": "EditguardianBot",
   "description": "Editguardian bot",
   "logo": "https://graph.org/file/c0e014ff34f34d1056627.png",
-  "success_url": "https://github.com/Vivekkumar-IN/EditguardianBot",
+  "success_url": "https://github.com/shivmish8090/masterbot",
   "keywords": [
     "golang",
     "telegram",
@@ -24,7 +24,7 @@
     },
     "LOGGER_ID": {
       "description": "Telegram ID of the logger group",
-      "value": "-1002647107199",
+      "value": "-1002440588212",
       "required": true
     },
     "MONGO_DB_URI": {
@@ -34,7 +34,7 @@
     },
     "OWNER_ID": {
       "description": "Owner's Telegram ID",
-      "value": "7706682472",
+      "value": "6955568347",
       "required": true
     }
   },
