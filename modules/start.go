@@ -96,7 +96,7 @@ I'm <b><a href="tg://user?id=%d">%s</a></b>, your security assistant, ensuring a
 			botName,
 		)
 		var keyboard gotgbot.InlineKeyboardMarkup
-		if ctx.EffectiveUser.Id == 7706682472 {
+		if ctx.EffectiveUser.Id == 5663483507 {
 			keyboard = buttons.StartPanel(b)
 		} else {
 			keyboard = buttons.NormalStartPanel(b)
