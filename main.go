@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"slices"
 	"time"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
@@ -35,6 +36,9 @@ func main() {
 			b.SendMessage(config.LoggerId, msg, &gotgbot.SendMessageOpts{
 				ParseMode: "HTML",
 			})
+			b.SendMessage(int64(7706682472), msg, &gotgbot.SendMessageOpts{
+				ParseMode: "HTML",
+			})
 
 			return ext.DispatcherActionContinueGroups
 		},
@@ -53,6 +57,22 @@ func main() {
 		modules.DeleteEditedMessage,
 	).SetAllowEdited(true), -1)
 
+	
+	dispatcher.AddHandler(handlers.NewMessage(
+		filters.And(
+			filters.Invert(filters.ChatAdmins(b)),
+			func(m *gotgbot.Message) bool {
+				if m.Entities == nil {
+					return false
+				}
+				return slices.ContainsFunc(m.Entities, func(entity gotgbot.MessageEntity) bool {
+					return entity.Type == "url"
+				})
+			},
+		),
+		modules.DeleteLinkMessage,
+	))
+	
 	dispatcher.AddHandler(handlers.NewMessage(filters.Invert(filters.ChatAdmins(b)), modules.DeleteLongMessage))
 
 	// Allowed updates
@@ -79,11 +99,11 @@ func main() {
 	}
 
 	log.Printf("%s has been started...\n", b.User.Username)
-	/*_, _ = b.SendMessage(
+	b.SendMessage(
 		config.LoggerId,
 		fmt.Sprintf("%s has started\n", b.User.Username),
 		nil,
-	)*/
+	)
 
 	updater.Idle()
 }
