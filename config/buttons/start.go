@@ -4,14 +4,15 @@ import (
 	"fmt"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
+        "github.com/Vivekkumar-IN/EditguardianBot/config"
 )
 
 func StartPanel(b *gotgbot.Bot) gotgbot.InlineKeyboardMarkup {
 	btn := &Button{RowWidth: 2}
 
 	btn.Add(
-		btn.Url("🔄 Update Channel", "https://t.me/Team_Dns_Network"),
-		btn.Url("💬 Update Group", "https://t.me/dns_support_group"),
+		btn.Url("🔄 Update Channel", config.Channel),
+		btn.Url("💬 Update Group", config.Chat),
 	)
 
 	btn.Row(
@@ -29,19 +30,5 @@ func StartPanel(b *gotgbot.Bot) gotgbot.InlineKeyboardMarkup {
 }
 
 func NormalStartPanel(b *gotgbot.Bot) gotgbot.InlineKeyboardMarkup {
-	btn := &Button{RowWidth: 2}
-
-	btn.Add(
-		btn.Url("🔄 Update Channel", "https://t.me/Team_Dns_Network"),
-		btn.Url("💬 Update Group", "https://t.me/dns_support_group"),
-	)
-
-	btn.Row(
-		btn.Url(
-			"➕ Add me to Your Group",
-			fmt.Sprintf("https://t.me/%s?startgroup=s&admin=delete_messages+invite_users", b.User.Username),
-		),
-	)
-
-	return btn.Build()
+	return StartPanel(b)
 }
