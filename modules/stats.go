@@ -2,7 +2,6 @@ package modules
 
 import (
 	"fmt"
-	"slices"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
