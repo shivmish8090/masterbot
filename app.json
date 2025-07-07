@@ -36,6 +36,15 @@
       "description": "Owner's Telegram ID",
       "value": "6955568347",
       "required": true
+    },
+    "SUPPORT_GROUP": {
+      "description": "Support Group link",
+      "required": true
+    },
+    "SUPPORT_CHANNEL": {
+      "description": "Support Channel link",
+      "value": "6955568347",
+      "required": true
     }
   },
   "formation": {
