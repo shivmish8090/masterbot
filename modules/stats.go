@@ -8,8 +8,8 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
 
-	"main/config"
-	"main/database"
+        "github.com/Vivekkumar-IN/EditguardianBot/database"
+        "github.com/Vivekkumar-IN/EditguardianBot/config"
 )
 
 func init() {
@@ -17,7 +17,7 @@ func init() {
 }
 
 func stats(b *gotgbot.Bot, ctx *ext.Context) error {
-	if !slices.Contains(config.OwnerId, ctx.EffectiveUser.Id) {
+	if config.OwnerId != ctx.EffectiveUser.Id {
 		return Continue
 	}
 
