@@ -43,7 +43,6 @@
     },
     "SUPPORT_CHANNEL": {
       "description": "Support Channel link",
-      "value": "6955568347",
       "required": true
     }
   },
