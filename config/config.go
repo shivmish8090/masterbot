@@ -42,12 +42,12 @@ func init() {
 	)
 	Chat = Getenv[string](
 		"SUPPORT_GROUP",
-		"",
+		"https://t.me/dns_support_group",
 		nil,
 	)
 	Channel = Getenv[string](
 		"SUPPORT_CHANNEL",
-		"",
+		"https://t.me/Team_Dns_Network",
 		nil,
 	)
 	LoggerId = Getenv("LOGGER_ID", "-1002440588212", parseToInt64)
