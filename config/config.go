@@ -18,6 +18,8 @@ var (
 	StartImage string
 	Token      string
 	StartTime  time.Time
+ 	Chat string
+ 	Channel string
 )
 
 func init() {
@@ -36,6 +38,16 @@ func init() {
 	StartImage = Getenv[string](
 		"START_IMG_URL",
 		"https://telegra.ph/file/ba238ec5e542d8754cea7-dc1786aa23ae1224f2.jpg",
+		nil,
+	)
+	Chat = Getenv[string](
+		"SUPPORT_GROUP",
+		"",
+		nil,
+	)
+	Channel = Getenv[string](
+		"SUPPORT_CHANNEL",
+		"",
 		nil,
 	)
 	LoggerId = Getenv("LOGGER_ID", "-1002440588212", parseToInt64)
