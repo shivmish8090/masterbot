@@ -100,7 +100,7 @@ func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
         _, err = b.SendMessage(
                 chat.Id,
                 reason,
-                &gotgbot.SendMessageOpts{ParseMode: "HTML"},
+                &gotgbot.SendMessageOpts{ParseMode: "HTML", ReplyMarkup: buttons.EditedMessagePanel(b)},
         )
         return orCont(err)
 }
