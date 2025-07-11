@@ -1,68 +1,113 @@
 package modules
 
 import (
-	"github.com/PaulSonOfLars/gotgbot/v2"
-	"github.com/PaulSonOfLars/gotgbot/v2/ext"
+        "fmt"
+        "html"
 
-	"github.com/Vivekkumar-IN/EditguardianBot/config/buttons"
+        "github.com/PaulSonOfLars/gotgbot/v2"
+        "github.com/PaulSonOfLars/gotgbot/v2/ext"
+        "main/config/helpers"
 )
 
 func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
-	message := ctx.EditedMessage
-	if message == nil || ctx.EffectiveChat.Type == "private" {
-		return Continue
-	}
+        msg := ctx.EditedMessage
+        if msg == nil || ctx.EffectiveChat.Type != "supergroup" {
+                return Continue
+        }
 
-	Chat, err := b.GetChat(ctx.EffectiveChat.Id, nil)
-	if err != nil {
-		return err
-	}
+        sender := msg.GetSender()
+        if sender.User == nil || sender.Chat != nil {
+                if sender.ChatId == msg.Chat.Id {
+                        return Continue
+                }
+                fullChat, err := b.GetChat(msg.Chat.Id, nil)
+                if err != nil {
+                        return err
+                }
+                if sender.ChatId == fullChat.LinkedChatId {
+                        return Continue
+                }
+        }
 
-	if message.SenderChat != nil {
-		if message.Chat.Id == message.SenderChat.Id || Chat.LinkedChatId == message.SenderChat.Id {
-			return Continue
-		}
-	}
+        if isadmin, err := helpers.IsChatAdmin(b, ctx.EffectiveChat.Id, sender.User.Id); err != nil {
+                return err
+        } else if isadmin {
+                return Continue
+        }
 
-	if _, err = ctx.EffectiveMessage.Delete(b, nil); err != nil {
-		return orCont(err)
-	}
+        chat, err := b.GetChat(ctx.EffectiveChat.Id, nil)
+        if err != nil {
+                return err
+        }
 
-	reason := "<b>🚫 Editing messages is prohibited in this chat.</b> Please refrain from modifying your messages to maintain the integrity of the conversation."
+        if msg.SenderChat != nil {
+                if chat.Id == msg.SenderChat.Id || chat.LinkedChatId == msg.SenderChat.Id {
+                        return nil
+                }
+        }
 
-	switch {
-	case message.Text != "":
-		reason = "<b>🚫 Editing messages is prohibited in this chat.</b> Please avoid changing the text content once it's sent to maintain the flow of conversation."
-	case message.Caption != "":
-		reason = "<b>✍️ Editing a caption is restricted.</b> Once the caption is set, it cannot be changed to ensure clarity and consistency in the content."
-	case message.Photo != nil:
-		reason = "<b>📷 Replacing or editing a photo is not permitted.</b> Altering images after posting is not allowed to keep the visual context intact."
-	case message.Video != nil:
-		reason = "<b>🎥 Replacing or editing a video is not allowed.</b> Videos should not be modified after posting to preserve the original content."
-	case message.Document != nil:
-		reason = "<b>📄 Replacing a document is restricted.</b> Documents cannot be edited or replaced to ensure accuracy and trust in the information."
-	case message.Audio != nil:
-		reason = "<b>🎵 Replacing an audio file is not permitted.</b> Audio files cannot be edited after being uploaded for consistency."
-	case message.VideoNote != nil:
-		reason = "<b>📹 Changing a video note is not allowed.</b> Video notes must remain as originally sent to keep the communication intact."
-	case message.Voice != nil:
-		reason = "<b>🎙️ Editing a voice message is not permitted.</b> Voice recordings should not be altered to maintain the original intent."
-	case message.Animation != nil:
-		reason = "<b>🎞️ Modifying a GIF is not allowed.</b> GIFs must remain unchanged after being sent to preserve the context of the conversation."
-	case message.Sticker != nil:
-		reason = "<b>🖼️ Replacing a sticker is not permitted.</b> Stickers cannot be edited after posting to maintain their original meaning."
-	}
+        if _, err = ctx.EffectiveMessage.Delete(b, nil); err != nil {
+                return err
+        }
 
-	keyboard := buttons.EditedMessagePanel(b)
+        var senderTag string
+        if sender.User.Username != "" {
+                senderTag = "@" + sender.User.Username
+        } else {
+                senderTag = fmt.Sprintf(`<a href="tg://user?id=%d">%s</a>`, sender.User.Id, html.EscapeString(sender.User.FirstName))
+        }
 
-	_, err = b.SendMessage(
-		ctx.EffectiveChat.Id,
-		reason,
-		&gotgbot.SendMessageOpts{ParseMode: "HTML", ReplyMarkup: keyboard},
-	)
-	if err != nil {
-		return err
-	}
+        var reason string
 
-	return Continue
+        switch {
+        case msg.Text != "":
+                reason = fmt.Sprintf(`<b>🚫 %s edited text.</b> Editing text is not allowed to keep conversations clear.`, senderTag)
+
+        case msg.Caption != "":
+                if msg.Photo != nil {
+                        reason = fmt.Sprintf(`<b>📷 %s edited a photo caption.</b> Image edits are blocked to preserve context.`, senderTag)
+                } else if msg.Video != nil {
+                        reason = fmt.Sprintf(`<b>🎥 %s edited a video caption.</b> Video edits aren't allowed to retain originality.`, senderTag)
+                } else if msg.Document != nil {
+                        reason = fmt.Sprintf(`<b>📄 %s edited a document caption.</b> Please avoid modifying documents.`, senderTag)
+                } else if msg.Audio != nil {
+                        reason = fmt.Sprintf(`<b>🎵 %s edited an audio caption.</b> Audio files must remain unaltered.`, senderTag)
+                } else {
+                        reason = fmt.Sprintf(`<b>✍️ %s edited a media caption.</b> Caption edits affect clarity and are not permitted.`, senderTag)
+                }
+
+        case msg.Photo != nil:
+                reason = fmt.Sprintf(`<b>📷 %s edited a photo.</b> Photos must remain unchanged to preserve context.`, senderTag)
+
+        case msg.Video != nil:
+                reason = fmt.Sprintf(`<b>🎥 %s edited a video file.</b> Video content must remain as originally shared.`, senderTag)
+
+        case msg.Document != nil:
+                reason = fmt.Sprintf(`<b>📄 %s edited a document.</b> Document files should not be modified.`, senderTag)
+
+        case msg.Audio != nil:
+                reason = fmt.Sprintf(`<b>🎵 %s edited an audio file.</b> Audio content must remain unaltered.`, senderTag)
+
+        case msg.VideoNote != nil:
+                reason = fmt.Sprintf(`<b>📹 %s edited a video note.</b> Video notes must stay as sent.`, senderTag)
+
+        case msg.Voice != nil:
+                reason = fmt.Sprintf(`<b>🎙️ %s edited a voice message.</b> Voice messages should remain original.`, senderTag)
+
+        case msg.Animation != nil:
+                reason = fmt.Sprintf(`<b>🎞️ %s edited a GIF or animation.</b> Keep animations unchanged for context.`, senderTag)
+
+        case msg.Sticker != nil:
+                reason = fmt.Sprintf(`<b>🖼️ %s edited a sticker.</b> Stickers must stay unaltered.`, senderTag)
+
+        default:
+                reason = fmt.Sprintf(`<b>🚫 %s edited a message.</b> Editing messages is prohibited in this chat to maintain conversation integrity.`, senderTag)
+        }
+
+        _, err = b.SendMessage(
+                chat.Id,
+                reason,
+                &gotgbot.SendMessageOpts{ParseMode: "HTML"},
+        )
+        return orCont(err)
 }
