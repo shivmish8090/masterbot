@@ -29,12 +29,6 @@ func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
                 }
         }
 
-        if isadmin, err := helpers.IsChatAdmin(b, ctx.EffectiveChat.Id, sender.User.Id); err != nil {
-                return err
-        } else if isadmin {
-                return Continue
-        }
-
         chat, err := b.GetChat(ctx.EffectiveChat.Id, nil)
         if err != nil {
                 return err
