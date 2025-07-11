@@ -6,7 +6,7 @@ import (
 
         "github.com/PaulSonOfLars/gotgbot/v2"
         "github.com/PaulSonOfLars/gotgbot/v2/ext"
-        "main/config/helpers"
+        "github.com/Vivekkumar-IN/EditguardianBot/config/helpers"
 )
 
 func DeleteEditedMessage(b *gotgbot.Bot, ctx *ext.Context) error {
